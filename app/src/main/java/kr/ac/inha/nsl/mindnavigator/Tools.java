@@ -5,6 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class Tools {
@@ -17,11 +18,22 @@ public class Tools {
         cellHeight = height;
     }
 
-    public static ViewGroup emptyCell(Activity activity, ViewGroup parent) {
-        ViewGroup res = (ViewGroup) activity.getLayoutInflater().inflate(R.layout.date_cell, parent, false);
-        res.getLayoutParams().width = cellWidth;
-        res.getLayoutParams().height = cellHeight;
-        return res;
+    public static void cellClearOut(ViewGroup[][] grid, int row, int col, Activity activity, ViewGroup parent, LinearLayout.OnClickListener cellClickListener) {
+        if (grid[row][col] == null) {
+            activity.getLayoutInflater().inflate(R.layout.date_cell, parent, true);
+            ViewGroup res = (ViewGroup) parent.getChildAt(parent.getChildCount() - 1);
+            res.getLayoutParams().width = cellWidth;
+            res.getLayoutParams().height = cellHeight;
+            res.setOnClickListener(cellClickListener);
+            grid[row][col] = res;
+        } else {
+            TextView date_text = grid[row][col].findViewById(R.id.date_text_view);
+            date_text.setTextColor(activity.getColor(R.color.textColor));
+            date_text.setBackgroundResource(R.drawable.bg_cell);
+
+            while (grid[row][col].getChildCount() > 1)
+                grid[row][col].removeViewAt(1);
+        }
     }
 
     public static void addEvent(Activity activity, ViewGroup parent, Event event) {
