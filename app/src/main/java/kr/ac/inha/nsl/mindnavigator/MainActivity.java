@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,8 +15,10 @@ import android.view.ViewTreeObserver;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,6 +30,18 @@ public class MainActivity extends AppCompatActivity {
     private Calendar currentCal;
 
     private String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+
+    // region CellClick Listener
+    LinearLayout.OnClickListener cellClick = new LinearLayout.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis((long) view.getTag());
+
+            Toast.makeText(MainActivity.this, String.format(Locale.US, "Cell is clicked, date: %02d/%02d/%d", cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR)), Toast.LENGTH_SHORT).show();
+        }
+    };
+    // endregion
     // endregion
 
     @Override
@@ -54,65 +69,8 @@ public class MainActivity extends AppCompatActivity {
 
                 Tools.setCellSize(event_grid.getWidth() / event_grid.getColumnCount(), event_grid.getHeight() / event_grid.getRowCount());
                 updateCalendarView();
-
-                LinearLayout.OnClickListener cellClick = new LinearLayout.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                    }
-                };
             }
         });
-    }
-
-    @SuppressLint("CutPasteId")
-    private void refreshToDefaultGrid() {
-        for (int row = 0; row < event_grid.getRowCount(); row++)
-            for (int col = 0; col < event_grid.getColumnCount(); col++)
-                Tools.cellClearOut(cells, col, row, this, event_grid);
-
-        Calendar today = Calendar.getInstance();
-        TextView todayText;
-
-        if (currentCal.get(Calendar.MONTH) == today.get(Calendar.MONTH) && currentCal.get(Calendar.YEAR) == today.get(Calendar.YEAR)) {
-            int col = today.get(Calendar.DAY_OF_WEEK) - 1;
-            int row = (today.get(Calendar.DAY_OF_MONTH) + col) / 7;
-
-            todayText = cells[col][row].findViewById(R.id.date_text_view);
-            todayText.setTextColor(Color.WHITE);
-            todayText.setBackgroundResource(R.drawable.bg_today_view);
-        }
-
-        int firstDayOfMonth = getFirstWeekdayIndex(currentCal.get(Calendar.DAY_OF_MONTH), currentCal.get(Calendar.MONTH), currentCal.get(Calendar.YEAR));
-        int numOfDaysCurMonth = currentCal.getActualMaximum(Calendar.DAY_OF_MONTH);
-
-        Calendar clone = (Calendar) currentCal.clone();
-        clone.add(Calendar.MONTH, -1);
-        int prevCnt = clone.getActualMaximum(Calendar.DAY_OF_MONTH) - firstDayOfMonth + 2;
-
-        int col = 0, count = 1;
-        for (int row = 0; row < event_grid.getRowCount(); row++) {
-            if (row == 0) {
-                for (col = 0; col < firstDayOfMonth - 1; col++) {
-                    TextView date_text = cells[col][row].findViewById(R.id.date_text_view);
-
-                    clone.set(Calendar.DAY_OF_MONTH, prevCnt);
-                    date_text.setText(String.valueOf(prevCnt));
-                    date_text.setTag(clone.getTimeInMillis());
-
-                    prevCnt++;
-                }
-                for (; col < event_grid.getColumnCount(); col++)
-                    ((TextView) cells[col][row].findViewById(R.id.date_text_view)).setText(String.valueOf(count++));
-            } else
-                for (col = 0; col < event_grid.getColumnCount(); col++) {
-                    ((TextView) cells[col][row].findViewById(R.id.date_text_view)).setText(String.valueOf(count));
-                    if (count++ == numOfDaysCurMonth + 1)
-                        break;
-                }
-        }
-        for (count = 1; col < event_grid.getColumnCount(); col++)
-            ((TextView) cells[col][event_grid.getRowCount() - 1].findViewById(R.id.date_text_view)).setText(String.valueOf(count++));
     }
 
     public void navNextWeekClick(View view) {
@@ -125,24 +83,92 @@ public class MainActivity extends AppCompatActivity {
         updateCalendarView();
     }
 
+    @SuppressLint("CutPasteId")
     public void updateCalendarView() {
-        refreshToDefaultGrid();
+        // Update the value of year and month according to the currently selected month
+        monthName.setText(months[currentCal.get(Calendar.MONTH)]);
+        year.setText(String.valueOf(currentCal.get(Calendar.YEAR)));
+
+        // First clear our the grid
+        for (int row = 0; row < event_grid.getRowCount(); row++)
+            for (int col = 0; col < event_grid.getColumnCount(); col++)
+                Tools.cellClearOut(cells, col, row, this, event_grid, cellClick);
+
+        // Check if displayed month contains today
+        Calendar today = Calendar.getInstance();
+        TextView todayText;
+
+        if (currentCal.get(Calendar.MONTH) == today.get(Calendar.MONTH) && currentCal.get(Calendar.YEAR) == today.get(Calendar.YEAR)) {
+            int col = today.get(Calendar.DAY_OF_WEEK) - 1;
+            int row = (today.get(Calendar.DAY_OF_MONTH) + col) / 7;
+
+            todayText = cells[col][row].findViewById(R.id.date_text_view);
+            todayText.setTextColor(Color.WHITE);
+            todayText.setBackgroundResource(R.drawable.bg_today_view);
+        }
+
+        // Calculate which date of week current month starts from
+        int firstDayOfMonth = getFirstWeekdayIndex(currentCal.get(Calendar.DAY_OF_MONTH), currentCal.get(Calendar.MONTH), currentCal.get(Calendar.YEAR));
+        int numOfDaysCurMonth = currentCal.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+        Calendar clone = (Calendar) currentCal.clone();
+        clone.add(Calendar.MONTH, -1);
+        int prevCnt = clone.getActualMaximum(Calendar.DAY_OF_MONTH) - firstDayOfMonth + 2;
+
+        // Set dates to display
+        int col = 0, row, count = 1;
+        for (row = 0; row < event_grid.getRowCount(); row++) {
+            if (row == 0) {
+                for (col = 0; col < firstDayOfMonth - 1; col++) {
+                    TextView date_text = cells[col][row].findViewById(R.id.date_text_view);
+                    date_text.setText(String.valueOf(prevCnt));
+
+                    clone.set(Calendar.DAY_OF_MONTH, prevCnt);
+                    cells[col][row].setTag(clone.getTimeInMillis());
+
+                    prevCnt++;
+                }
+                clone.add(Calendar.MONTH, 1);
+                for (; col < event_grid.getColumnCount(); col++, count++) {
+                    TextView date_text = cells[col][row].findViewById(R.id.date_text_view);
+                    date_text.setText(String.valueOf(count));
+
+                    clone.set(Calendar.DAY_OF_MONTH, count);
+                    cells[col][row].setTag(clone.getTimeInMillis());
+                }
+            } else
+                for (col = 0; count < numOfDaysCurMonth && col < event_grid.getColumnCount(); col++, count++) {
+                    TextView date_text = cells[col][row].findViewById(R.id.date_text_view);
+                    date_text.setText(String.valueOf(count));
+
+                    clone.set(Calendar.DAY_OF_MONTH, count);
+                    cells[col][row].setTag(clone.getTimeInMillis());
+                }
+        }
+        clone.add(Calendar.DAY_OF_MONTH, 1);
+
+        for (count = 1, row = event_grid.getRowCount() - 1; col < event_grid.getColumnCount(); col++, count++) {
+            TextView date_text = cells[col][row].findViewById(R.id.date_text_view);
+            date_text.setText(String.valueOf(count));
+
+            clone.set(Calendar.DAY_OF_MONTH, count);
+            cells[col][row].setTag(clone.getTimeInMillis());
+        }
+
+        // Add fake events
         Event events[] = new Event[]{
                 new Event("UCL final match", 3),
                 new Event("Movie with Debbie", 0),
                 new Event("NSL meeting", 2),
                 new Event("Shopping", 1)
         };
-        for (int row = 0; row < event_grid.getRowCount(); row++)
-            for (int col = 0; col < event_grid.getColumnCount(); col++) {
+        for (row = 0; row < event_grid.getRowCount(); row++)
+            for (col = 0; col < event_grid.getColumnCount(); col++) {
                 Tools.addEvent(this, cells[col][row], events[0]);
                 Tools.addEvent(this, cells[col][row], events[1]);
                 Tools.addEvent(this, cells[col][row], events[2]);
                 Tools.addEvent(this, cells[col][row], events[3]);
             }
-
-        monthName.setText(months[currentCal.get(Calendar.MONTH)]);
-        year.setText(String.valueOf(currentCal.get(Calendar.YEAR)));
     }
 
     public int getFirstWeekdayIndex(int day, int month, int year) {

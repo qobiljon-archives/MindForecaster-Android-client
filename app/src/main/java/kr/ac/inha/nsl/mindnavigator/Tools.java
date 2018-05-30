@@ -3,6 +3,7 @@ package kr.ac.inha.nsl.mindnavigator;
 import android.app.Activity;
 import android.support.annotation.ColorInt;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class Tools {
@@ -15,12 +16,13 @@ public class Tools {
         cellHeight = height;
     }
 
-    public static void cellClearOut(ViewGroup[][] grid, int row, int col, Activity activity, ViewGroup parent) {
+    public static void cellClearOut(ViewGroup[][] grid, int row, int col, Activity activity, ViewGroup parent, LinearLayout.OnClickListener cellClickListener) {
         if (grid[row][col] == null) {
             activity.getLayoutInflater().inflate(R.layout.date_cell, parent, true);
             ViewGroup res = (ViewGroup) parent.getChildAt(parent.getChildCount() - 1);
             res.getLayoutParams().width = cellWidth;
             res.getLayoutParams().height = cellHeight;
+            res.setOnClickListener(cellClickListener);
             grid[row][col] = res;
         } else {
             TextView date_text = grid[row][col].findViewById(R.id.date_text_view);
