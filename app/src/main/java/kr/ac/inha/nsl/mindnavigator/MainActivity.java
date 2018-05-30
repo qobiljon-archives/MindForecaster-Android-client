@@ -1,5 +1,6 @@
 package kr.ac.inha.nsl.mindnavigator;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.GridLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Calendar;
@@ -52,33 +54,34 @@ public class MainActivity extends AppCompatActivity {
 
                 Tools.setCellSize(event_grid.getWidth() / event_grid.getColumnCount(), event_grid.getHeight() / event_grid.getRowCount());
                 updateCalendarView();
+
+                LinearLayout.OnClickListener cellClick = new LinearLayout.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                };
             }
         });
     }
 
-    private void initEmptyGridViews() {
-        event_grid.removeAllViews();
-
+    @SuppressLint("CutPasteId")
+    private void refreshToDefaultGrid() {
         for (int row = 0; row < event_grid.getRowCount(); row++)
-            for (int col = 0; col < event_grid.getColumnCount(); col++) {
-                // Populate the prepared TextView
-                cells[col][row] = Tools.emptyCell(this, event_grid);
-                event_grid.addView(cells[col][row]);
-            }
+            for (int col = 0; col < event_grid.getColumnCount(); col++)
+                Tools.cellClearOut(cells, col, row, this, event_grid);
 
         Calendar today = Calendar.getInstance();
+        TextView todayText;
+
         if (currentCal.get(Calendar.MONTH) == today.get(Calendar.MONTH) && currentCal.get(Calendar.YEAR) == today.get(Calendar.YEAR)) {
             int col = today.get(Calendar.DAY_OF_WEEK) - 1;
             int row = (today.get(Calendar.DAY_OF_MONTH) + col) / 7;
 
-            TextView todayText = cells[col][row].findViewById(R.id.date_text_view);
+            todayText = cells[col][row].findViewById(R.id.date_text_view);
             todayText.setTextColor(Color.WHITE);
             todayText.setBackgroundResource(R.drawable.bg_today_view);
         }
-    }
-
-    private void refreshToDefaultGrid() {
-        initEmptyGridViews();
 
         int firstDayOfMonth = getFirstWeekdayIndex(currentCal.get(Calendar.DAY_OF_MONTH), currentCal.get(Calendar.MONTH), currentCal.get(Calendar.YEAR));
         int numOfDaysCurMonth = currentCal.getActualMaximum(Calendar.DAY_OF_MONTH);
@@ -90,8 +93,15 @@ public class MainActivity extends AppCompatActivity {
         int col = 0, count = 1;
         for (int row = 0; row < event_grid.getRowCount(); row++) {
             if (row == 0) {
-                for (col = 0; col < firstDayOfMonth - 1; col++)
-                    ((TextView) cells[col][row].findViewById(R.id.date_text_view)).setText(String.valueOf(prevCnt++));
+                for (col = 0; col < firstDayOfMonth - 1; col++) {
+                    TextView date_text = cells[col][row].findViewById(R.id.date_text_view);
+
+                    clone.set(Calendar.DAY_OF_MONTH, prevCnt);
+                    date_text.setText(String.valueOf(prevCnt));
+                    date_text.setTag(clone.getTimeInMillis());
+
+                    prevCnt++;
+                }
                 for (; col < event_grid.getColumnCount(); col++)
                     ((TextView) cells[col][row].findViewById(R.id.date_text_view)).setText(String.valueOf(count++));
             } else
@@ -129,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
                 Tools.addEvent(this, cells[col][row], events[1]);
                 Tools.addEvent(this, cells[col][row], events[2]);
                 Tools.addEvent(this, cells[col][row], events[3]);
-
             }
 
         monthName.setText(months[currentCal.get(Calendar.MONTH)]);
