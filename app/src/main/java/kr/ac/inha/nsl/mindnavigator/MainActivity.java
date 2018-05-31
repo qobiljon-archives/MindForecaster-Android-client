@@ -238,7 +238,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void onNewEventClick(View view) {
         Intent intent = new Intent(this, EventActivity.class);
-        intent.putExtra("selectedDayMillis", clickedCellCal.getTimeInMillis());
+        if(view == findViewById(R.id.btn_add_from_dialog)){
+            intent.putExtra("selectedDayMillis", clickedCellCal.getTimeInMillis());
+        } else{
+            intent.putExtra("selectedDayMillis", Calendar.getInstance().getTimeInMillis());
+        }
         startActivity(intent);
     }
 }
