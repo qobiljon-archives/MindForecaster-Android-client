@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView monthName;
     private TextView year;
     private Calendar currentCal;
+    private Calendar clickedCellCal;
 
     private String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 
@@ -36,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout.OnClickListener cellClick = new LinearLayout.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Calendar selectedDay = Calendar.getInstance();
-            selectedDay.setTimeInMillis((long) view.getTag());
+            clickedCellCal = Calendar.getInstance();
+            clickedCellCal.setTimeInMillis((long) view.getTag());
 
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             Fragment prev = getFragmentManager().findFragmentByTag("dialog");
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             }
             ft.addToBackStack(null);
             Bundle args = new Bundle();
-            args.putLong("selectedDayMillis", selectedDay.getTimeInMillis());
+            args.putLong("selectedDayMillis", clickedCellCal.getTimeInMillis());
             DialogFragment dialogFragment = new EventsListDialog();
             dialogFragment.setArguments(args);
             dialogFragment.show(ft, "dialog");
@@ -237,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onNewEventClick(View view) {
         Intent intent = new Intent(this, EventActivity.class);
+        intent.putExtra("selectedDayMillis", clickedCellCal.getTimeInMillis());
         startActivity(intent);
     }
 }

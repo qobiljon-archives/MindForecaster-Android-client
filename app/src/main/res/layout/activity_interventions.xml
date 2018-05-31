@@ -34,7 +34,7 @@
                 android:layout_marginEnd="15dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_interv_method_unchecked_view"
-                android:onClick="selfTabClick"
+                android:onClick="tabClicked"
                 android:padding="10dp"
                 android:text="@string/self"
                 android:textAlignment="center"
@@ -47,7 +47,7 @@
                 android:layout_marginEnd="15dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_interv_method_unchecked_view"
-                android:onClick="systemTabClick"
+                android:onClick="tabClicked"
                 android:padding="10dp"
                 android:text="@string/system"
                 android:textAlignment="center"
@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/bg_interv_method_unchecked_view"
-                android:onClick="peerTabClick"
+                android:onClick="tabClicked"
                 android:padding="10dp"
                 android:text="@string/peer"
                 android:textAlignment="center"
@@ -95,7 +95,8 @@
             android:gravity="top"
             android:inputType="text|textMultiLine"
             android:lines="7"
-            android:paddingStart="3dp" />
+            android:paddingTop="5dp"
+            android:paddingStart="5dp" />
 
     </LinearLayout>
 
