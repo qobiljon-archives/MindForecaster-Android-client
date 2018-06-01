@@ -10,7 +10,7 @@
     <color name="inner_activity_action_color">#1ab7ea</color>
 
     <color name="colorPrimary">#D60000</color>
-    <color name="colorPrimaryDark">#D60000</color>
+    <color name="colorPrimaryDark">#000</color>
     <color name="colorAccent">#b71c1c</color>
 
 

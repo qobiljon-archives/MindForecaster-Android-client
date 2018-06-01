@@ -24,6 +24,9 @@ public class InterventionsActivity extends AppCompatActivity {
     }
 
     //region Variables
+    boolean saveIntervention = false;
+    static String result = null;
+
     EditText interv_text;
     View interv_choice;
     ViewGroup interv_list;
@@ -60,6 +63,7 @@ public class InterventionsActivity extends AppCompatActivity {
                 tabButtons[0].setBackgroundResource(R.drawable.bg_interv_method_checked_view);
                 interv_text.setVisibility(View.VISIBLE);
                 Tools.toggle_keyboard(this, interv_text, true);
+                saveIntervention = true;
                 break;
             case R.id.button_systems_intervention:
                 tabButtons[1].setBackgroundResource(R.drawable.bg_interv_method_checked_view);
@@ -67,8 +71,8 @@ public class InterventionsActivity extends AppCompatActivity {
                 interv_list.removeViews(1, interv_list.getChildCount() - 1);
                 Tools.toggle_keyboard(this, interv_text, false);
                 Tools.execute(new MyRunnable(
-                        "qobiljon",
-                        "12345678",
+                        SignInActivity.loginPrefs.getString(SignInActivity.username, null),
+                        SignInActivity.loginPrefs.getString(SignInActivity.password, null),
                         getString(R.string.url_fetch_interv_system)
                 ) {
                     @Override
@@ -120,6 +124,7 @@ public class InterventionsActivity extends AppCompatActivity {
                         }
                     }
                 });
+                saveIntervention = false;
                 break;
             case R.id.button_peer_interventions:
                 tabButtons[2].setBackgroundResource(R.drawable.bg_interv_method_checked_view);
@@ -127,8 +132,8 @@ public class InterventionsActivity extends AppCompatActivity {
                 interv_list.removeViews(1, interv_list.getChildCount() - 1);
                 Tools.toggle_keyboard(this, interv_text, false);
                 Tools.execute(new MyRunnable(
-                        "qobiljon",
-                        "12345678",
+                        SignInActivity.loginPrefs.getString(SignInActivity.username, null),
+                        SignInActivity.loginPrefs.getString(SignInActivity.password, null),
                         getString(R.string.url_fetch_interv_peer)
                 ) {
                     @Override
@@ -180,6 +185,7 @@ public class InterventionsActivity extends AppCompatActivity {
                         }
                     }
                 });
+                saveIntervention = false;
                 break;
             default:
                 break;
@@ -191,6 +197,62 @@ public class InterventionsActivity extends AppCompatActivity {
     }
 
     public void saveClick(View view) {
+        if (saveIntervention) {
+            Tools.execute(new MyRunnable(
+                    SignInActivity.loginPrefs.getString(SignInActivity.username, null),
+                    SignInActivity.loginPrefs.getString(SignInActivity.password, null),
+                    getString(R.string.url_fetch_interv_system)
+            ) {
+                @Override
+                public void run() {
+                    String username = (String) args[0];
+                    String password = (String) args[1];
+                    String url = (String) args[2];
+
+                    JSONObject body = new JSONObject();
+                    try {
+                        body.put("username", username);
+                        body.put("password", password);
+
+                        JSONObject res = new JSONObject(Tools.post(url, body));
+                        switch (res.getInt("result")) {
+                            case Tools.RES_OK:
+                                runOnUiThread(new MyRunnable(
+                                        res.getJSONArray("names")
+                                ) {
+                                    @Override
+                                    public void run() {
+                                        JSONArray arr = (JSONArray) args[0];
+                                        while (interv_list.getChildCount() > 1)
+                                            interv_list.removeViewAt(1);
+
+                                        LayoutInflater inflater = getLayoutInflater();
+                                        try {
+                                            for (int n = 0; n < arr.length(); n++) {
+                                                inflater.inflate(R.layout.intervention_element, interv_list);
+                                                TextView interv_text = interv_list.getChildAt(n + 1).findViewById(R.id.intervention_text);
+                                                interv_text.setText(arr.getString(n));
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                                break;
+                            case Tools.RES_FAIL:
+                                break;
+                            case Tools.RES_SRV_ERR:
+                                break;
+                            default:
+                                break;
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
         finish();
     }
 }

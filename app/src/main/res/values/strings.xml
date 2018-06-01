@@ -69,6 +69,19 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
+    <string name="sign_in">Sign in</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="not_a_member">Not a member yet?</string>
+    <string name="now">now</string>
+    <string name="sign_up_label"><u>Sign up</u></string>
+    <string name="sign_up">Sign up</string>
+    <string name="name">Full name</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="sign_up_now">Sign Up Now</string>
+    <string name="signing_in">Signing in…</string>
+    <string name="signing_up">Signing up…</string>
+
     <string-array name="months_array">
         <item>Jan</item>
         <item>Feb</item>

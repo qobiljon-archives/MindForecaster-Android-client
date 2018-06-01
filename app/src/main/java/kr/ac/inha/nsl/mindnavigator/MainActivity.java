@@ -5,6 +5,7 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,40 +23,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
-
-    // region Variables
-    private GridLayout event_grid;
-    private ViewGroup[][] cells = new ViewGroup[7][5];
-    private TextView monthName;
-    private TextView year;
-    private Calendar currentCal;
-    private Calendar clickedCellCal;
-
-    private String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
-
-    // region CellClick Listener
-    LinearLayout.OnClickListener cellClick = new LinearLayout.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            clickedCellCal = Calendar.getInstance();
-            clickedCellCal.setTimeInMillis((long) view.getTag());
-
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-            if (prev != null) {
-                ft.remove(prev);
-            }
-            ft.addToBackStack(null);
-            Bundle args = new Bundle();
-            args.putLong("selectedDayMillis", clickedCellCal.getTimeInMillis());
-            DialogFragment dialogFragment = new EventsListDialog();
-            dialogFragment.setArguments(args);
-            dialogFragment.show(ft, "dialog");
-
-        }
-    };
-    // endregion
-    // endregion
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +59,46 @@ public class MainActivity extends AppCompatActivity {
         // endregion
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    // region Variables
+    private GridLayout event_grid;
+    private ViewGroup[][] cells = new ViewGroup[7][5];
+    private TextView monthName;
+    private TextView year;
+    private Calendar currentCal;
+    private Calendar clickedCellCal;
+
+    private String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+
+    // region CellClick Listener
+    LinearLayout.OnClickListener cellClick = new LinearLayout.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            clickedCellCal = Calendar.getInstance();
+            clickedCellCal.setTimeInMillis((long) view.getTag());
+
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+            if (prev != null) {
+                ft.remove(prev);
+            }
+            ft.addToBackStack(null);
+            Bundle args = new Bundle();
+            args.putLong("selectedDayMillis", clickedCellCal.getTimeInMillis());
+            DialogFragment dialogFragment = new EventsListDialog();
+            dialogFragment.setArguments(args);
+            dialogFragment.show(ft, "dialog");
+
+        }
+    };
+    // endregion
+    // endregion
+
     private void init() {
         currentCal = Calendar.getInstance();
         event_grid = findViewById(R.id.event_grid);
@@ -107,16 +114,6 @@ public class MainActivity extends AppCompatActivity {
                 updateCalendarView();
             }
         });
-    }
-
-    public void navNextWeekClick(View view) {
-        currentCal.add(Calendar.MONTH, 1);
-        updateCalendarView();
-    }
-
-    public void navPrevWeekClick(View view) {
-        currentCal.add(Calendar.MONTH, -1);
-        updateCalendarView();
     }
 
     @SuppressLint("CutPasteId")
@@ -216,10 +213,14 @@ public class MainActivity extends AppCompatActivity {
         return cal.get(Calendar.DAY_OF_WEEK);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return super.onCreateOptionsMenu(menu);
+    public void navNextWeekClick(View view) {
+        currentCal.add(Calendar.MONTH, 1);
+        updateCalendarView();
+    }
+
+    public void navPrevWeekClick(View view) {
+        currentCal.add(Calendar.MONTH, -1);
+        updateCalendarView();
     }
 
     public void todayClick(MenuItem item) {
@@ -227,7 +228,14 @@ public class MainActivity extends AppCompatActivity {
         updateCalendarView();
     }
 
-    public void settingsClick(MenuItem item) {
+    public void logoutClick(MenuItem item) {
+        SharedPreferences.Editor editor = SignInActivity.loginPrefs.edit();
+        editor.clear();
+        editor.apply();
+        Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
+        finish();
     }
 
     public void selectMonth(View view) {
