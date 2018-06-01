@@ -60,6 +60,14 @@
     <string name="evaluation">Evaluation</string>
     <string name="feedback">Feedback</string>
     <string name="event_details">Event details</string>
+    <string name="event">Event</string>
+    <string name="intervention">Intervention</string>
+    <string name="did_it">I did it</string>
+    <string name="did_not_it">I did not do it</string>
+    <string name="bad">Bad</string>
+    <string name="good">Good</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
     <string-array name="months_array">
         <item>Jan</item>

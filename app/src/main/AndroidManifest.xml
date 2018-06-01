@@ -28,6 +28,9 @@
         <activity
             android:name=".InterventionsActivity"
             android:theme="@style/InnerActivityTheme" />
+        <activity
+            android:name=".EvaluationActivity"
+            android:theme="@style/InnerActivityTheme" />
     </application>
 
 </manifest>

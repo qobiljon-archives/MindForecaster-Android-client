@@ -222,7 +222,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <!--Option: Anticipated stress level-->
 
@@ -275,11 +275,9 @@
 
                         <SeekBar
                             android:id="@+id/stressLvl"
-                            style="@style/Widget.AppCompat.SeekBar.Discrete"
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="2"
-                            android:max="2" />
+                            android:layout_height="wrap_content"
+                            android:max="100"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -289,7 +287,6 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:labelFor="@+id/progressBar"
                                 android:text="@string/low"
                                 android:textColor="@color/slvl0_color"
                                 android:textSize="15sp" />
@@ -298,7 +295,6 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:labelFor="@+id/progressBar"
                                 android:text="@string/normal"
                                 android:textAlignment="center"
                                 android:textColor="@color/slvl1_color"
@@ -308,7 +304,6 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:labelFor="@+id/progressBar"
                                 android:text="@string/high"
                                 android:textAlignment="viewEnd"
                                 android:textColor="@color/slvl2_color"
@@ -332,72 +327,59 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:labelFor="@+id/txt_stress_cause"
                         android:text="@string/stress_type"
                         android:textColor="@color/black"
                         android:textSize="15sp"
                         android:textStyle="bold"
                         android:typeface="monospace" />
 
-                    <TextView
+                    <Button
                         android:id="@+id/stressor_positive"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:background="@drawable/bg_box_view"
-                        android:padding="10dp"
+                        android:background="@drawable/bg_box_unchecked_view"
+                        android:textAllCaps="false"
                         android:text="@string/positive"
                         android:textAlignment="center"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
 
-                    <TextView
+                    <Button
                         android:id="@+id/stressor_negative"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:background="@drawable/bg_box_view"
-                        android:padding="10dp"
+                        android:background="@drawable/bg_box_unchecked_view"
+                        android:textAllCaps="false"
                         android:text="@string/negative"
                         android:textAlignment="center"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
 
-                    <TextView
+                    <Button
                         android:id="@+id/stressor_dont_know"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:background="@drawable/bg_box_view"
-                        android:padding="10dp"
+                        android:background="@drawable/bg_box_unchecked_view"
+                        android:textAllCaps="false"
                         android:text="@string/unidentified"
                         android:textAlignment="center"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
 
-                    <TextView
+                    <EditText
+                        android:id="@+id/txt_stress_cause"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
-                        android:labelFor="@+id/txt_stress_cause"
-                        android:text="@string/stress_cause"
-                        android:textColor="@color/black"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        android:typeface="monospace" />
-
-                    <EditText
-                        android:id="@id/txt_stress_cause"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
                         android:background="@drawable/bg_solid_wrap"
+                        android:hint="@string/stress_cause"
                         android:gravity="top"
                         android:inputType="text|textMultiLine"
-                        android:lines="4"
-                        android:paddingEnd="5dp"
-                        android:paddingStart="5dp"
-                        android:paddingTop="5dp" />
+                        android:maxLines="5"
+                        android:padding="10dp"/>
                 </LinearLayout>
 
             </LinearLayout>
@@ -466,6 +448,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="20dp"
+                android:onClick="evaluationClick"
                 android:text="@string/evaluation"
                 android:textColor="@color/black"
                 android:textSize="18sp" />

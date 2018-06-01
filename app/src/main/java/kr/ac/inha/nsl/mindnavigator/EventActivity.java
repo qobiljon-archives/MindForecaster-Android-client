@@ -89,29 +89,23 @@ public class EventActivity extends AppCompatActivity {
         stressLvl.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                switch (progress) {
-                    case 0:
-                        int slvl0Col = ResourcesCompat.getColor(getResources(), R.color.slvl0_color, null);
-                        stressLvl.getProgressDrawable().setColorFilter(slvl0Col, PorterDuff.Mode.SRC_IN);
-                        stressLvl.getThumb().setColorFilter(slvl0Col, PorterDuff.Mode.SRC_IN);
-                        inactiveLayout.setVisibility(View.GONE);
-                        break;
-                    case 1:
-                        int slvl1Col = ResourcesCompat.getColor(getResources(), R.color.slvl1_color, null);
-                        stressLvl.getProgressDrawable().setColorFilter(slvl1Col, PorterDuff.Mode.SRC_IN);
-                        stressLvl.getThumb().setColorFilter(slvl1Col, PorterDuff.Mode.SRC_IN);
-                        inactiveLayout.setVisibility(View.VISIBLE);
-                        break;
-                    case 2:
-                        int slvl2Col = ResourcesCompat.getColor(getResources(), R.color.slvl2_color, null);
-                        stressLvl.getProgressDrawable().setColorFilter(slvl2Col, PorterDuff.Mode.SRC_IN);
-                        stressLvl.getThumb().setColorFilter(slvl2Col, PorterDuff.Mode.SRC_IN);
-                        inactiveLayout.setVisibility(View.VISIBLE);
-                        break;
-                    default:
-                        break;
+                if(progress > 0 && progress < 50){
+                    int slvl0Col = ResourcesCompat.getColor(getResources(), R.color.slvl0_color, null);
+                    stressLvl.getProgressDrawable().setColorFilter(slvl0Col, PorterDuff.Mode.SRC_IN);
+                    stressLvl.getThumb().setColorFilter(slvl0Col, PorterDuff.Mode.SRC_IN);
+                    inactiveLayout.setVisibility(View.GONE);
                 }
-
+                else if(progress > 50 && progress < 80){
+                    int slvl1Col = ResourcesCompat.getColor(getResources(), R.color.slvl1_color, null);
+                    stressLvl.getProgressDrawable().setColorFilter(slvl1Col, PorterDuff.Mode.SRC_IN);
+                    stressLvl.getThumb().setColorFilter(slvl1Col, PorterDuff.Mode.SRC_IN);
+                    inactiveLayout.setVisibility(View.VISIBLE);
+                } else{
+                    int slvl2Col = ResourcesCompat.getColor(getResources(), R.color.slvl2_color, null);
+                    stressLvl.getProgressDrawable().setColorFilter(slvl2Col, PorterDuff.Mode.SRC_IN);
+                    stressLvl.getThumb().setColorFilter(slvl2Col, PorterDuff.Mode.SRC_IN);
+                    inactiveLayout.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -154,6 +148,11 @@ public class EventActivity extends AppCompatActivity {
 
     public void interventionsClick(View view) {
         Intent intent = new Intent(this, InterventionsActivity.class);
+        startActivity(intent);
+    }
+
+    public void evaluationClick(View view) {
+        Intent intent = new Intent(this, EvaluationActivity.class);
         startActivity(intent);
     }
 
