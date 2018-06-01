@@ -3,11 +3,9 @@ package kr.ac.inha.nsl.mindnavigator;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -23,23 +21,20 @@ public class EventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
-        ActionBar bar = getSupportActionBar();
-        if (bar != null)
-            bar.setTitle("Event");
         init();
     }
 
     //region Variables
-    TextView eventTitle;
-    Switch switchAllDay;
-    TextView startDate, startTime, endDate, endTime;
-    SeekBar stressLvl;
-    LinearLayout inactiveLayout;
-    TextView positiveStressor, negativeStressor, dontKnowStressor;
-    TextView stressCause;
-    Button saveBtn, cancelBtn;
+    private TextView eventTitle;
+    private Switch switchAllDay;
+    private TextView startDate, startTime, endDate, endTime;
+    private SeekBar stressLvl;
+    private LinearLayout inactiveLayout;
+    private TextView positiveStress, negativeStress, dentKnowStress;
+    private TextView stressCause;
 
     //endregion
+
     private void init() {
         //region Assign UI variables
         eventTitle = findViewById(R.id.txt_event_title);
@@ -51,15 +46,11 @@ public class EventActivity extends AppCompatActivity {
 
         stressLvl = findViewById(R.id.stressLvl);
         inactiveLayout = findViewById(R.id.layout_to_be_inactive);
-        positiveStressor = findViewById(R.id.stressor_positive);
-        negativeStressor = findViewById(R.id.stressor_negative);
-        dontKnowStressor = findViewById(R.id.stressor_dont_know);
+        positiveStress = findViewById(R.id.stressor_positive);
+        negativeStress = findViewById(R.id.stressor_negative);
+        dentKnowStress = findViewById(R.id.stressor_dont_know);
         stressCause = findViewById(R.id.txt_stress_cause);
-
-        saveBtn = findViewById(R.id.btn_save);
-        cancelBtn = findViewById(R.id.btn_cancel);
         //endregion
-
 
 
         //region Set the selected day fields (Date & Time)
@@ -136,10 +127,10 @@ public class EventActivity extends AppCompatActivity {
         switchAllDay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
+                if (isChecked) {
                     startTime.setVisibility(View.GONE);
                     endTime.setVisibility(View.GONE);
-                } else{
+                } else {
                     startTime.setVisibility(View.VISIBLE);
                     endTime.setVisibility(View.VISIBLE);
                 }
@@ -148,13 +139,11 @@ public class EventActivity extends AppCompatActivity {
     }
 
     public void moreOptionsClick(View view) {
-        LinearLayout btnMore = findViewById(R.id.btn_more_layout);
-        LinearLayout moreOptLayout = findViewById(R.id.more_options_layout);
-        btnMore.setVisibility(View.GONE);
-        moreOptLayout.setVisibility(View.VISIBLE);
+        findViewById(R.id.text_more_event_options).setVisibility(View.GONE);
+        findViewById(R.id.more_options_layout).setVisibility(View.VISIBLE);
     }
 
-    public void stressLvlMoreClick(View view) {
+    public void expandStressLevelClick(View view) {
         LinearLayout moreStressLvl = findViewById(R.id.stress_lvl_more);
 
         if (moreStressLvl.getVisibility() == View.VISIBLE) {
@@ -163,14 +152,16 @@ public class EventActivity extends AppCompatActivity {
             moreStressLvl.setVisibility(View.VISIBLE);
     }
 
-    public void cancelClick(View view) {
-        finish();
-    }
-
-    public void interVentionsClick(View view) {
+    public void interventionsClick(View view) {
         Intent intent = new Intent(this, InterventionsActivity.class);
         startActivity(intent);
     }
 
+    public void cancelClick(View view) {
+        finish();
+    }
 
+    public void saveClick(View view) {
+        finish();
+    }
 }

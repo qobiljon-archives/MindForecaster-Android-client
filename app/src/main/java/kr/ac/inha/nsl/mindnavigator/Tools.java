@@ -1,11 +1,11 @@
 package kr.ac.inha.nsl.mindnavigator;
 
 import android.app.Activity;
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.content.Context;
 import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,17 +18,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 public class Tools {
     // region Variables
@@ -39,9 +30,7 @@ public class Tools {
 
     private static int cellWidth, cellHeight;
 
-    private static Queue<MyRunnable> execQueue = new LinkedList<>();
-    private static ExecutorService masterExec = Executors.newCachedThreadPool();
-    private static ExecutorService slaveExec = Executors.newCachedThreadPool();
+    private static ExecutorService executor = Executors.newCachedThreadPool();
     // endregion
 
     static void setCellSize(int width, int height) {
@@ -105,8 +94,17 @@ public class Tools {
         }
     }
 
-    static void execute(MyRunnable runnable, boolean interrupt_current) {
-        execQueue.add(runnable);
+    static void execute(MyRunnable runnable) {
+        executor.execute(runnable);
+    }
+
+    static void toggle_keyboard(Activity activity, EditText editText, boolean show) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null)
+            if (show)
+                imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+            else
+                imm.hideSoftInputFromWindow(editText.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
 }
 
@@ -115,10 +113,10 @@ abstract class MyRunnable implements Runnable {
         this.args = Arrays.copyOf(args, args.length);
     }
 
-    private Object[] args;
+    Object[] args;
 }
 
-class Event implements Parcelable {
+class Event {
     Event(String title, int stressLevel, Calendar startTime, Calendar endTime) {
         setTitle(title);
         setStressLevel(stressLevel);
@@ -129,30 +127,7 @@ class Event implements Parcelable {
         events.add(this);
     }
 
-    private Event(Parcel in) {
-        startTime = Calendar.getInstance();
-        endTime = Calendar.getInstance();
-
-        id = in.readLong();
-        startTime.setTimeInMillis(in.readLong());
-        endTime.setTimeInMillis(in.readLong());
-        stressLevel = in.readInt();
-        title = in.readString();
-    }
-
-    public static final Creator<Event> CREATOR = new Creator<Event>() {
-        @Override
-        public Event createFromParcel(Parcel in) {
-            return new Event(in);
-        }
-
-        @Override
-        public Event[] newArray(int size) {
-            return new Event[size];
-        }
-    };
-
-    public static void init(Activity activity) {
+    static void init(Activity activity) {
         stressColors[0] = activity.getColor(R.color.slvl0_color);
         stressColors[1] = activity.getColor(R.color.slvl1_color);
         stressColors[2] = activity.getColor(R.color.slvl2_color);
@@ -160,7 +135,7 @@ class Event implements Parcelable {
         events.clear();
     }
 
-    public static ArrayList<Event> getOneDayEvents(Calendar day) {
+    static ArrayList<Event> getOneDayEvents(Calendar day) {
         ArrayList<Event> res = new ArrayList<>();
 
         Calendar comDay = (Calendar) day.clone();
@@ -204,7 +179,7 @@ class Event implements Parcelable {
         this.startTime = (Calendar) startTime.clone();
     }
 
-    public Calendar getStartTime() {
+    Calendar getStartTime() {
         return startTime;
     }
 
@@ -214,7 +189,7 @@ class Event implements Parcelable {
         this.endTime = (Calendar) endTime.clone();
     }
 
-    public Calendar getEndTime() {
+    Calendar getEndTime() {
         return endTime;
     }
 
@@ -222,7 +197,7 @@ class Event implements Parcelable {
         this.stressLevel = stressLevel;
     }
 
-    public int getStressLevel() {
+    int getStressLevel() {
         return stressLevel;
     }
 
@@ -231,29 +206,15 @@ class Event implements Parcelable {
     }
 
     @SuppressWarnings("unused")
-    public long getEventId() {
+    long getEventId() {
         return id;
     }
 
-    public int getStressColor() {
+    int getStressColor() {
         return stressColors[stressLevel];
     }
 
-    public String getTitle() {
+    String getTitle() {
         return title;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeLong(startTime.getTimeInMillis());
-        dest.writeLong(endTime.getTimeInMillis());
-        dest.writeInt(stressLevel);
-        dest.writeString(title);
     }
 }

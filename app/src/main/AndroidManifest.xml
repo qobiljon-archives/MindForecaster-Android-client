@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="kr.ac.inha.nsl.mindnavigator">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
@@ -22,10 +24,10 @@
         </activity>
         <activity
             android:name=".EventActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/InnerActivityTheme" />
         <activity
             android:name=".InterventionsActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/InnerActivityTheme" />
     </application>
 
 </manifest>
