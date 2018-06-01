@@ -43,18 +43,19 @@
             android:layout_margin="5dp"
             android:gravity="center">
 
-            <ImageButton
+            <ImageButton android:contentDescription="@string/clock_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|start"
-                android:background="@drawable/clock"/>
+                android:background="@drawable/clock" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/all_day"
-                android:textColor="@color/black"
                 android:layout_gravity="center|start"
                 android:layout_marginStart="30dp"
+                android:text="@string/all_day"
+                android:textColor="@color/black"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 android:typeface="monospace" />
@@ -64,7 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|end"
-                android:layout_marginEnd="20dp"/>
+                android:layout_marginEnd="20dp" />
 
         </FrameLayout>
 
@@ -77,8 +78,8 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
                 android:layout_marginEnd="5dp"
+                android:layout_marginStart="30dp"
                 android:layout_weight="2"
                 android:labelFor="@+id/txt_event_start_time"
                 android:text="@string/event_start_time"
@@ -119,8 +120,8 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
                 android:layout_marginEnd="5dp"
+                android:layout_marginStart="30dp"
                 android:layout_weight="2"
                 android:labelFor="@+id/txt_event_end_time"
                 android:text="@string/event_end_time"
@@ -163,6 +164,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
+                android:contentDescription="@string/expand_button"
                 android:onClick="moreOptionsClick"
                 android:src="@drawable/img_more_options" />
 
@@ -199,7 +201,7 @@
                     android:layout_height="wrap_content"
                     android:onClick="stressLvlMoreClick"
                     android:padding="20dp"
-                    android:text="Anticipated stress level"
+                    android:text="@string/anticipated_stress_level"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 
@@ -209,6 +211,7 @@
                     android:layout_gravity="center|end"
                     android:layout_margin="17dp"
                     android:background="@android:color/transparent"
+                    android:contentDescription="@string/arrow_down"
                     android:onClick="stressLvlMoreClick"
                     android:src="@drawable/arrow_down" />
             </FrameLayout>
@@ -249,7 +252,7 @@
                             android:id="@+id/stressLvl"
                             style="@style/Widget.AppCompat.SeekBar.Discrete"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="0dp"
                             android:layout_weight="2"
                             android:max="2" />
 
@@ -305,7 +308,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:labelFor="@+id/txt_stress_cause"
-                        android:text="What type of stress is this event for you?"
+                        android:text="@string/stress_type"
                         android:textColor="@color/black"
                         android:textSize="15sp"
                         android:textStyle="bold"
@@ -318,7 +321,7 @@
                         android:layout_marginTop="10dp"
                         android:background="@drawable/bg_box_view"
                         android:padding="10dp"
-                        android:text="Positive"
+                        android:text="@string/positive"
                         android:textAlignment="center"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
@@ -330,7 +333,7 @@
                         android:layout_marginTop="10dp"
                         android:background="@drawable/bg_box_view"
                         android:padding="10dp"
-                        android:text="Negative"
+                        android:text="@string/negative"
                         android:textAlignment="center"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
@@ -342,7 +345,7 @@
                         android:layout_marginTop="10dp"
                         android:background="@drawable/bg_box_view"
                         android:padding="10dp"
-                        android:text="I don't know"
+                        android:text="@string/unidentified"
                         android:textAlignment="center"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
@@ -352,7 +355,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
                         android:labelFor="@+id/txt_stress_cause"
-                        android:text="What causes you to be stressed?"
+                        android:text="@string/stress_cause"
                         android:textColor="@color/black"
                         android:textSize="15sp"
                         android:textStyle="bold"
@@ -363,12 +366,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:background="@drawable/bg_text_input"
+                        android:background="@drawable/bg_solid_wrap"
                         android:gravity="top"
                         android:inputType="text|textMultiLine"
                         android:lines="4"
-                        android:paddingTop="5dp"
-                        android:paddingStart="5dp" />
+                        android:paddingEnd="5dp"
+                        android:paddingStart="5dp"
+                        android:paddingTop="5dp" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -384,7 +388,7 @@
                 android:layout_height="wrap_content"
                 android:onClick="interVentionsClick"
                 android:padding="20dp"
-                android:text="Interventions"
+                android:text="@string/interventions"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
@@ -398,7 +402,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="20dp"
-                android:text="Repeat / Notification"
+                android:text="@string/repeat_notification"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
@@ -416,7 +420,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="20dp"
-                    android:text="Share"
+                    android:text="@string/share"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 
@@ -424,7 +428,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|end"
-                    android:layout_marginEnd="20dp"/>
+                    android:layout_marginEnd="20dp" />
             </FrameLayout>
 
             <!--Option: Evaluation-->
@@ -437,7 +441,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="20dp"
-                android:text="Evaluation"
+                android:text="@string/evaluation"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
@@ -451,7 +455,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="20dp"
-                android:text="Feedback"
+                android:text="@string/feedback"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
@@ -462,8 +466,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginEnd="5dp"
             android:layout_marginBottom="30dp"
+            android:layout_marginEnd="5dp"
             android:layout_marginTop="30dp"
             android:orientation="horizontal">
 

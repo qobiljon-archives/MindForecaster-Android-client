@@ -43,6 +43,22 @@
     <string name="system">system</string>
     <string name="peer">peer</string>
     <string name="all_day">All-day</string>
+    <string name="self_intervention_hint">Please describe here an intervention that can mediate your stress</string>
+    <string name="interventions_list">Please choose one of the options below:</string>
+    <string name="expand_button">Expand button</string>
+    <string name="anticipated_stress_level">Anticipated stress level</string>
+    <string name="arrow_down">Arrow down</string>
+    <string name="stress_type">What type of stress is this event for you?</string>
+    <string name="positive">Positive</string>
+    <string name="negative">Negative</string>
+    <string name="unidentified">I don\'t know</string>
+    <string name="stress_cause">What causes you to be stressed?</string>
+    <string name="clock_image">Clock image</string>
+    <string name="interventions">Interventions</string>
+    <string name="repeat_notification">Repeat / Notification</string>
+    <string name="share">Share</string>
+    <string name="evaluation">Evaluation</string>
+    <string name="feedback">Feedback</string>
 
     <string-array name="months_array">
         <item>Jan</item>

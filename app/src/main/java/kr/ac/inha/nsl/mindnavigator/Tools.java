@@ -4,24 +4,52 @@ import android.app.Activity;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.DataOutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class Tools {
     // region Variables
+    static final short
+            RES_OK = 0,
+            RES_SRV_ERR = -1,
+            RES_FAIL = 1;
+
     private static int cellWidth, cellHeight;
+
+    private static Queue<MyRunnable> execQueue = new LinkedList<>();
+    private static ExecutorService masterExec = Executors.newCachedThreadPool();
+    private static ExecutorService slaveExec = Executors.newCachedThreadPool();
     // endregion
 
-    public static void setCellSize(int width, int height) {
+    static void setCellSize(int width, int height) {
         cellWidth = width;
         cellHeight = height;
     }
 
-    public static void cellClearOut(ViewGroup[][] grid, int row, int col, Activity activity, ViewGroup parent, LinearLayout.OnClickListener cellClickListener) {
+    static void cellClearOut(ViewGroup[][] grid, int row, int col, Activity activity, ViewGroup parent, LinearLayout.OnClickListener cellClickListener) {
         if (grid[row][col] == null) {
             activity.getLayoutInflater().inflate(R.layout.date_cell, parent, true);
             ViewGroup res = (ViewGroup) parent.getChildAt(parent.getChildCount() - 1);
@@ -38,6 +66,56 @@ public class Tools {
                 grid[row][col].removeViewAt(1);
         }
     }
+
+    static String post(String _url, JSONObject json_body) {
+        try {
+            URL url = new URL(_url);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setDoOutput(json_body != null);
+            con.setDoInput(true);
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.connect();
+
+            if (json_body != null) {
+                DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+                wr.writeBytes(json_body.toString());
+                wr.flush();
+                wr.close();
+            }
+
+            int status = con.getResponseCode();
+            if (status != HttpURLConnection.HTTP_OK) {
+                con.disconnect();
+                return null;
+            } else {
+                byte[] buf = new byte[1024];
+                int rd;
+                StringBuilder sb = new StringBuilder();
+                BufferedInputStream is = new BufferedInputStream(con.getInputStream());
+                while ((rd = is.read(buf)) > 0)
+                    sb.append(new String(buf, 0, rd, "utf-8"));
+                is.close();
+                con.disconnect();
+                return sb.toString();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    static void execute(MyRunnable runnable, boolean interrupt_current) {
+        execQueue.add(runnable);
+    }
+}
+
+abstract class MyRunnable implements Runnable {
+    MyRunnable(Object... args) {
+        this.args = Arrays.copyOf(args, args.length);
+    }
+
+    private Object[] args;
 }
 
 class Event implements Parcelable {

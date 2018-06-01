@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
             int col = today.get(Calendar.DAY_OF_WEEK) - 1;
             int row = today.get(Calendar.DAY_OF_MONTH);
             today.set(Calendar.DAY_OF_MONTH, 1);
-            row = (row + today.get(Calendar.DAY_OF_WEEK)) / 7;
+            row = (row + today.get(Calendar.DAY_OF_WEEK) - 1) / 7;
 
             todayText = cells[col][row].findViewById(R.id.date_text_view);
             todayText.setTextColor(Color.WHITE);
@@ -238,9 +238,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void onNewEventClick(View view) {
         Intent intent = new Intent(this, EventActivity.class);
-        if(view == findViewById(R.id.btn_add_from_dialog)){
+        if (view == findViewById(R.id.btn_add_from_dialog)) {
             intent.putExtra("selectedDayMillis", clickedCellCal.getTimeInMillis());
-        } else{
+        } else {
             intent.putExtra("selectedDayMillis", Calendar.getInstance().getTimeInMillis());
         }
         startActivity(intent);
