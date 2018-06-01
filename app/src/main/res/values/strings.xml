@@ -59,6 +59,7 @@
     <string name="share">Share</string>
     <string name="evaluation">Evaluation</string>
     <string name="feedback">Feedback</string>
+    <string name="event_details">Event details</string>
 
     <string-array name="months_array">
         <item>Jan</item>

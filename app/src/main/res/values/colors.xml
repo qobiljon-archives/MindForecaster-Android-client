@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <style name="InnerActivityTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:textColor">#000</item>
+        <item name="android:statusBarColor">#d60000</item>
+    </style>
+
+    <color name="inner_activity_actionbar">#d60000</color>
+    <color name="inner_activity_action_color">#1ab7ea</color>
+
     <color name="colorPrimary">#D60000</color>
     <color name="colorPrimaryDark">#D60000</color>
     <color name="colorAccent">#b71c1c</color>
@@ -24,4 +33,5 @@
     <color name="slvl1_color">#FABB37</color>
     <color name="slvl2_color">#E8473D</color>
     <color name="textColor">#444</color>
+    <color name="dark_blue">#44f</color>
 </resources>
