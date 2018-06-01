@@ -37,6 +37,9 @@
         <activity
             android:name=".EvaluationActivity"
             android:theme="@style/InnerActivityTheme" />
+        <activity
+            android:name=".FeedbackActivity"
+            android:theme="@style/InnerActivityTheme"/>
     </application>
 
 </manifest>
