@@ -117,25 +117,17 @@ abstract class MyRunnable implements Runnable {
 }
 
 class Event {
-    Event(String title, int stressLevel, Calendar startTime, Calendar endTime) {
-        setTitle(title);
-        setStressLevel(stressLevel);
-        setStartTime(startTime);
-        setEndTime(endTime);
+    Event() {
         id = System.currentTimeMillis() / 1000;
-
-        events.add(this);
     }
 
     static void init(Activity activity) {
         stressColors[0] = activity.getColor(R.color.slvl0_color);
         stressColors[1] = activity.getColor(R.color.slvl1_color);
         stressColors[2] = activity.getColor(R.color.slvl2_color);
-
-        events.clear();
     }
 
-    static ArrayList<Event> getOneDayEvents(Calendar day) {
+    static ArrayList<Event> getOneDayEvents(Event[] events, Calendar day) {
         ArrayList<Event> res = new ArrayList<>();
 
         Calendar comDay = (Calendar) day.clone();
@@ -164,16 +156,20 @@ class Event {
     //region Variables
     @ColorInt
     private static int[] stressColors = new int[3];
-    private static ArrayList<Event> events = new ArrayList<>();
 
     private long id;
     private int stressLevel;
     private String title;
     private Calendar startTime;
     private Calendar endTime;
+    private String intervention;
     //endregion
 
-    private void setStartTime(Calendar startTime) {
+    long getEventId() {
+        return id;
+    }
+
+    void setStartTime(Calendar startTime) {
         startTime.set(Calendar.SECOND, 0);
         startTime.set(Calendar.MILLISECOND, 0);
         this.startTime = (Calendar) startTime.clone();
@@ -183,7 +179,7 @@ class Event {
         return startTime;
     }
 
-    private void setEndTime(Calendar endTime) {
+    void setEndTime(Calendar endTime) {
         endTime.set(Calendar.SECOND, 0);
         endTime.set(Calendar.MILLISECOND, 0);
         this.endTime = (Calendar) endTime.clone();
@@ -193,28 +189,27 @@ class Event {
         return endTime;
     }
 
-    private void setStressLevel(int stressLevel) {
+    void setStressLevel(int stressLevel) {
         this.stressLevel = stressLevel;
-    }
-
-    int getStressLevel() {
-        return stressLevel;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    @SuppressWarnings("unused")
-    long getEventId() {
-        return id;
     }
 
     int getStressColor() {
         return stressColors[stressLevel];
     }
 
+    void setTitle(String title) {
+        this.title = title;
+    }
+
     String getTitle() {
         return title;
+    }
+
+    void setIntervention(String intervention) {
+        this.intervention = intervention;
+    }
+
+    String getIntervention() {
+        return intervention;
     }
 }

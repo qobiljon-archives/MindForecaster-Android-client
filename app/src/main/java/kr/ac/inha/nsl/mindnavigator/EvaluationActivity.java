@@ -16,15 +16,15 @@ public class EvaluationActivity extends AppCompatActivity {
     }
 
     //region Variables
+    static Object result = null;
+
     Button[] tabButtons;
     Button[] btnEventDidNot;
     Button[] btnIntervDidNot, btnIntervYesNo;
     LinearLayout eventLayout, interventionLayout;
-
     //endregion
 
     private void init() {
-
         tabButtons = new Button[]{
                 findViewById(R.id.tab_event),
                 findViewById(R.id.tab_intervention)
@@ -102,7 +102,7 @@ public class EvaluationActivity extends AppCompatActivity {
         }
     }
 
-    public void btnYesNoIntervionClick(View view) {
+    public void btnYesNoIntervClick(View view) {
         for (Button button : btnIntervYesNo)
             button.setBackgroundResource(R.drawable.bg_box_unchecked_view);
 
@@ -119,11 +119,14 @@ public class EvaluationActivity extends AppCompatActivity {
     }
 
     public void cancelClick(View view) {
+        setResult(Tools.RES_FAIL);
         finish();
+        overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
     }
 
     public void saveClick(View view) {
+        setResult(Tools.RES_OK);
+        finish();
+        overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
     }
-
-
 }

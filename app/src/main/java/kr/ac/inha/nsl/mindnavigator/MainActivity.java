@@ -39,23 +39,23 @@ public class MainActivity extends AppCompatActivity {
         init();
 
         // region Add fake events
-        Calendar startTime = Calendar.getInstance(), endTime = Calendar.getInstance();
-
-        startTime.set(Calendar.MINUTE, 0);
-        endTime.set(Calendar.MINUTE, 30);
-        new Event("UCL final match", 2, startTime, endTime);
-
-        startTime.add(Calendar.HOUR, 1);
-        endTime.add(Calendar.HOUR, 1);
-        new Event("Movie with Debbie", 0, startTime, endTime);
-
-        startTime.add(Calendar.DAY_OF_MONTH, 1);
-        endTime.add(Calendar.DAY_OF_MONTH, 1);
-        new Event("NSL meeting", 2, startTime, endTime);
-
-        startTime.add(Calendar.DAY_OF_MONTH, 1);
-        endTime.add(Calendar.DAY_OF_MONTH, 1);
-        new Event("Shopping", 1, startTime, endTime);
+//        Calendar startTime = Calendar.getInstance(), endTime = Calendar.getInstance();
+//
+//        startTime.set(Calendar.MINUTE, 0);
+//        endTime.set(Calendar.MINUTE, 30);
+//        new Event("UCL final match", 2, startTime, endTime);
+//
+//        startTime.add(Calendar.HOUR, 1);
+//        endTime.add(Calendar.HOUR, 1);
+//        new Event("Movie with Debbie", 0, startTime, endTime);
+//
+//        startTime.add(Calendar.DAY_OF_MONTH, 1);
+//        endTime.add(Calendar.DAY_OF_MONTH, 1);
+//        new Event("NSL meeting", 2, startTime, endTime);
+//
+//        startTime.add(Calendar.DAY_OF_MONTH, 1);
+//        endTime.add(Calendar.DAY_OF_MONTH, 1);
+//        new Event("Shopping", 1, startTime, endTime);
         // endregion
     }
 
@@ -190,18 +190,18 @@ public class MainActivity extends AppCompatActivity {
             cells[col][row].setTag(clone.getTimeInMillis());
         }
 
-        for (row = 0; row < event_grid.getRowCount(); row++)
-            for (col = 0; col < event_grid.getColumnCount(); col++) {
-                Calendar day = Calendar.getInstance();
-                day.setTimeInMillis((long) cells[col][row].getTag());
-                ArrayList<Event> dayEvents = Event.getOneDayEvents(day);
-                for (Event event : dayEvents) {
-                    getLayoutInflater().inflate(R.layout.event_element, cells[col][row]);
-                    TextView res = (TextView) cells[col][row].getChildAt(cells[col][row].getChildCount() - 1);
-                    res.setBackgroundColor(event.getStressColor());
-                    res.setText(event.getTitle());
-                }
-            }
+//        for (row = 0; row < event_grid.getRowCount(); row++)
+//            for (col = 0; col < event_grid.getColumnCount(); col++) {
+//                Calendar day = Calendar.getInstance();
+//                day.setTimeInMillis((long) cells[col][row].getTag());
+//                ArrayList<Event> dayEvents = Event.getOneDayEvents(day);
+//                for (Event event : dayEvents) {
+//                    getLayoutInflater().inflate(R.layout.event_element, cells[col][row]);
+//                    TextView res = (TextView) cells[col][row].getChildAt(cells[col][row].getChildCount() - 1);
+//                    res.setBackgroundColor(event.getStressColor());
+//                    res.setText(event.getTitle());
+//                }
+//            }
     }
 
     public int getFirstWeekdayIndex(int day, int month, int year) {
@@ -246,11 +246,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void onNewEventClick(View view) {
         Intent intent = new Intent(this, EventActivity.class);
-        if (view == findViewById(R.id.btn_add_from_dialog)) {
+        if (view == findViewById(R.id.btn_add_from_dialog))
             intent.putExtra("selectedDayMillis", clickedCellCal.getTimeInMillis());
-        } else {
+        else
             intent.putExtra("selectedDayMillis", Calendar.getInstance().getTimeInMillis());
-        }
-        startActivity(intent);
+
+        startActivityForResult(intent, 0);
+        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
     }
 }
