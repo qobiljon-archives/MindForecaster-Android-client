@@ -9,20 +9,71 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/inner_activity_actionbar">
 
-        <Button
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/bright_grey"
-            android:text="@string/event" />
+            android:background="@android:color/transparent"
+            android:fontFamily="monospace"
+            android:onClick="cancelClick"
+            android:padding="10dp"
+            android:text="@string/cancel"
+            android:textAllCaps="true"
+            android:textColor="@color/inner_activity_action_color"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-        <Button
+        <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@android:color/transparent"
+            android:gravity="center_horizontal"
+            android:text="@string/evaluation"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:typeface="monospace" />
+
+        <TextView
+            android:id="@+id/btn_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:fontFamily="monospace"
+            android:onClick="saveClick"
+            android:padding="10dp"
+            android:text="@string/save"
+            android:textAllCaps="true"
+            android:textColor="@color/inner_activity_action_color"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/tab_event"
+            android:layout_width="0dp"
+            android:onClick="tabClicked"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:layout_weight="1"
+            android:text="@string/event" />
+
+        <Button
+            android:id="@+id/tab_intervention"
+            android:layout_width="0dp"
+            android:onClick="tabClicked"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/bright_grey"
             android:text="@string/intervention" />
     </LinearLayout>
 
@@ -36,12 +87,12 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/event_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="30dp"
                 android:layout_marginStart="30dp"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -90,6 +141,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
+                        android:onClick="btnDidNotEventClick"
                         android:background="@drawable/bg_box_unchecked_view"
                         android:text="@string/did_it"
                         android:textAlignment="center"
@@ -102,6 +154,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
+                        android:onClick="btnDidNotEventClick"
                         android:background="@drawable/bg_box_unchecked_view"
                         android:text="@string/did_not_it"
                         android:textAlignment="center"
@@ -176,11 +229,13 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/intervention_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="30dp"
                 android:layout_marginStart="30dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -229,6 +284,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
+                        android:onClick="btnDidNotIntervClick"
                         android:background="@drawable/bg_box_unchecked_view"
                         android:text="@string/did_it"
                         android:textAlignment="center"
@@ -241,6 +297,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
+                        android:onClick="btnDidNotIntervClick"
                         android:background="@drawable/bg_box_unchecked_view"
                         android:text="@string/did_not_it"
                         android:textAlignment="center"
@@ -289,8 +346,8 @@
                             android:layout_weight="1"
                             android:text="@string/bad"
                             android:textColor="@color/black"
-                            android:typeface="monospace"
-                            android:textSize="15sp" />
+                            android:textSize="15sp"
+                            android:typeface="monospace" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -299,8 +356,8 @@
                             android:text="@string/good"
                             android:textAlignment="viewEnd"
                             android:textColor="@color/black"
-                            android:typeface="monospace"
-                            android:textSize="15sp" />
+                            android:textSize="15sp"
+                            android:typeface="monospace" />
 
                     </LinearLayout>
 
@@ -328,10 +385,11 @@
                         android:typeface="monospace" />
 
                     <Button
-                        android:id="@+id/btn_recommend_yes"
+                        android:id="@+id/btn_yes_intervention"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
+                        android:onClick="btnYesNoIntervionClick"
                         android:background="@drawable/bg_box_unchecked_view"
                         android:text="@string/yes"
                         android:textAlignment="center"
@@ -340,10 +398,11 @@
                         android:textSize="15sp" />
 
                     <Button
-                        android:id="@+id/btn_recommend_no"
+                        android:id="@+id/btn_no_intervention"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
+                        android:onClick="btnYesNoIntervionClick"
                         android:background="@drawable/bg_box_unchecked_view"
                         android:text="@string/no"
                         android:textAlignment="center"
@@ -353,11 +412,6 @@
 
 
                 </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@android:color/darker_gray" />
 
 
             </LinearLayout>
