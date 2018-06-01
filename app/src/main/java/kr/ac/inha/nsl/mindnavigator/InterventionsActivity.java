@@ -49,13 +49,16 @@ public class InterventionsActivity extends AppCompatActivity {
         // Act upon the click event
         switch (view.getId()) {
             case R.id.button_self_intervention:
+                tabButtons[0].setBackgroundResource(R.drawable.bg_interv_method_checked_view);
                 interv_text.setVisibility(View.VISIBLE);
                 break;
             case R.id.button_systems_intervention:
+                tabButtons[1].setBackgroundResource(R.drawable.bg_interv_method_checked_view);
                 interv_choice.setVisibility(View.VISIBLE);
                 interv_list.removeViews(1, interv_list.getChildCount() - 1);
                 break;
             case R.id.button_peer_interventions:
+                tabButtons[2].setBackgroundResource(R.drawable.bg_interv_method_checked_view);
                 interv_choice.setVisibility(View.VISIBLE);
                 interv_list.removeViews(1, interv_list.getChildCount() - 1);
                 break;
