@@ -1,18 +1,24 @@
 package kr.ac.inha.nsl.mindnavigator;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -83,35 +89,78 @@ public class EventActivity extends AppCompatActivity {
         selCal.setTimeInMillis(getIntent().getLongExtra("selectedDayMillis", 0));
 
         startDateText.setText(String.format(Locale.US,
-                "%s, %02d %s",
+                "%s, %s %d, %d",
                 selCal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
+                selCal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
                 selCal.get(Calendar.DAY_OF_MONTH),
-                selCal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault())
+                selCal.get(Calendar.YEAR)
         ));
         startDateText.setTag(selCal.getTimeInMillis());
 
         startTimeText.setText(String.format(Locale.US,
                 "%02d:%02d",
-                selCal.get(Calendar.HOUR),
-                selCal.get(Calendar.MINUTE)));
+                selCal.get(Calendar.HOUR_OF_DAY),
+                selCal.get(Calendar.MINUTE))
+        );
         startTimeText.setTag(selCal.getTimeInMillis());
         startTime = (Calendar) selCal.clone();
 
         selCal.add(Calendar.HOUR, 1);
         endDateText.setText(String.format(Locale.US,
-                "%s, %02d %s",
+                "%s, %s %d, %d",
                 selCal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
+                selCal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
                 selCal.get(Calendar.DAY_OF_MONTH),
-                selCal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault())
+                selCal.get(Calendar.YEAR)
         ));
         endDateText.setTag(selCal.getTimeInMillis());
 
         endTimeText.setText(String.format(Locale.US,
                 "%02d:%02d",
-                selCal.get(Calendar.HOUR),
-                selCal.get(Calendar.MINUTE)));
-        endDateText.setTag(selCal.getTimeInMillis());
+                selCal.get(Calendar.HOUR_OF_DAY),
+                selCal.get(Calendar.MINUTE))
+        );
+        endTimeText.setTag(selCal.getTimeInMillis());
         endTime = (Calendar) selCal.clone();
+
+        MyTextWatcher timePickingCorrector = new MyTextWatcher(startDateText, startTimeText, endDateText, endTimeText) {
+            @Override
+            public void afterTextChanged(Editable s) {
+                Calendar startTime = Calendar.getInstance(), endTime = Calendar.getInstance();
+                Tools.copy_date((long) startDateText.getTag(), startTime);
+                Tools.copy_time((long) startTimeText.getTag(), startTime);
+                Tools.copy_date((long) endDateText.getTag(), endTime);
+                Tools.copy_time((long) endTimeText.getTag(), endTime);
+
+                if (endTime.before(startTime)) {
+                    endTime.setTimeInMillis(startTime.getTimeInMillis());
+                    endTime.add(Calendar.HOUR_OF_DAY, 1);
+
+                    endDateText.removeTextChangedListener(this);
+                    endTimeText.removeTextChangedListener(this);
+                    endDateText.setText(String.format(Locale.US,
+                            "%s, %s %d, %d",
+                            endTime.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
+                            endTime.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
+                            endTime.get(Calendar.DAY_OF_MONTH),
+                            endTime.get(Calendar.YEAR)
+                    ));
+                    endTimeText.setText(String.format(Locale.US,
+                            "%02d:%02d",
+                            endTime.get(Calendar.HOUR_OF_DAY),
+                            endTime.get(Calendar.MINUTE))
+                    );
+                    endDateText.addTextChangedListener(this);
+                    endTimeText.addTextChangedListener(this);
+                }
+
+                startTimeText.setTag(startTime.getTimeInMillis());
+            }
+        };
+        startDateText.addTextChangedListener(timePickingCorrector);
+        startTimeText.addTextChangedListener(timePickingCorrector);
+        endDateText.addTextChangedListener(timePickingCorrector);
+        endTimeText.addTextChangedListener(timePickingCorrector);
 
         stressLvl.getProgressDrawable().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.slvl0_color, null), PorterDuff.Mode.SRC_IN);
         stressLvl.getThumb().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.slvl0_color, null), PorterDuff.Mode.SRC_IN);
@@ -221,37 +270,24 @@ public class EventActivity extends AppCompatActivity {
 
     public void saveClick(View view) {
         event.setTitle(eventTitle.getText().toString());
-        // region Collect start and end time
-        if (!switchAllDay.isChecked()) {
-            String startStr = startTimeText.getText().toString();
-            String endStr = endTimeText.getText().toString();
 
-            startTime.set(Calendar.HOUR, Integer.parseInt(startStr.substring(0, startStr.indexOf(':'))));
-            startTime.set(Calendar.HOUR, Integer.parseInt(startStr.substring(startStr.indexOf(':') + 1)));
-            endTime.set(Calendar.HOUR, Integer.parseInt(endStr.substring(0, endStr.indexOf(':'))));
-            endTime.set(Calendar.HOUR, Integer.parseInt(endStr.substring(endStr.indexOf(':') + 1)));
+        Tools.copy_date((long) startDateText.getTag(), startTime);
+        Tools.copy_time((long) startTimeText.getTag(), startTime);
+        Tools.copy_date((long) endDateText.getTag(), endTime);
+        Tools.copy_time((long) endTimeText.getTag(), endTime);
+        if (switchAllDay.isChecked()) {
+            startTime.set(Calendar.HOUR, 0);
+            startTime.set(Calendar.MINUTE, 0);
+            startTime.set(Calendar.SECOND, 0);
+            startTime.set(Calendar.MILLISECOND, 0);
+
+            endTime.add(Calendar.DAY_OF_MONTH, 1);
+            endTime.set(Calendar.HOUR, 0);
+            endTime.set(Calendar.MINUTE, 0);
+            endTime.set(Calendar.SECOND, 0);
+            endTime.set(Calendar.MILLISECOND, 0);
         }
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis((long) startDateText.getTag());
-        startTime.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH));
-        startTime.set(Calendar.MONTH, cal.get(Calendar.MONTH));
-        startTime.set(Calendar.YEAR, cal.get(Calendar.YEAR));
-        cal.setTimeInMillis((long) startTimeText.getTag());
-        startTime.set(Calendar.HOUR, cal.get(Calendar.HOUR));
-        startTime.set(Calendar.MINUTE, cal.get(Calendar.MINUTE));
-        startTime.set(Calendar.SECOND, 0);
-        startTime.set(Calendar.MILLISECOND, 0);
 
-        cal.setTimeInMillis((long) endDateText.getTag());
-        endTime.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH));
-        endTime.set(Calendar.MONTH, cal.get(Calendar.MONTH));
-        endTime.set(Calendar.YEAR, cal.get(Calendar.YEAR));
-        cal.setTimeInMillis((long) endTimeText.getTag());
-        endTime.set(Calendar.HOUR, cal.get(Calendar.HOUR));
-        endTime.set(Calendar.MINUTE, cal.get(Calendar.MINUTE));
-        endTime.set(Calendar.SECOND, 0);
-        endTime.set(Calendar.MILLISECOND, 0);
-        // endregion
         event.setStartTime(startTime);
         event.setEndTime(endTime);
         switch (stressTypeGroup.getCheckedRadioButtonId()) {
@@ -272,5 +308,91 @@ public class EventActivity extends AppCompatActivity {
 
         finish();
         overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
+    }
+
+    public void pickDateClick(View view) {
+        MyOnDateSetListener listener = new MyOnDateSetListener(view) {
+            @Override
+            public void onDateSet(DatePicker picker, int year, int month, int dayOfMonth) {
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis((long) view.getTag());
+                cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                cal.set(Calendar.MONTH, month);
+                cal.set(Calendar.YEAR, year);
+
+                view.setTag(cal.getTimeInMillis());
+                ((TextView) view).setText(String.format(Locale.US,
+                        "%s, %s %d, %d",
+                        cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
+                        cal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
+                        cal.get(Calendar.DAY_OF_MONTH),
+                        cal.get(Calendar.YEAR)
+                ));
+            }
+        };
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis((long) view.getTag());
+        DatePickerDialog dialog = new DatePickerDialog(this, listener, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+        dialog.show();
+    }
+
+    public void pickTimeClick(View view) {
+        MyOnTimeSetListener listener = new MyOnTimeSetListener(view) {
+            @Override
+            public void onTimeSet(TimePicker picker, int hourOfDay, int minute) {
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis((long) view.getTag());
+                cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                cal.set(Calendar.MINUTE, minute);
+
+                view.setTag(cal.getTimeInMillis());
+                ((TextView) view).setText(String.format(Locale.US,
+                        "%02d:%02d",
+                        cal.get(Calendar.HOUR_OF_DAY),
+                        cal.get(Calendar.MINUTE))
+                );
+            }
+        };
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis((long) view.getTag());
+        TimePickerDialog dialog = new TimePickerDialog(this, listener, cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE), true);
+        dialog.show();
+    }
+
+    private abstract class MyOnDateSetListener implements DatePickerDialog.OnDateSetListener {
+        MyOnDateSetListener(View view) {
+            this.view = view;
+        }
+
+        View view;
+    }
+
+    private abstract class MyOnTimeSetListener implements TimePickerDialog.OnTimeSetListener {
+        MyOnTimeSetListener(View view) {
+            this.view = view;
+        }
+
+        View view;
+    }
+
+    private abstract class MyTextWatcher implements TextWatcher {
+        MyTextWatcher(TextView startDateText, TextView startTimeText, TextView endDateText, TextView endTimeText) {
+            this.startDateText = startDateText;
+            this.startTimeText = startTimeText;
+            this.endDateText = endDateText;
+            this.endTimeText = endTimeText;
+        }
+
+        TextView startDateText, startTimeText, endDateText, endTimeText;
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
     }
 }

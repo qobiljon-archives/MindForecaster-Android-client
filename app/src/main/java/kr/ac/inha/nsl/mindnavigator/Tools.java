@@ -3,6 +3,7 @@ package kr.ac.inha.nsl.mindnavigator;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -98,13 +99,32 @@ public class Tools {
         executor.execute(runnable);
     }
 
-    static void toggle_keyboard(Activity activity, EditText editText, boolean show) {
+    static void toggle_keyboard(@NonNull Activity activity, EditText editText, boolean show) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null)
             if (show)
                 imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
             else
                 imm.hideSoftInputFromWindow(editText.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+    }
+
+    static void copy_date(long fromMillis, Calendar toCal) {
+        Calendar fromCal = Calendar.getInstance();
+        fromCal.setTimeInMillis(fromMillis);
+
+        toCal.set(Calendar.YEAR, fromCal.get(Calendar.YEAR));
+        toCal.set(Calendar.MONTH, fromCal.get(Calendar.MONTH));
+        toCal.set(Calendar.DAY_OF_MONTH, fromCal.get(Calendar.DAY_OF_MONTH));
+    }
+
+    static void copy_time(long fromMillis, Calendar toCal) {
+        Calendar fromCal = Calendar.getInstance();
+        fromCal.setTimeInMillis(fromMillis);
+
+        toCal.set(Calendar.HOUR_OF_DAY, fromCal.get(Calendar.HOUR_OF_DAY));
+        toCal.set(Calendar.MINUTE, fromCal.get(Calendar.MINUTE));
+        toCal.set(Calendar.SECOND, 0);
+        toCal.set(Calendar.MILLISECOND, 0);
     }
 }
 
@@ -121,13 +141,13 @@ class Event {
         id = System.currentTimeMillis() / 1000;
     }
 
-    static void init(Activity activity) {
+    static void init(@NonNull Activity activity) {
         stressColors[0] = activity.getColor(R.color.slvl0_color);
         stressColors[1] = activity.getColor(R.color.slvl1_color);
         stressColors[2] = activity.getColor(R.color.slvl2_color);
     }
 
-    static ArrayList<Event> getOneDayEvents(Event[] events, Calendar day) {
+    static ArrayList<Event> getOneDayEvents(@NonNull Event[] events, @NonNull Calendar day) {
         ArrayList<Event> res = new ArrayList<>();
 
         Calendar comDay = (Calendar) day.clone();
