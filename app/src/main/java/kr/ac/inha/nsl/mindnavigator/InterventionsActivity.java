@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,9 +33,12 @@ public class InterventionsActivity extends AppCompatActivity {
 
     EditText interv_text;
     View interv_choice;
-    ViewGroup interv_list, schedulingView, beforeEventLayout, afterEventLayout;
+    ViewGroup interv_list, schedulingView;
     RadioGroup intervScheduling;
     Button[] tabButtons;
+
+    Button prevEditButton = null;
+    TextView prevTextView = null;
     //endregion
 
     private void init() {
@@ -62,6 +64,8 @@ public class InterventionsActivity extends AppCompatActivity {
         interv_text.setVisibility(View.GONE);
         interv_choice.setVisibility(View.GONE);
         schedulingView.setVisibility(View.GONE);
+        prevEditButton = null;
+        prevTextView = null;
         for (Button button : tabButtons)
             button.setBackgroundResource(R.drawable.bg_interv_method_unchecked_view);
 
@@ -200,16 +204,21 @@ public class InterventionsActivity extends AppCompatActivity {
     }
 
     public void onIntervClick(View view) {
-        for (int n = 0; n < interv_list.getChildCount(); n++) {
-            TextView interv_text = interv_list.getChildAt(n).findViewById(R.id.intervention_text);
-            interv_text.setTextColor(getColor(R.color.black));
+        if (prevTextView != null) {
+            prevTextView.setTextColor(getColor(R.color.black));
+            prevEditButton.setVisibility(View.GONE);
         }
 
         ((TextView) view.findViewById(R.id.intervention_text)).setTextColor(getColor(R.color.dark_blue));
-        result = ((TextView) view.findViewById(R.id.intervention_text)).getText().toString();
         schedulingView.setVisibility(View.VISIBLE);
-        Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
-        //saveClick(null);
+        result = (prevTextView = view.findViewById(R.id.intervention_text)).getText().toString();
+        (prevEditButton = view.findViewById(R.id.btn_edit_interv)).setVisibility(View.VISIBLE);
+    }
+
+    public void editIntervClick(View view) {
+        interv_text.setText(result);
+        interv_text.setSelection(interv_text.length());
+        tabButtons[0].callOnClick();
     }
 
     public void cancelClick(View view) {
@@ -263,7 +272,9 @@ public class InterventionsActivity extends AppCompatActivity {
                                 });
                                 break;
                             case Tools.RES_FAIL:
-                                runOnUiThread(new Runnable() {
+                                runOnUiThread(new MyRunnable(
+                                        interv_name
+                                ) {
                                     @Override
                                     public void run() {
                                         String interv_name = (String) args[0];

@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -43,6 +42,37 @@ public class EventActivity extends AppCompatActivity {
                     event.setIntervention(InterventionsActivity.result);
                     InterventionsActivity.result = null;
                     selectedInterv.setText(event.getIntervention());
+                    //region Setting a text for intervention reminder
+                    String text = null;
+                    switch (InterventionsActivity.resultSchedule) {
+                        case -1440:
+                            text = getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_before));
+                            break;
+                        case -60:
+                            text = getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_before));
+                            break;
+                        case -30:
+                            text = getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._30_minutes_before));
+                            break;
+                        case -10:
+                            text = getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_before));
+                            break;
+                        case 1440:
+                            text = getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_after));
+                            break;
+                        case 60:
+                            text = getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_after));
+                            break;
+                        case 30:
+                            text = getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._30_minutes_after));
+                            break;
+                        case 10:
+                            text = getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_after));
+                            break;
+                    }
+                    //endregion
+                    intervReminderTxt.setText(text);
+                    intervReminderTxt.setVisibility(View.VISIBLE);
                     Toast.makeText(this, String.valueOf(InterventionsActivity.resultSchedule), Toast.LENGTH_SHORT).show();
                     break;
                 case EVALUATION_ACTIVITY:
@@ -63,7 +93,7 @@ public class EventActivity extends AppCompatActivity {
     static Event event;
 
     private ViewGroup inactiveLayout, stressLevelDetails, interventionDetails, repeatNotificationDetails;
-    private TextView startDateText, startTimeText, endDateText, endTimeText, selectedInterv;
+    private TextView startDateText, startTimeText, endDateText, endTimeText, selectedInterv, intervReminderTxt;
     private RadioGroup stressTypeGroup, repeatModeGroup;
     private EditText eventTitle, stressCause;
     private Switch switchAllDay, shareSwitch;
@@ -89,6 +119,8 @@ public class EventActivity extends AppCompatActivity {
         shareSwitch = findViewById(R.id.share_switch);
         selectedInterv = findViewById(R.id.selected_intervention);
         repeatModeGroup = findViewById(R.id.repeat_mode_group);
+        intervReminderTxt = findViewById(R.id.txt_interv_reminder_time);
+        intervReminderTxt.setVisibility(View.GONE);
 
         Calendar selCal = Calendar.getInstance();
         selCal.setTimeInMillis(getIntent().getLongExtra("selectedDayMillis", 0));
