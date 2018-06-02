@@ -1,10 +1,15 @@
 package kr.ac.inha.nsl.mindnavigator;
 
+import android.graphics.PorterDuff;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.RadioGroup;
+import android.widget.SeekBar;
+import android.widget.Toast;
 
 public class EvaluationActivity extends AppCompatActivity {
 
@@ -16,12 +21,14 @@ public class EvaluationActivity extends AppCompatActivity {
     }
 
     //region Variables
+    private int stressValue;
     static Object result = null;
 
     Button[] tabButtons;
-    Button[] btnEventDidNot;
-    Button[] btnIntervDidNot, btnIntervYesNo;
-    LinearLayout eventLayout, interventionLayout;
+    RadioGroup eventCompletionBtn;
+    RadioGroup intervCompletion, intervRecommendation;
+    private SeekBar stressLvl;
+    ViewGroup eventLayout, interventionLayout;
     //endregion
 
     private void init() {
@@ -30,23 +37,44 @@ public class EvaluationActivity extends AppCompatActivity {
                 findViewById(R.id.tab_intervention)
         };
 
-        btnEventDidNot = new Button[]{
-                findViewById(R.id.btn_did_event),
-                findViewById(R.id.btn_didnt_do_event)
-        };
-
-        btnIntervDidNot = new Button[]{
-                findViewById(R.id.btn_did_intervention),
-                findViewById(R.id.btn_didnt_do_intervention)
-        };
-
-        btnIntervYesNo = new Button[]{
-                findViewById(R.id.btn_yes_intervention),
-                findViewById(R.id.btn_no_intervention)
-        };
-
+        eventCompletionBtn = findViewById(R.id.event_cempletion);
+        intervCompletion = findViewById(R.id.intervention_completion);
+        stressLvl = findViewById(R.id.stressLvl);
+        intervRecommendation = findViewById(R.id.intervention_recommendation);
         eventLayout = findViewById(R.id.event_layout);
         interventionLayout = findViewById(R.id.intervention_layout);
+
+        stressLvl.getProgressDrawable().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.slvl0_color, null), PorterDuff.Mode.SRC_IN);
+        stressLvl.getThumb().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.slvl0_color, null), PorterDuff.Mode.SRC_IN);
+        stressLvl.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                stressValue = progress;
+                if (progress >= 0 && progress < 50) {
+                    int slvl0Col = ResourcesCompat.getColor(getResources(), R.color.slvl0_color, null);
+                    stressLvl.getProgressDrawable().setColorFilter(slvl0Col, PorterDuff.Mode.SRC_IN);
+                    stressLvl.getThumb().setColorFilter(slvl0Col, PorterDuff.Mode.SRC_IN);
+                } else if (progress > 50 && progress < 80) {
+                    int slvl1Col = ResourcesCompat.getColor(getResources(), R.color.slvl1_color, null);
+                    stressLvl.getProgressDrawable().setColorFilter(slvl1Col, PorterDuff.Mode.SRC_IN);
+                    stressLvl.getThumb().setColorFilter(slvl1Col, PorterDuff.Mode.SRC_IN);
+                } else {
+                    int slvl2Col = ResourcesCompat.getColor(getResources(), R.color.slvl2_color, null);
+                    stressLvl.getProgressDrawable().setColorFilter(slvl2Col, PorterDuff.Mode.SRC_IN);
+                    stressLvl.getThumb().setColorFilter(slvl2Col, PorterDuff.Mode.SRC_IN);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                Toast.makeText(EvaluationActivity.this, String.valueOf(stressValue), Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -70,54 +98,6 @@ public class EvaluationActivity extends AppCompatActivity {
         }
     }
 
-    public void btnDidNotEventClick(View view) {
-        for (Button button : btnEventDidNot)
-            button.setBackgroundResource(R.drawable.radio_off);
-
-        switch (view.getId()) {
-            case R.id.btn_did_event:
-                btnEventDidNot[0].setBackgroundResource(R.drawable.radio_on);
-                break;
-            case R.id.btn_didnt_do_event:
-                btnEventDidNot[1].setBackgroundResource(R.drawable.radio_on);
-                break;
-            default:
-                break;
-        }
-    }
-
-    public void btnDidNotIntervClick(View view) {
-        for (Button button : btnIntervDidNot)
-            button.setBackgroundResource(R.drawable.radio_off);
-
-        switch (view.getId()) {
-            case R.id.btn_did_intervention:
-                btnIntervDidNot[0].setBackgroundResource(R.drawable.radio_on);
-                break;
-            case R.id.btn_didnt_do_intervention:
-                btnIntervDidNot[1].setBackgroundResource(R.drawable.radio_on);
-                break;
-            default:
-                break;
-        }
-    }
-
-    public void btnYesNoIntervClick(View view) {
-        for (Button button : btnIntervYesNo)
-            button.setBackgroundResource(R.drawable.radio_off);
-
-        switch (view.getId()) {
-            case R.id.btn_yes_intervention:
-                btnIntervYesNo[0].setBackgroundResource(R.drawable.radio_on);
-                break;
-            case R.id.btn_no_intervention:
-                btnIntervYesNo[1].setBackgroundResource(R.drawable.radio_on);
-                break;
-            default:
-                break;
-        }
-    }
-
     public void cancelClick(View view) {
         setResult(Tools.RES_FAIL);
         finish();
@@ -126,6 +106,38 @@ public class EvaluationActivity extends AppCompatActivity {
 
     public void saveClick(View view) {
         setResult(Tools.RES_OK);
+        switch (eventCompletionBtn.getCheckedRadioButtonId()) {
+            case R.id.btn_did_event:
+                //TODO: btn "I did it" clicked; Do smth
+                break;
+            case R.id.btn_didnt_do_event:
+                //TODO: btn "I did not do it" clicked; Do smth
+                break;
+            default:
+                break;
+        }
+
+        switch (intervCompletion.getCheckedRadioButtonId()) {
+            case R.id.btn_did_intervention:
+                //TODO: btn "I did it" clicked; Do smth
+                break;
+            case R.id.btn_didnt_do_intervention:
+                //TODO: btn "I did not do it" clicked; Do smth
+                break;
+            default:
+                break;
+        }
+
+        switch (intervRecommendation.getCheckedRadioButtonId()) {
+            case R.id.btn_yes_intervention:
+                //TODO: btn "Yes" clicked; Do smth
+                break;
+            case R.id.btn_no_intervention:
+                //TODO: btn "No" clicked; Do smth
+                break;
+            default:
+                break;
+        }
         finish();
         overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
     }

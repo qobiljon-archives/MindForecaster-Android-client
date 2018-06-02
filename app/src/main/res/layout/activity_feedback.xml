@@ -231,12 +231,15 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/stress_reason_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="15dp"
+            android:visibility="gone">
 
             <TextView
+                android:id="@+id/stress_reason"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="The stress level has increased. What do you think the reason?"
