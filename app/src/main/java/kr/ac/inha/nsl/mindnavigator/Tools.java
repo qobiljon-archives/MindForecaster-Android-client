@@ -50,7 +50,7 @@ public class Tools {
         } else {
             TextView date_text = grid[row][col].findViewById(R.id.date_text_view);
             date_text.setTextColor(activity.getColor(R.color.textColor));
-            date_text.setBackgroundResource(R.drawable.bg_cell);
+            date_text.setBackground(null);
 
             while (grid[row][col].getChildCount() > 1)
                 grid[row][col].removeViewAt(1);
