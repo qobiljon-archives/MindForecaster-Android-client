@@ -180,87 +180,88 @@
             android:layout_height="match_parent"
             android:background="@drawable/bg_solid_wrap">
 
-            <LinearLayout
+            <RadioGroup
+                android:id="@+id/interv_scheduling_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
+                android:checkedButton="@+id/option_10mins_before"
                 android:orientation="vertical">
 
-                <RadioGroup
-                    android:id="@+id/interv_scheduling_group"
+                <RadioButton
+                    android:id="@+id/option_day_before"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:checkedButton="@+id/option_10mins_before"
-                    android:orientation="vertical">
+                    android:layout_marginTop="10dp"
+                    android:tag="-1440"
+                    android:text="@string/_1_day_before"
+                    android:textSize="14sp" />
 
-                    <RadioButton
-                        android:id="@+id/option_day_before"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="1 day before"
-                        android:textSize="14sp" />
+                <RadioButton
+                    android:id="@+id/option_hour_before"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:tag="-60"
+                    android:text="@string/_1_hour_before"
+                    android:textSize="14sp" />
 
-                    <RadioButton
-                        android:id="@+id/option_hour_before"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="1 hour before"
-                        android:textSize="14sp" />
+                <RadioButton
+                    android:id="@+id/option_30mins_before"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:tag="-30"
+                    android:text="@string/_30_minutes_before"
+                    android:textSize="14sp" />
 
-                    <RadioButton
-                        android:id="@+id/option_30mins_before"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="30 minutes before"
-                        android:textSize="14sp" />
+                <RadioButton
+                    android:id="@id/option_10mins_before"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:tag="-10"
+                    android:text="@string/_10_minutes_before"
+                    android:textSize="14sp" />
 
-                    <RadioButton
-                        android:id="@id/option_10mins_before"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="10 minutes before"
-                        android:textSize="14sp" />
+                <RadioButton
+                    android:id="@+id/option_10mins_after"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:tag="10"
+                    android:text="@string/_10_minutes_after"
+                    android:textSize="14sp" />
 
-                    <RadioButton
-                        android:id="@+id/option_10mins_after"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="10 minutes after"
-                        android:textSize="14sp" />
+                <RadioButton
+                    android:id="@+id/option_30mins_after"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:tag="30"
+                    android:text="@string/_30_minutes_after"
+                    android:textSize="14sp" />
 
-                    <RadioButton
-                        android:id="@+id/option_30mins_after"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="30 minutes after"
-                        android:textSize="14sp" />
+                <RadioButton
+                    android:id="@+id/option_hour_after"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:tag="60"
+                    android:text="@string/_1_hour_after"
+                    android:textSize="14sp" />
 
-                    <RadioButton
-                        android:id="@+id/option_hour_after"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="1 hour after"
-                        android:textSize="14sp" />
+                <RadioButton
+                    android:id="@+id/option_day_after"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:tag="1440"
+                    android:text="@string/_1_day_after"
+                    android:textSize="14sp" />
 
-                    <RadioButton
-                        android:id="@+id/option_day_after"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginTop="10dp"
-                        android:text="1 day after"
-                        android:textSize="14sp" />
-
-                </RadioGroup>
-
-            </LinearLayout>
+            </RadioGroup>
 
         </ScrollView>
 

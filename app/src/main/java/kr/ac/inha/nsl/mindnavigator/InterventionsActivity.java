@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +30,7 @@ public class InterventionsActivity extends AppCompatActivity {
     //region Variables
     boolean saveIntervention = false;
     static String result = null;
+    static int resultSchedule = 0;
 
     EditText interv_text;
     View interv_choice;
@@ -253,6 +255,7 @@ public class InterventionsActivity extends AppCompatActivity {
                                         String interv_name = (String) args[0];
                                         Toast.makeText(InterventionsActivity.this, "Intervention successfully created!", Toast.LENGTH_SHORT).show();
                                         result = interv_name;
+                                        resultSchedule = Integer.parseInt((String) intervScheduling.findViewById(intervScheduling.getCheckedRadioButtonId()).getTag());
                                         setResult(Activity.RESULT_OK);
                                         finish();
                                         overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
@@ -266,6 +269,7 @@ public class InterventionsActivity extends AppCompatActivity {
                                         String interv_name = (String) args[0];
                                         Toast.makeText(InterventionsActivity.this, "Intervention already exists. Thus, it was picked for you.", Toast.LENGTH_SHORT).show();
                                         result = interv_name;
+                                        resultSchedule = Integer.parseInt((String) intervScheduling.findViewById(intervScheduling.getCheckedRadioButtonId()).getTag());
                                         setResult(Activity.RESULT_OK);
                                         finish();
                                         overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
@@ -294,7 +298,8 @@ public class InterventionsActivity extends AppCompatActivity {
                 Toast.makeText(this, "Please pick an intervention first!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            setResult(Tools.RES_OK);
+            resultSchedule = Integer.parseInt((String) intervScheduling.findViewById(intervScheduling.getCheckedRadioButtonId()).getTag());
+            setResult(Activity.RESULT_OK);
             finish();
             overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
         }

@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -20,6 +21,7 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -41,6 +43,7 @@ public class EventActivity extends AppCompatActivity {
                     event.setIntervention(InterventionsActivity.result);
                     InterventionsActivity.result = null;
                     selectedInterv.setText(event.getIntervention());
+                    Toast.makeText(this, String.valueOf(InterventionsActivity.resultSchedule), Toast.LENGTH_SHORT).show();
                     break;
                 case EVALUATION_ACTIVITY:
                     // TODO: Do something

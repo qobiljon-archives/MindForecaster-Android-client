@@ -96,6 +96,14 @@
     <string name="everyday">Everyday</string>
     <string name="every_week">Every week</string>
     <string name="event_repeat_mode">Event repeat mode:</string>
+    <string name="_1_day_before">1 day before</string>
+    <string name="_1_hour_before">1 hour before</string>
+    <string name="_30_minutes_before">30 minutes before</string>
+    <string name="_10_minutes_before">10 minutes before</string>
+    <string name="_10_minutes_after">10 minutes after</string>
+    <string name="_30_minutes_after">30 minutes after</string>
+    <string name="_1_hour_after">1 hour after</string>
+    <string name="_1_day_after">1 day after</string>
 
     <string-array name="months_array">
         <item>Jan</item>
