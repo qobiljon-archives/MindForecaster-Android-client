@@ -121,6 +121,7 @@
         android:visibility="gone" />
 
     <LinearLayout
+        android:id="@+id/intervention_choice"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginEnd="20dp"
@@ -134,12 +135,11 @@
             android:layout_height="wrap_content"
             android:text="@string/interventions_list"
             android:textColor="@color/black"
-            android:textSize="15sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             android:typeface="monospace" />
 
         <ScrollView
-            android:id="@+id/intervention_choice"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/bg_solid_wrap">
@@ -155,8 +155,8 @@
         </ScrollView>
     </LinearLayout>
 
-
     <LinearLayout
+        android:id="@+id/interv_scheduling_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginEnd="20dp"
@@ -171,7 +171,7 @@
             android:layout_height="wrap_content"
             android:text="@string/intervention_scheduling"
             android:textColor="@color/black"
-            android:textSize="15sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             android:typeface="monospace" />
 
@@ -183,149 +183,80 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/before_event"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/img_expand"
-                    android:onClick="beforeEventExpand"
-                    android:padding="10dp"
-                    android:text="@string/before_event"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
                 <RadioGroup
-                    android:id="@+id/rg_before_event"
+                    android:id="@+id/interv_scheduling_group"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
+                    android:checkedButton="@+id/option_10mins_before"
+                    android:orientation="vertical">
 
                     <RadioButton
+                        android:id="@+id/option_day_before"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginEnd="13dp"
-                        android:layout_marginStart="40dp"
-                        android:button="@android:color/transparent"
-                        android:drawableEnd="@android:drawable/checkbox_off_background"
-                        android:text="10 minutes before"
-                        android:textSize="13sp" />
-
-                    <RadioButton
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginEnd="13dp"
-                        android:layout_marginStart="40dp"
-                        android:button="@android:color/transparent"
-                        android:drawableEnd="@android:drawable/checkbox_off_background"
-                        android:text="30 minutes before"
-                        android:textSize="13sp" />
-
-                    <RadioButton
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginEnd="13dp"
-                        android:layout_marginStart="40dp"
-                        android:button="@android:color/transparent"
-                        android:drawableEnd="@android:drawable/checkbox_off_background"
-                        android:text="1 hour before"
-                        android:textSize="13sp" />
-
-                    <RadioButton
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginEnd="13dp"
-                        android:layout_marginStart="40dp"
-                        android:button="@android:color/transparent"
-                        android:drawableEnd="@android:drawable/checkbox_off_background"
+                        android:layout_marginTop="10dp"
                         android:text="1 day before"
-                        android:textSize="13sp" />
+                        android:textSize="14sp" />
 
                     <RadioButton
+                        android:id="@+id/option_hour_before"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginEnd="13dp"
-                        android:layout_marginStart="40dp"
-                        android:button="@android:color/transparent"
-                        android:drawableEnd="@android:drawable/checkbox_off_background"
-                        android:text="1 week before"
-                        android:textSize="13sp" />
-
-                </RadioGroup>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@color/bright_grey" />
-
-                <TextView
-                    android:id="@+id/after_event"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/img_expand"
-                    android:onClick="afterEventExpand"
-                    android:padding="10dp"
-                    android:text="@string/after_ecvent"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-                <RadioGroup
-                    android:id="@+id/rg_after_event"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
+                        android:layout_marginTop="10dp"
+                        android:text="1 hour before"
+                        android:textSize="14sp" />
 
                     <RadioButton
+                        android:id="@+id/option_30mins_before"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginEnd="13dp"
-                        android:layout_marginStart="40dp"
-                        android:button="@android:color/transparent"
-                        android:drawableEnd="@android:drawable/checkbox_off_background"
+                        android:layout_marginTop="10dp"
+                        android:text="30 minutes before"
+                        android:textSize="14sp" />
+
+                    <RadioButton
+                        android:id="@id/option_10mins_before"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="10 minutes before"
+                        android:textSize="14sp" />
+
+                    <RadioButton
+                        android:id="@+id/option_10mins_after"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
                         android:text="10 minutes after"
-                        android:textSize="13sp" />
+                        android:textSize="14sp" />
 
                     <RadioButton
+                        android:id="@+id/option_30mins_after"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginEnd="13dp"
-                        android:layout_marginStart="40dp"
-                        android:button="@android:color/transparent"
-                        android:drawableEnd="@android:drawable/checkbox_off_background"
+                        android:layout_marginTop="10dp"
                         android:text="30 minutes after"
-                        android:textSize="13sp" />
+                        android:textSize="14sp" />
 
                     <RadioButton
+                        android:id="@+id/option_hour_after"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginEnd="13dp"
-                        android:layout_marginStart="40dp"
-                        android:button="@android:color/transparent"
-                        android:drawableEnd="@android:drawable/checkbox_off_background"
+                        android:layout_marginTop="10dp"
                         android:text="1 hour after"
-                        android:textSize="13sp" />
+                        android:textSize="14sp" />
 
                     <RadioButton
+                        android:id="@+id/option_day_after"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
-                        android:layout_marginEnd="13dp"
-                        android:layout_marginStart="40dp"
-                        android:button="@android:color/transparent"
-                        android:drawableEnd="@android:drawable/checkbox_off_background"
+                        android:layout_marginTop="10dp"
                         android:text="1 day after"
-                        android:textSize="13sp" />
+                        android:textSize="14sp" />
 
                 </RadioGroup>
 
