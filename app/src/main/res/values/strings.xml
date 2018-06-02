@@ -92,6 +92,9 @@
     <string name="intervention_scheduling">Intervention scheduling:</string>
     <string name="before_event">Before event</string>
     <string name="after_ecvent">After ecvent</string>
+    <string name="only_once">Only once</string>
+    <string name="everyday">Everyday</string>
+    <string name="every_week">Every week</string>
 
     <string-array name="months_array">
         <item>Jan</item>

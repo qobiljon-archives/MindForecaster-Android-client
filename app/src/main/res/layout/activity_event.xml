@@ -217,7 +217,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <!--Option: Anticipated stress level-->
             <View
@@ -434,26 +434,26 @@
                     <TextView
                         android:id="@+id/selected_intervention"
                         android:layout_width="0dp"
-                        android:layout_weight="5"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:background="@drawable/bg_solid_wrap"
-                        android:textSize="15sp"
-                        android:padding="10dp"
                         android:layout_marginBottom="5dp"
+                        android:layout_weight="5"
+                        android:background="@drawable/bg_solid_wrap"
                         android:maxLines="2"
+                        android:padding="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
                         android:textStyle="bold"
                         android:typeface="monospace" />
 
                     <Button
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:onClick="editInterventionClick"
+                        android:layout_weight="1"
                         android:background="@android:color/transparent"
                         android:gravity="end|center_vertical"
-                        android:textColor="@color/dark_blue"
-                        android:text="@string/edit"/>
+                        android:onClick="editInterventionClick"
+                        android:text="@string/edit"
+                        android:textColor="@color/dark_blue" />
 
                 </LinearLayout>
 
@@ -481,13 +481,60 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
                 android:layout_marginStart="20dp"
+                android:background="@drawable/bg_solid_wrap"
+                android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="visible">
 
-                <Button
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/dummy" />
+                    android:fontFamily="monospace"
+                    android:text="Event repeat mode:"
+                    android:textAllCaps="true"
+                    android:textStyle="bold" />
+
+                <RadioGroup
+                    android:id="@+id/repeat_weekly_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkedButton="@+id/once_radio"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@id/once_radio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/bg_radio_weekday_button"
+                        android:button="@android:color/transparent"
+                        android:padding="5dp"
+                        android:text="@string/only_once"
+                        android:textAllCaps="true" />
+
+                    <RadioButton
+                        android:id="@id/once_radio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/bg_radio_weekday_button"
+                        android:button="@android:color/transparent"
+                        android:padding="5dp"
+                        android:text="@string/everyday"
+                        android:textAllCaps="true" />
+
+                    <RadioButton
+                        android:id="@id/once_radio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/bg_radio_weekday_button"
+                        android:button="@android:color/transparent"
+                        android:padding="5dp"
+                        android:text="@string/every_week"
+                        android:textAllCaps="true" />
+
+                </RadioGroup>
 
             </LinearLayout>
 
