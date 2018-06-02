@@ -39,6 +39,7 @@ public class EventActivity extends AppCompatActivity {
                 case INTERVENTION_ACTIVITY:
                     event.setIntervention(InterventionsActivity.result);
                     InterventionsActivity.result = null;
+                    selectedInterv.setText(event.getIntervention());
                     break;
                 case EVALUATION_ACTIVITY:
                     // TODO: Do something
@@ -59,11 +60,13 @@ public class EventActivity extends AppCompatActivity {
 
     private EditText eventTitle, stressCause;
     private TextView startDateText, startTimeText, endDateText, endTimeText;
+    private TextView selectedInterv;
     private SeekBar stressLvl;
     private Switch switchAllDay;
     private ViewGroup inactiveLayout;
     private RadioGroup stressTypeGroup;
     private ViewGroup stressLevelDetails;
+    private ViewGroup interventionDetails;
     private ViewGroup repeatNotificationDetails;
     private Switch shareSwitch;
 
@@ -82,8 +85,10 @@ public class EventActivity extends AppCompatActivity {
         stressTypeGroup = findViewById(R.id.stress_type_group);
         stressCause = findViewById(R.id.txt_stress_cause);
         stressLevelDetails = findViewById(R.id.stress_level_details);
+        interventionDetails = findViewById(R.id.intervention_details);
         repeatNotificationDetails = findViewById(R.id.repeat_notification_details);
         shareSwitch = findViewById(R.id.share_switch);
+        selectedInterv = findViewById(R.id.selected_intervention);
 
         Calendar selCal = Calendar.getInstance();
         selCal.setTimeInMillis(getIntent().getLongExtra("selectedDayMillis", 0));
@@ -245,7 +250,21 @@ public class EventActivity extends AppCompatActivity {
         }
     }
 
-    public void interventionsClick(View view) {
+    public void expandInterventionsClick(View view) {
+
+        TextView optionView = (TextView) view;
+
+        if (interventionDetails.getVisibility() == View.VISIBLE) {
+            interventionDetails.setVisibility(View.GONE);
+            optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_expand), null);
+        } else {
+            interventionDetails.setVisibility(View.VISIBLE);
+            optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
+        }
+
+    }
+
+    public void editInterventionClick(View view) {
         Intent intent = new Intent(this, InterventionsActivity.class);
         startActivityForResult(intent, INTERVENTION_ACTIVITY);
         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);

@@ -89,6 +89,9 @@
     <string name="interv_completion">Did you perform this intervention?</string>
     <string name="interv_effectiveness">How effective was the intervention?</string>
     <string name="interv_recommendation">Do you want to recommend your intervention to others?</string>
+    <string name="intervention_scheduling">Intervention scheduling:</string>
+    <string name="before_event">Before event</string>
+    <string name="after_ecvent">After ecvent</string>
 
     <string-array name="months_array">
         <item>Jan</item>

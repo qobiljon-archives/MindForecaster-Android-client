@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="20dp"
     android:orientation="vertical"
     tools:context=".InterventionsActivity">
 
@@ -117,44 +118,220 @@
         android:maxLines="5"
         android:padding="10dp"
         android:paddingTop="5dp"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
-    <ScrollView
-        android:id="@+id/intervention_choice"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:layout_weight="1"
-        android:background="@drawable/bg_solid_wrap">
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/interventions_list"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:orientation="vertical">
+            android:text="@string/interventions_list"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:typeface="monospace" />
 
-            <TextView
-                android:layout_width="wrap_content"
+        <ScrollView
+            android:id="@+id/intervention_choice"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_solid_wrap">
+
+            <LinearLayout
+                android:id="@+id/interventions_list"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="10dp"
-                android:text="@string/interventions_list"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:typeface="monospace" />
+                android:layout_margin="5dp"
+                android:orientation="vertical">
 
-        </LinearLayout>
-    </ScrollView>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="6dp"
         android:layout_weight="1"
+        android:orientation="vertical"
         android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/intervention_scheduling"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:typeface="monospace" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_solid_wrap">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/before_event"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/img_expand"
+                    android:onClick="beforeEventExpand"
+                    android:padding="10dp"
+                    android:text="@string/before_event"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <RadioGroup
+                    android:id="@+id/rg_before_event"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <RadioButton
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginEnd="13dp"
+                        android:layout_marginStart="40dp"
+                        android:button="@android:color/transparent"
+                        android:drawableEnd="@android:drawable/checkbox_off_background"
+                        android:text="10 minutes before"
+                        android:textSize="13sp" />
+
+                    <RadioButton
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginEnd="13dp"
+                        android:layout_marginStart="40dp"
+                        android:button="@android:color/transparent"
+                        android:drawableEnd="@android:drawable/checkbox_off_background"
+                        android:text="30 minutes before"
+                        android:textSize="13sp" />
+
+                    <RadioButton
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginEnd="13dp"
+                        android:layout_marginStart="40dp"
+                        android:button="@android:color/transparent"
+                        android:drawableEnd="@android:drawable/checkbox_off_background"
+                        android:text="1 hour before"
+                        android:textSize="13sp" />
+
+                    <RadioButton
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginEnd="13dp"
+                        android:layout_marginStart="40dp"
+                        android:button="@android:color/transparent"
+                        android:drawableEnd="@android:drawable/checkbox_off_background"
+                        android:text="1 day before"
+                        android:textSize="13sp" />
+
+                    <RadioButton
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginEnd="13dp"
+                        android:layout_marginStart="40dp"
+                        android:button="@android:color/transparent"
+                        android:drawableEnd="@android:drawable/checkbox_off_background"
+                        android:text="1 week before"
+                        android:textSize="13sp" />
+
+                </RadioGroup>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/bright_grey" />
+
+                <TextView
+                    android:id="@+id/after_event"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/img_expand"
+                    android:onClick="afterEventExpand"
+                    android:padding="10dp"
+                    android:text="@string/after_ecvent"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <RadioGroup
+                    android:id="@+id/rg_after_event"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <RadioButton
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginEnd="13dp"
+                        android:layout_marginStart="40dp"
+                        android:button="@android:color/transparent"
+                        android:drawableEnd="@android:drawable/checkbox_off_background"
+                        android:text="10 minutes after"
+                        android:textSize="13sp" />
+
+                    <RadioButton
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginEnd="13dp"
+                        android:layout_marginStart="40dp"
+                        android:button="@android:color/transparent"
+                        android:drawableEnd="@android:drawable/checkbox_off_background"
+                        android:text="30 minutes after"
+                        android:textSize="13sp" />
+
+                    <RadioButton
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginEnd="13dp"
+                        android:layout_marginStart="40dp"
+                        android:button="@android:color/transparent"
+                        android:drawableEnd="@android:drawable/checkbox_off_background"
+                        android:text="1 hour after"
+                        android:textSize="13sp" />
+
+                    <RadioButton
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginEnd="13dp"
+                        android:layout_marginStart="40dp"
+                        android:button="@android:color/transparent"
+                        android:drawableEnd="@android:drawable/checkbox_off_background"
+                        android:text="1 day after"
+                        android:textSize="13sp" />
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+        </ScrollView>
 
     </LinearLayout>
 

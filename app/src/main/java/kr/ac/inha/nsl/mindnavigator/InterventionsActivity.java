@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +34,9 @@ public class InterventionsActivity extends AppCompatActivity {
     ViewGroup interv_list;
 
     Button[] tabButtons;
+
+    RadioGroup rgBeforeEvent, rgAfterEvent;
+
     //endregion
 
     private void init() {
@@ -47,6 +51,9 @@ public class InterventionsActivity extends AppCompatActivity {
         interv_text.setVisibility(View.GONE);
         interv_choice.setVisibility(View.GONE);
         tabButtons[0].callOnClick();
+
+        rgBeforeEvent = findViewById(R.id.rg_before_event);
+        rgAfterEvent = findViewById(R.id.rg_after_event);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
@@ -69,7 +76,7 @@ public class InterventionsActivity extends AppCompatActivity {
             case R.id.button_systems_intervention:
                 tabButtons[1].setBackgroundResource(R.drawable.bg_interv_method_checked_view);
                 interv_choice.setVisibility(View.VISIBLE);
-                interv_list.removeViews(1, interv_list.getChildCount() - 1);
+                interv_list.removeAllViews();
                 Tools.toggle_keyboard(this, interv_text, false);
                 Tools.execute(new MyRunnable(
                         SignInActivity.loginPrefs.getString(SignInActivity.username, null),
@@ -103,7 +110,7 @@ public class InterventionsActivity extends AppCompatActivity {
                                             try {
                                                 for (int n = 0; n < arr.length(); n++) {
                                                     inflater.inflate(R.layout.intervention_element, interv_list);
-                                                    TextView interv_text = interv_list.getChildAt(n + 1).findViewById(R.id.intervention_text);
+                                                    TextView interv_text = interv_list.getChildAt(n).findViewById(R.id.intervention_text);
                                                     interv_text.setText(arr.getString(n));
                                                 }
                                             } catch (JSONException e) {
@@ -130,7 +137,7 @@ public class InterventionsActivity extends AppCompatActivity {
             case R.id.button_peer_interventions:
                 tabButtons[2].setBackgroundResource(R.drawable.bg_interv_method_checked_view);
                 interv_choice.setVisibility(View.VISIBLE);
-                interv_list.removeViews(1, interv_list.getChildCount() - 1);
+                interv_list.removeAllViews();
                 Tools.toggle_keyboard(this, interv_text, false);
                 Tools.execute(new MyRunnable(
                         SignInActivity.loginPrefs.getString(SignInActivity.username, null),
@@ -164,7 +171,7 @@ public class InterventionsActivity extends AppCompatActivity {
                                             try {
                                                 for (int n = 0; n < arr.length(); n++) {
                                                     inflater.inflate(R.layout.intervention_element, interv_list);
-                                                    TextView interv_text = interv_list.getChildAt(n + 1).findViewById(R.id.intervention_text);
+                                                    TextView interv_text = interv_list.getChildAt(n).findViewById(R.id.intervention_text);
                                                     interv_text.setText(arr.getString(n));
                                                 }
                                             } catch (JSONException e) {
@@ -191,6 +198,11 @@ public class InterventionsActivity extends AppCompatActivity {
             default:
                 break;
         }
+    }
+
+    public void onIntervClick(View view) {
+        result = ((TextView) view.findViewById(R.id.intervention_text)).getText().toString();
+        saveClick(null);
     }
 
     public void cancelClick(View view) {
@@ -278,6 +290,30 @@ public class InterventionsActivity extends AppCompatActivity {
             setResult(Tools.RES_OK);
             finish();
             overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
+        }
+    }
+
+    public void beforeEventExpand(View view) {
+        TextView optionView = (TextView) view;
+
+        if (rgBeforeEvent.getVisibility() == View.VISIBLE) {
+            rgBeforeEvent.setVisibility(View.GONE);
+            optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_expand), null);
+        } else {
+            rgBeforeEvent.setVisibility(View.VISIBLE);
+            optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
+        }
+    }
+
+    public void afterEventExpand(View view) {
+        TextView optionView = (TextView) view;
+
+        if (rgAfterEvent.getVisibility() == View.VISIBLE) {
+            rgAfterEvent.setVisibility(View.GONE);
+            optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_expand), null);
+        } else {
+            rgAfterEvent.setVisibility(View.VISIBLE);
+            optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
         }
     }
 }
