@@ -1,5 +1,6 @@
 package kr.ac.inha.nsl.mindnavigator;
 
+import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -210,7 +211,7 @@ public class InterventionsActivity extends AppCompatActivity {
     }
 
     public void cancelClick(View view) {
-        setResult(Tools.RES_FAIL);
+        setResult(Activity.RESULT_CANCELED);
         finish();
         overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
     }
@@ -252,6 +253,7 @@ public class InterventionsActivity extends AppCompatActivity {
                                         String interv_name = (String) args[0];
                                         Toast.makeText(InterventionsActivity.this, "Intervention successfully created!", Toast.LENGTH_SHORT).show();
                                         result = interv_name;
+                                        setResult(Activity.RESULT_OK);
                                         finish();
                                         overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
                                     }
@@ -264,6 +266,7 @@ public class InterventionsActivity extends AppCompatActivity {
                                         String interv_name = (String) args[0];
                                         Toast.makeText(InterventionsActivity.this, "Intervention already exists. Thus, it was picked for you.", Toast.LENGTH_SHORT).show();
                                         result = interv_name;
+                                        setResult(Activity.RESULT_OK);
                                         finish();
                                         overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
                                     }

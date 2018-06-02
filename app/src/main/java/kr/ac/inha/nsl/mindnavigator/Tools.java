@@ -176,6 +176,7 @@ class Event {
     //region Variables
     @ColorInt
     private static int[] stressColors = new int[3];
+    static final int NO_REPEAT = 0, REPEAT_EVERYDAY = 1, REPEAT_WEEKLY = 2;
 
     private long id;
     private int stressLevel;
@@ -186,6 +187,7 @@ class Event {
     private String stressType;
     private String stressCause;
     private boolean is_shared;
+    private int repeatMode;
     //endregion
 
     long getEventId() {
@@ -258,5 +260,13 @@ class Event {
 
     boolean isShared() {
         return is_shared;
+    }
+
+    void setRepeatMode(int repeatMode) {
+        this.repeatMode = repeatMode;
+    }
+
+    int getRepeatMode() {
+        return repeatMode;
     }
 }

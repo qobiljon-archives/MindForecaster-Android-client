@@ -95,6 +95,7 @@
     <string name="only_once">Only once</string>
     <string name="everyday">Everyday</string>
     <string name="every_week">Every week</string>
+    <string name="event_repeat_mode">Event repeat mode:</string>
 
     <string-array name="months_array">
         <item>Jan</item>

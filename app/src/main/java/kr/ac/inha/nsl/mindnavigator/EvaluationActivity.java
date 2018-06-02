@@ -1,5 +1,6 @@
 package kr.ac.inha.nsl.mindnavigator;
 
+import android.app.Activity;
 import android.graphics.PorterDuff;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -99,7 +100,7 @@ public class EvaluationActivity extends AppCompatActivity {
     }
 
     public void cancelClick(View view) {
-        setResult(Tools.RES_FAIL);
+        setResult(Activity.RESULT_CANCELED);
         finish();
         overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
     }
@@ -137,7 +138,7 @@ public class EvaluationActivity extends AppCompatActivity {
             default:
                 break;
         }
-        setResult(Tools.RES_OK);
+        setResult(Activity.RESULT_OK);
         finish();
         overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
     }

@@ -1,5 +1,6 @@
 package kr.ac.inha.nsl.mindnavigator;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -34,7 +35,7 @@ public class EventActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Tools.RES_OK)
+        if (resultCode == Activity.RESULT_OK)
             switch (requestCode) {
                 case INTERVENTION_ACTIVITY:
                     event.setIntervention(InterventionsActivity.result);
@@ -58,17 +59,12 @@ public class EventActivity extends AppCompatActivity {
     private final int EVALUATION_ACTIVITY = 0, INTERVENTION_ACTIVITY = 1, FEEDBACK_ACTIVITY = 2;
     static Event event;
 
+    private ViewGroup inactiveLayout, stressLevelDetails, interventionDetails, repeatNotificationDetails;
+    private TextView startDateText, startTimeText, endDateText, endTimeText, selectedInterv;
+    private RadioGroup stressTypeGroup, repeatModeGroup;
     private EditText eventTitle, stressCause;
-    private TextView startDateText, startTimeText, endDateText, endTimeText;
-    private TextView selectedInterv;
+    private Switch switchAllDay, shareSwitch;
     private SeekBar stressLvl;
-    private Switch switchAllDay;
-    private ViewGroup inactiveLayout;
-    private RadioGroup stressTypeGroup;
-    private ViewGroup stressLevelDetails;
-    private ViewGroup interventionDetails;
-    private ViewGroup repeatNotificationDetails;
-    private Switch shareSwitch;
 
     private Calendar startTime, endTime;
     //endregion
@@ -89,6 +85,7 @@ public class EventActivity extends AppCompatActivity {
         repeatNotificationDetails = findViewById(R.id.repeat_notification_details);
         shareSwitch = findViewById(R.id.share_switch);
         selectedInterv = findViewById(R.id.selected_intervention);
+        repeatModeGroup = findViewById(R.id.repeat_mode_group);
 
         Calendar selCal = Calendar.getInstance();
         selCal.setTimeInMillis(getIntent().getLongExtra("selectedDayMillis", 0));
@@ -251,7 +248,6 @@ public class EventActivity extends AppCompatActivity {
     }
 
     public void expandInterventionsClick(View view) {
-
         TextView optionView = (TextView) view;
 
         if (interventionDetails.getVisibility() == View.VISIBLE) {
@@ -324,6 +320,19 @@ public class EventActivity extends AppCompatActivity {
         }
         event.setStressCause(stressCause.getText().toString());
         event.setSharing(shareSwitch.isChecked());
+        switch (repeatModeGroup.getCheckedRadioButtonId()) {
+            case R.id.no_repeat_radio:
+                event.setRepeatMode(Event.NO_REPEAT);
+                break;
+            case R.id.everyday_repeat_radio:
+                event.setRepeatMode(Event.REPEAT_EVERYDAY);
+                break;
+            case R.id.everyweek_repeat_radio:
+                event.setRepeatMode(Event.REPEAT_WEEKLY);
+                break;
+            default:
+                break;
+        }
 
         finish();
         overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);

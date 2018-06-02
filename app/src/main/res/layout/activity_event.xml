@@ -490,45 +490,45 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="monospace"
-                    android:text="Event repeat mode:"
+                    android:text="@string/event_repeat_mode"
                     android:textAllCaps="true"
                     android:textStyle="bold" />
 
                 <RadioGroup
-                    android:id="@+id/repeat_weekly_layout"
+                    android:id="@+id/repeat_mode_group"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checkedButton="@+id/once_radio"
+                    android:checkedButton="@+id/no_repeat_radio"
                     android:orientation="horizontal">
 
                     <RadioButton
-                        android:id="@id/once_radio"
+                        android:id="@id/no_repeat_radio"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        android:background="@drawable/bg_radio_weekday_button"
+                        android:background="@drawable/bg_radio_button"
                         android:button="@android:color/transparent"
                         android:padding="5dp"
                         android:text="@string/only_once"
                         android:textAllCaps="true" />
 
                     <RadioButton
-                        android:id="@id/once_radio"
+                        android:id="@+id/everyday_repeat_radio"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        android:background="@drawable/bg_radio_weekday_button"
+                        android:background="@drawable/bg_radio_button"
                         android:button="@android:color/transparent"
                         android:padding="5dp"
                         android:text="@string/everyday"
                         android:textAllCaps="true" />
 
                     <RadioButton
-                        android:id="@id/once_radio"
+                        android:id="@+id/everyweek_repeat_radio"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        android:background="@drawable/bg_radio_weekday_button"
+                        android:background="@drawable/bg_radio_button"
                         android:button="@android:color/transparent"
                         android:padding="5dp"
                         android:text="@string/every_week"
