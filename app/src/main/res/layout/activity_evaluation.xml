@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -60,20 +59,22 @@
 
         <Button
             android:id="@+id/tab_event"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
-            android:onClick="tabClicked"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
             android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:onClick="tabClicked"
             android:text="@string/event" />
 
         <Button
             android:id="@+id/tab_intervention"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
-            android:onClick="tabClicked"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/bright_grey"
+            android:onClick="tabClicked"
             android:text="@string/intervention" />
     </LinearLayout>
 
@@ -130,7 +131,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Did you complete this event?"
+                        android:text="@string/event_completion"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -141,8 +142,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
+                        android:background="@drawable/radio_off"
                         android:onClick="btnDidNotEventClick"
-                        android:background="@drawable/bg_box_unchecked_view"
                         android:text="@string/did_it"
                         android:textAlignment="center"
                         android:textAllCaps="false"
@@ -154,8 +155,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
+                        android:background="@drawable/radio_off"
                         android:onClick="btnDidNotEventClick"
-                        android:background="@drawable/bg_box_unchecked_view"
                         android:text="@string/did_not_it"
                         android:textAlignment="center"
                         android:textAllCaps="false"
@@ -180,7 +181,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="How stressful was the event?"
+                        android:text="@string/ask_stress_level"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -273,7 +274,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Did you perform this intervention?"
+                        android:text="@string/interv_completion"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -284,8 +285,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
+                        android:background="@drawable/radio_off"
                         android:onClick="btnDidNotIntervClick"
-                        android:background="@drawable/bg_box_unchecked_view"
                         android:text="@string/did_it"
                         android:textAlignment="center"
                         android:textAllCaps="false"
@@ -297,8 +298,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
+                        android:background="@drawable/radio_off"
                         android:onClick="btnDidNotIntervClick"
-                        android:background="@drawable/bg_box_unchecked_view"
                         android:text="@string/did_not_it"
                         android:textAlignment="center"
                         android:textAllCaps="false"
@@ -323,7 +324,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="How effective was the intervention?"
+                        android:text="@string/interv_effectiveness"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -378,7 +379,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Do you want to recommend your intervention to others?"
+                        android:text="@string/interv_recommendation"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -389,8 +390,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:onClick="btnYesNoIntervionClick"
-                        android:background="@drawable/bg_box_unchecked_view"
+                        android:background="@drawable/radio_off"
                         android:text="@string/yes"
                         android:textAlignment="center"
                         android:textAllCaps="false"
@@ -402,8 +402,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:onClick="btnYesNoIntervionClick"
-                        android:background="@drawable/bg_box_unchecked_view"
+                        android:background="@drawable/radio_off"
                         android:text="@string/no"
                         android:textAlignment="center"
                         android:textAllCaps="false"

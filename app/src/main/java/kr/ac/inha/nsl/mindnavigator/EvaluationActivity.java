@@ -72,14 +72,14 @@ public class EvaluationActivity extends AppCompatActivity {
 
     public void btnDidNotEventClick(View view) {
         for (Button button : btnEventDidNot)
-            button.setBackgroundResource(R.drawable.bg_box_unchecked_view);
+            button.setBackgroundResource(R.drawable.radio_off);
 
         switch (view.getId()) {
             case R.id.btn_did_event:
-                btnEventDidNot[0].setBackgroundResource(R.drawable.bg_box_checked_view);
+                btnEventDidNot[0].setBackgroundResource(R.drawable.radio_on);
                 break;
             case R.id.btn_didnt_do_event:
-                btnEventDidNot[1].setBackgroundResource(R.drawable.bg_box_checked_view);
+                btnEventDidNot[1].setBackgroundResource(R.drawable.radio_on);
                 break;
             default:
                 break;
@@ -88,14 +88,14 @@ public class EvaluationActivity extends AppCompatActivity {
 
     public void btnDidNotIntervClick(View view) {
         for (Button button : btnIntervDidNot)
-            button.setBackgroundResource(R.drawable.bg_box_unchecked_view);
+            button.setBackgroundResource(R.drawable.radio_off);
 
         switch (view.getId()) {
             case R.id.btn_did_intervention:
-                btnIntervDidNot[0].setBackgroundResource(R.drawable.bg_box_checked_view);
+                btnIntervDidNot[0].setBackgroundResource(R.drawable.radio_on);
                 break;
             case R.id.btn_didnt_do_intervention:
-                btnIntervDidNot[1].setBackgroundResource(R.drawable.bg_box_checked_view);
+                btnIntervDidNot[1].setBackgroundResource(R.drawable.radio_on);
                 break;
             default:
                 break;
@@ -104,14 +104,14 @@ public class EvaluationActivity extends AppCompatActivity {
 
     public void btnYesNoIntervClick(View view) {
         for (Button button : btnIntervYesNo)
-            button.setBackgroundResource(R.drawable.bg_box_unchecked_view);
+            button.setBackgroundResource(R.drawable.radio_off);
 
         switch (view.getId()) {
             case R.id.btn_yes_intervention:
-                btnIntervYesNo[0].setBackgroundResource(R.drawable.bg_box_checked_view);
+                btnIntervYesNo[0].setBackgroundResource(R.drawable.radio_on);
                 break;
             case R.id.btn_no_intervention:
-                btnIntervYesNo[1].setBackgroundResource(R.drawable.bg_box_checked_view);
+                btnIntervYesNo[1].setBackgroundResource(R.drawable.radio_on);
                 break;
             default:
                 break;

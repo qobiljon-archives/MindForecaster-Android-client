@@ -6,8 +6,10 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.LinearLayout;
+import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -35,6 +37,9 @@ public class EventActivity extends AppCompatActivity {
                 case EVALUATION_ACTIVITY:
                     // TODO: Do something
                     break;
+                case FEEDBACK_ACTIVITY:
+                    // TODO: Do something
+                    break;
                 default:
                     break;
             }
@@ -43,19 +48,24 @@ public class EventActivity extends AppCompatActivity {
     }
 
     //region Variables
-    private final int EVALUATION_ACTIVITY = 0, INTERVENTION_ACTIVITY = 1;
+    private final int EVALUATION_ACTIVITY = 0, INTERVENTION_ACTIVITY = 1, FEEDBACK_ACTIVITY = 2;
     static Event event;
 
-    private TextView eventTitle, startDateText, startTimeText, endDateText, endTimeText, positiveStress, negativeStress, dentKnowStress, stressCause;
+    private EditText eventTitle, stressCause;
+    private TextView startDateText, startTimeText, endDateText, endTimeText;
     private SeekBar stressLvl;
     private Switch switchAllDay;
-    private LinearLayout inactiveLayout;
+    private ViewGroup inactiveLayout;
+    private RadioGroup stressTypeGroup;
+    private ViewGroup stressLevelDetails;
+    private ViewGroup repeatNotificationDetails;
+    private Switch shareSwitch;
 
     private Calendar startTime, endTime;
     //endregion
 
     private void init() {
-        eventTitle = findViewById(R.id.txt_event_title);
+        eventTitle = findViewById(R.id.edit_event_title);
         switchAllDay = findViewById(R.id.all_day_switch);
         startDateText = findViewById(R.id.txt_event_start_date);
         startTimeText = findViewById(R.id.txt_event_start_time);
@@ -63,10 +73,11 @@ public class EventActivity extends AppCompatActivity {
         endTimeText = findViewById(R.id.txt_event_end_time);
         stressLvl = findViewById(R.id.stressLvl);
         inactiveLayout = findViewById(R.id.layout_to_be_inactive);
-        positiveStress = findViewById(R.id.stressor_positive);
-        negativeStress = findViewById(R.id.stressor_negative);
-        dentKnowStress = findViewById(R.id.stressor_dont_know);
+        stressTypeGroup = findViewById(R.id.stress_type_group);
         stressCause = findViewById(R.id.txt_stress_cause);
+        stressLevelDetails = findViewById(R.id.stress_level_details);
+        repeatNotificationDetails = findViewById(R.id.repeat_notification_details);
+        shareSwitch = findViewById(R.id.share_switch);
 
         Calendar selCal = Calendar.getInstance();
         selCal.setTimeInMillis(getIntent().getLongExtra("selectedDayMillis", 0));
@@ -84,6 +95,7 @@ public class EventActivity extends AppCompatActivity {
                 selCal.get(Calendar.HOUR),
                 selCal.get(Calendar.MINUTE)));
         startTimeText.setTag(selCal.getTimeInMillis());
+        startTime = (Calendar) selCal.clone();
 
         selCal.add(Calendar.HOUR, 1);
         endDateText.setText(String.format(Locale.US,
@@ -99,13 +111,14 @@ public class EventActivity extends AppCompatActivity {
                 selCal.get(Calendar.HOUR),
                 selCal.get(Calendar.MINUTE)));
         endDateText.setTag(selCal.getTimeInMillis());
+        endTime = (Calendar) selCal.clone();
 
         stressLvl.getProgressDrawable().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.slvl0_color, null), PorterDuff.Mode.SRC_IN);
         stressLvl.getThumb().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.slvl0_color, null), PorterDuff.Mode.SRC_IN);
         stressLvl.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (progress > 0 && progress < 50) {
+                if (progress >= 0 && progress < 50) {
                     int slvl0Col = ResourcesCompat.getColor(getResources(), R.color.slvl0_color, null);
                     stressLvl.getProgressDrawable().setColorFilter(slvl0Col, PorterDuff.Mode.SRC_IN);
                     stressLvl.getThumb().setColorFilter(slvl0Col, PorterDuff.Mode.SRC_IN);
@@ -160,12 +173,27 @@ public class EventActivity extends AppCompatActivity {
     }
 
     public void expandStressLevelClick(View view) {
-        LinearLayout moreStressLvl = findViewById(R.id.stress_lvl_more);
+        TextView optionView = (TextView) view;
 
-        if (moreStressLvl.getVisibility() == View.VISIBLE)
-            moreStressLvl.setVisibility(View.GONE);
-        else
-            moreStressLvl.setVisibility(View.VISIBLE);
+        if (stressLevelDetails.getVisibility() == View.VISIBLE) {
+            stressLevelDetails.setVisibility(View.GONE);
+            optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_expand), null);
+        } else {
+            stressLevelDetails.setVisibility(View.VISIBLE);
+            optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
+        }
+    }
+
+    public void expandRepeatNotificationClick(View view) {
+        TextView optionView = (TextView) view;
+
+        if (repeatNotificationDetails.getVisibility() == View.VISIBLE) {
+            repeatNotificationDetails.setVisibility(View.GONE);
+            optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_expand), null);
+        } else {
+            repeatNotificationDetails.setVisibility(View.VISIBLE);
+            optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
+        }
     }
 
     public void interventionsClick(View view) {
@@ -177,6 +205,12 @@ public class EventActivity extends AppCompatActivity {
     public void evaluationClick(View view) {
         Intent intent = new Intent(this, EvaluationActivity.class);
         startActivityForResult(intent, EVALUATION_ACTIVITY);
+        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+    }
+
+    public void feedbackClick(View view) {
+        Intent intent = new Intent(this, FeedbackActivity.class);
+        startActivityForResult(intent, FEEDBACK_ACTIVITY);
         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
     }
 
@@ -220,6 +254,21 @@ public class EventActivity extends AppCompatActivity {
         // endregion
         event.setStartTime(startTime);
         event.setEndTime(endTime);
+        switch (stressTypeGroup.getCheckedRadioButtonId()) {
+            case R.id.stressor_positive:
+                event.setStressType("positive");
+                break;
+            case R.id.stressor_negative:
+                event.setStressType("negative");
+                break;
+            case R.id.stressor_unknown:
+                event.setStressType("unknown");
+                break;
+            default:
+                break;
+        }
+        event.setStressCause(stressCause.getText().toString());
+        event.setSharing(shareSwitch.isChecked());
 
         finish();
         overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);

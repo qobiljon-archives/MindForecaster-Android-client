@@ -82,6 +82,13 @@
     <string name="signing_in">Signing in…</string>
     <string name="signing_up">Signing up…</string>
     <string name="sunday_long">Sunday</string>
+    <string name="event_title_hint">Title</string>
+    <string name="text_image">Image of a letter</string>
+    <string name="event_completion">Did you complete this event?</string>
+    <string name="ask_stress_level">How stressful was the event?</string>
+    <string name="interv_completion">Did you perform this intervention?</string>
+    <string name="interv_effectiveness">How effective was the intervention?</string>
+    <string name="interv_recommendation">Do you want to recommend your intervention to others?</string>
 
     <string-array name="months_array">
         <item>Jan</item>

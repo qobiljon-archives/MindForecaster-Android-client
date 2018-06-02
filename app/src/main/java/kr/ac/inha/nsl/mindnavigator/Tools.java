@@ -163,6 +163,9 @@ class Event {
     private Calendar startTime;
     private Calendar endTime;
     private String intervention;
+    private String stressType;
+    private String stressCause;
+    private boolean is_shared;
     //endregion
 
     long getEventId() {
@@ -211,5 +214,29 @@ class Event {
 
     String getIntervention() {
         return intervention;
+    }
+
+    void setStressType(String stressType) {
+        this.stressType = stressType;
+    }
+
+    String getStressType() {
+        return stressType;
+    }
+
+    void setStressCause(String stressCause) {
+        this.stressCause = stressCause;
+    }
+
+    String getStressCause() {
+        return stressCause;
+    }
+
+    void setSharing(boolean isShared) {
+        this.is_shared = isShared;
+    }
+
+    boolean isShared() {
+        return is_shared;
     }
 }

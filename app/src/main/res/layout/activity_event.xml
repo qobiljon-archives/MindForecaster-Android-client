@@ -63,64 +63,54 @@
             android:layout_margin="5dp"
             android:gravity="center">
 
-            <TextView
-                android:layout_width="0dp"
+            <ImageView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="1"
-                android:labelFor="@+id/txt_event_title"
-                android:text="@string/event_title"
-                android:textColor="#000"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:typeface="monospace" />
+                android:background="@drawable/img_title"
+                android:contentDescription="@string/text_image" />
 
             <EditText
-                android:id="@id/txt_event_title"
+                android:id="@+id/edit_event_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:layout_weight="2"
+                android:hint="@string/event_title_hint"
                 android:inputType="text"
-                android:maxLines="1" />
+                android:maxLines="1"
+                tools:ignore="LabelFor" />
         </LinearLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:gravity="center">
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|start"
-                android:background="@drawable/clock"
-                android:contentDescription="@string/clock_image" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|start"
-                android:layout_marginStart="30dp"
-                android:text="@string/all_day"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:typeface="monospace" />
-
-            <Switch
-                android:id="@+id/all_day_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|end"
-                android:layout_marginEnd="20dp" />
-
-        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/img_clock"
+                android:contentDescription="@string/clock_image" />
+
+            <Switch
+                android:id="@+id/all_day_switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:fontFamily="monospace"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:text="@string/all_day"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center">
 
             <TextView
@@ -225,7 +215,6 @@
             android:visibility="gone">
 
             <!--Option: Anticipated stress level-->
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
@@ -234,7 +223,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/arrow_down"
+                android:drawableEnd="@drawable/img_expand"
                 android:onClick="expandStressLevelClick"
                 android:padding="20dp"
                 android:text="@string/anticipated_stress_level"
@@ -242,7 +231,7 @@
                 android:textSize="18sp" />
 
             <LinearLayout
-                android:id="@+id/stress_lvl_more"
+                android:id="@+id/stress_level_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
@@ -277,7 +266,7 @@
                             android:id="@+id/stressLvl"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:max="100"/>
+                            android:max="100" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -333,41 +322,64 @@
                         android:textStyle="bold"
                         android:typeface="monospace" />
 
-                    <Button
-                        android:id="@+id/stressor_positive"
+                    <RadioGroup
+                        android:id="@+id/stress_type_group"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:background="@drawable/bg_box_unchecked_view"
-                        android:textAllCaps="false"
-                        android:text="@string/positive"
-                        android:textAlignment="center"
-                        android:textColor="@color/black"
-                        android:textSize="15sp" />
+                        android:checkedButton="@+id/stressor_positive"
+                        android:orientation="vertical">
 
-                    <Button
-                        android:id="@+id/stressor_negative"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:background="@drawable/bg_box_unchecked_view"
-                        android:textAllCaps="false"
-                        android:text="@string/negative"
-                        android:textAlignment="center"
-                        android:textColor="@color/black"
-                        android:textSize="15sp" />
+                        <RadioButton
+                            android:id="@id/stressor_positive"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/bg_radio_button"
+                            android:button="@android:color/transparent"
+                            android:paddingBottom="5dp"
+                            android:paddingTop="5dp"
+                            android:text="@string/positive"
+                            android:textAlignment="center"
+                            android:textAllCaps="false"
+                            android:textColor="@color/black"
+                            android:textSize="15sp" />
 
-                    <Button
-                        android:id="@+id/stressor_dont_know"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:background="@drawable/bg_box_unchecked_view"
-                        android:textAllCaps="false"
-                        android:text="@string/unidentified"
-                        android:textAlignment="center"
-                        android:textColor="@color/black"
-                        android:textSize="15sp" />
+                        <RadioButton
+                            android:id="@+id/stressor_negative"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/bg_radio_button"
+                            android:button="@android:color/transparent"
+                            android:paddingBottom="5dp"
+                            android:paddingTop="5dp"
+                            android:text="@string/negative"
+                            android:textAlignment="center"
+                            android:textAllCaps="false"
+                            android:textColor="@color/black"
+                            android:textSize="15sp" />
+
+                        <RadioButton
+                            android:id="@+id/stressor_unknown"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/bg_radio_button"
+                            android:button="@android:color/transparent"
+                            android:paddingBottom="5dp"
+                            android:paddingTop="5dp"
+                            android:text="@string/unidentified"
+                            android:textAlignment="center"
+                            android:textAllCaps="false"
+                            android:textColor="@color/black"
+                            android:textSize="15sp" />
+                    </RadioGroup>
 
                     <EditText
                         android:id="@+id/txt_stress_cause"
@@ -375,11 +387,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
                         android:background="@drawable/bg_solid_wrap"
-                        android:hint="@string/stress_cause"
                         android:gravity="top"
+                        android:hint="@string/stress_cause"
                         android:inputType="text|textMultiLine"
                         android:maxLines="5"
-                        android:padding="10dp"/>
+                        android:padding="10dp" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -408,10 +420,28 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/img_expand"
+                android:onClick="expandRepeatNotificationClick"
                 android:padding="20dp"
                 android:text="@string/repeat_notification"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
+
+            <LinearLayout
+                android:id="@+id/repeat_notification_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dummy" />
+
+            </LinearLayout>
 
             <!--Option: Share-->
             <View
@@ -419,24 +449,13 @@
                 android:layout_height="0.5dp"
                 android:background="@color/bright_grey" />
 
-            <FrameLayout
+            <Switch
+                android:id="@+id/share_switch"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="20dp"
-                    android:text="@string/share"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
-
-                <Switch
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center|end"
-                    android:layout_marginEnd="20dp" />
-            </FrameLayout>
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:text="@string/share"
+                android:textSize="18sp" />
 
             <!--Option: Evaluation-->
             <View
@@ -447,8 +466,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="20dp"
                 android:onClick="evaluationClick"
+                android:padding="20dp"
                 android:text="@string/evaluation"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
@@ -462,6 +481,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:onClick="feedbackClick"
                 android:padding="20dp"
                 android:text="@string/feedback"
                 android:textColor="@color/black"
