@@ -194,6 +194,7 @@ public class InterventionsActivity extends AppCompatActivity {
     }
 
     public void cancelClick(View view) {
+        setResult(Tools.RES_FAIL);
         finish();
         overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
     }
@@ -274,6 +275,7 @@ public class InterventionsActivity extends AppCompatActivity {
                 Toast.makeText(this, "Please pick an intervention first!", Toast.LENGTH_SHORT).show();
                 return;
             }
+            setResult(Tools.RES_OK);
             finish();
             overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
         }

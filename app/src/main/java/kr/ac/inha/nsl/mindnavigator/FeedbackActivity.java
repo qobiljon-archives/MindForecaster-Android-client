@@ -74,11 +74,13 @@ public class FeedbackActivity extends AppCompatActivity {
 
     //endregion
     public void cancelClick(View view) {
+        setResult(Tools.RES_FAIL);
         finish();
         overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
     }
 
     public void saveClick(View view) {
+        setResult(Tools.RES_OK);
         finish();
         overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
     }

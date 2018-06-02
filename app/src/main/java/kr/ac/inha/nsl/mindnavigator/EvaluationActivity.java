@@ -105,7 +105,6 @@ public class EvaluationActivity extends AppCompatActivity {
     }
 
     public void saveClick(View view) {
-        setResult(Tools.RES_OK);
         switch (eventCompletionBtn.getCheckedRadioButtonId()) {
             case R.id.btn_did_event:
                 //TODO: btn "I did it" clicked; Do smth
@@ -138,6 +137,7 @@ public class EvaluationActivity extends AppCompatActivity {
             default:
                 break;
         }
+        setResult(Tools.RES_OK);
         finish();
         overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
     }
