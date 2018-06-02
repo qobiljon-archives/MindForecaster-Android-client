@@ -31,30 +31,26 @@ public class InterventionsActivity extends AppCompatActivity {
 
     EditText interv_text;
     View interv_choice;
-    ViewGroup interv_list;
-
+    ViewGroup interv_list, schedulingView, beforeEventLayout, afterEventLayout;
+    RadioGroup intervScheduling;
     Button[] tabButtons;
-
-    RadioGroup rgBeforeEvent, rgAfterEvent;
-
     //endregion
 
     private void init() {
         interv_choice = findViewById(R.id.intervention_choice);
         interv_text = findViewById(R.id.intervention_text);
         interv_list = findViewById(R.id.interventions_list);
+        schedulingView = findViewById(R.id.interv_scheduling_view);
+        intervScheduling = findViewById(R.id.interv_scheduling_group);
         tabButtons = new Button[]{
                 findViewById(R.id.button_self_intervention),
                 findViewById(R.id.button_systems_intervention),
                 findViewById(R.id.button_peer_interventions)
         };
+
         interv_text.setVisibility(View.GONE);
         interv_choice.setVisibility(View.GONE);
         tabButtons[0].callOnClick();
-
-        rgBeforeEvent = findViewById(R.id.rg_before_event);
-        rgAfterEvent = findViewById(R.id.rg_after_event);
-
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
@@ -62,6 +58,7 @@ public class InterventionsActivity extends AppCompatActivity {
         // Clear out visibility and previously set button color
         interv_text.setVisibility(View.GONE);
         interv_choice.setVisibility(View.GONE);
+        schedulingView.setVisibility(View.GONE);
         for (Button button : tabButtons)
             button.setBackgroundResource(R.drawable.bg_interv_method_unchecked_view);
 
@@ -105,7 +102,6 @@ public class InterventionsActivity extends AppCompatActivity {
                                             JSONArray arr = (JSONArray) args[0];
                                             while (interv_list.getChildCount() > 1)
                                                 interv_list.removeViewAt(1);
-
                                             LayoutInflater inflater = getLayoutInflater();
                                             try {
                                                 for (int n = 0; n < arr.length(); n++) {
@@ -201,8 +197,16 @@ public class InterventionsActivity extends AppCompatActivity {
     }
 
     public void onIntervClick(View view) {
+        for (int n = 0; n < interv_list.getChildCount(); n++) {
+            TextView interv_text = interv_list.getChildAt(n).findViewById(R.id.intervention_text);
+            interv_text.setTextColor(getColor(R.color.black));
+        }
+
+        ((TextView) view.findViewById(R.id.intervention_text)).setTextColor(getColor(R.color.dark_blue));
         result = ((TextView) view.findViewById(R.id.intervention_text)).getText().toString();
-        saveClick(null);
+        schedulingView.setVisibility(View.VISIBLE);
+        Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
+        //saveClick(null);
     }
 
     public void cancelClick(View view) {
@@ -290,30 +294,6 @@ public class InterventionsActivity extends AppCompatActivity {
             setResult(Tools.RES_OK);
             finish();
             overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
-        }
-    }
-
-    public void beforeEventExpand(View view) {
-        TextView optionView = (TextView) view;
-
-        if (rgBeforeEvent.getVisibility() == View.VISIBLE) {
-            rgBeforeEvent.setVisibility(View.GONE);
-            optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_expand), null);
-        } else {
-            rgBeforeEvent.setVisibility(View.VISIBLE);
-            optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
-        }
-    }
-
-    public void afterEventExpand(View view) {
-        TextView optionView = (TextView) view;
-
-        if (rgAfterEvent.getVisibility() == View.VISIBLE) {
-            rgAfterEvent.setVisibility(View.GONE);
-            optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_expand), null);
-        } else {
-            rgAfterEvent.setVisibility(View.VISIBLE);
-            optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
         }
     }
 }

@@ -7,7 +7,7 @@
     </style>
 
     <color name="inner_activity_actionbar">#d60000</color>
-    <color name="inner_activity_action_color">#1ab7ea</color>
+    <color name="inner_activity_action_color">#fff</color>
 
     <color name="colorPrimary">#D60000</color>
     <color name="colorPrimaryDark">#000</color>
