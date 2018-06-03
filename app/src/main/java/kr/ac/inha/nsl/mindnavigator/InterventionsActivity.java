@@ -253,7 +253,6 @@ public class InterventionsActivity extends AppCompatActivity {
                         body.put("interventionName", interv_name);
 
                         JSONObject res = new JSONObject(Tools.post(url, body));
-                        setResult(res.getInt("result"));
                         switch (res.getInt("result")) {
                             case Tools.RES_OK:
                                 runOnUiThread(new MyRunnable(
@@ -301,6 +300,13 @@ public class InterventionsActivity extends AppCompatActivity {
 
                     } catch (JSONException e) {
                         e.printStackTrace();
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(InterventionsActivity.this, "Failed to create the intervention.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 }
             });

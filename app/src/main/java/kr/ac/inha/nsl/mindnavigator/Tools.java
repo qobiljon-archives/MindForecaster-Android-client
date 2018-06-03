@@ -2,7 +2,6 @@ package kr.ac.inha.nsl.mindnavigator;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -137,14 +136,12 @@ abstract class MyRunnable implements Runnable {
 }
 
 class Event {
-    Event() {
-        id = System.currentTimeMillis() / 1000;
-    }
-
-    static void init(@NonNull Activity activity) {
-        stressColors[0] = activity.getColor(R.color.slvl0_color);
-        stressColors[1] = activity.getColor(R.color.slvl1_color);
-        stressColors[2] = activity.getColor(R.color.slvl2_color);
+    Event(long id) {
+        newEvent = id == 0;
+        if (newEvent)
+            this.id = System.currentTimeMillis() / 1000;
+        else
+            this.id = id;
     }
 
     static ArrayList<Event> getOneDayEvents(@NonNull Event[] events, @NonNull Calendar day) {
@@ -174,9 +171,9 @@ class Event {
     }
 
     //region Variables
-    @ColorInt
-    private static int[] stressColors = new int[3];
     static final int NO_REPEAT = 0, REPEAT_EVERYDAY = 1, REPEAT_WEEKLY = 2;
+
+    private boolean newEvent;
 
     private long id;
     private String title;
@@ -190,6 +187,10 @@ class Event {
     private boolean is_shared;
     private int repeatMode;
     //endregion
+
+    boolean isNewEvent() {
+        return newEvent;
+    }
 
     long getEventId() {
         return id;
@@ -219,8 +220,8 @@ class Event {
         this.stressLevel = stressLevel;
     }
 
-    int getStressColor() {
-        return stressColors[stressLevel];
+    int getStressLevel() {
+        return stressLevel;
     }
 
     void setTitle(String title) {

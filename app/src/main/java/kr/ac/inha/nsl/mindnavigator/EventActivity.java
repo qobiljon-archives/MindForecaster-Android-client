@@ -20,7 +20,6 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -74,7 +73,6 @@ public class EventActivity extends AppCompatActivity {
                     //endregion
                     intervReminderTxt.setText(text);
                     intervReminderTxt.setVisibility(View.VISIBLE);
-                    Toast.makeText(this, String.valueOf(InterventionsActivity.resultSchedule), Toast.LENGTH_SHORT).show();
                     break;
                 case EVALUATION_ACTIVITY:
                     // TODO: Do something
@@ -125,6 +123,10 @@ public class EventActivity extends AppCompatActivity {
 
         Calendar selCal = Calendar.getInstance();
         selCal.setTimeInMillis(getIntent().getLongExtra("selectedDayMillis", 0));
+        if (getIntent().hasExtra("eventId"))
+            event = new Event(getIntent().getLongExtra("eventId", 0));
+        else
+            event = new Event(0);
 
         startDateText.setText(String.format(Locale.US,
                 "%s, %s %d, %d",
@@ -250,8 +252,6 @@ public class EventActivity extends AppCompatActivity {
                 }
             }
         });
-
-        event = new Event();
     }
 
     public void moreOptionsClick(View view) {

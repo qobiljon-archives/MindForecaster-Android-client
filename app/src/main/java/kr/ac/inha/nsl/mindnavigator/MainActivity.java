@@ -1,6 +1,7 @@
 package kr.ac.inha.nsl.mindnavigator;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -18,8 +19,11 @@ import android.view.ViewTreeObserver;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.ArrayList;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setSupportActionBar((Toolbar) findViewById(R.id.my_toolbar));
-        Event.init(this);
         init();
     }
 
@@ -39,7 +42,99 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK)
+            switch (requestCode) {
+                case EVENT_ACTIVITY:
+                    Event event = EventActivity.event;
+                    Tools.execute(new MyRunnable(
+                            event.isNewEvent() ? getString(R.string.url_event_create) : getString(R.string.url_event_edit),
+                            SignInActivity.loginPrefs.getString(SignInActivity.username, null),
+                            SignInActivity.loginPrefs.getString(SignInActivity.password, null),
+                            event
+                    ) {
+                        @Override
+                        public void run() {
+                            String url = (String) args[0];
+                            String username = (String) args[1];
+                            String password = (String) args[2];
+                            Event event = (Event) args[3];
+
+                            JSONObject body = new JSONObject();
+                            try {
+                                body.put("username", username);
+                                body.put("password", password);
+                                body.put("event_id", event.getEventId());
+                                body.put("title", event.getTitle());
+                                body.put("stressLevel", event.getStressLevel());
+                                body.put("startTime", event.getStartTime().getTimeInMillis());
+                                body.put("endTime", event.getEndTime().getTimeInMillis());
+                                body.put("intervention", event.getIntervention());
+                                body.put("interventionReminder", event.getInterventionReminder());
+                                body.put("stressType", event.getStressType());
+                                body.put("stressCause", event.getStressCause());
+                                body.put("isShared", event.isShared());
+                                body.put("repeatMode", event.getRepeatMode());
+
+                                JSONObject res = new JSONObject(Tools.post(url, body));
+                                switch (res.getInt("result")) {
+                                    case Tools.RES_OK:
+                                        runOnUiThread(new MyRunnable(
+                                                event.isNewEvent()
+                                        ) {
+                                            @Override
+                                            public void run() {
+                                                boolean isNewEvent = (boolean) args[0];
+                                                Toast.makeText(MainActivity.this, isNewEvent ? "Event successfully created!" : "Event successfully edited!", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                        break;
+                                    case Tools.RES_FAIL:
+                                        runOnUiThread(new MyRunnable(
+                                                event.isNewEvent()
+                                        ) {
+                                            @Override
+                                            public void run() {
+                                                boolean isNewEvent = (boolean) args[0];
+                                                Toast.makeText(MainActivity.this, isNewEvent ? "Failed to create the event." : "Failed to edit the event.", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                        break;
+                                    case Tools.RES_SRV_ERR:
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(MainActivity.this, "Failure occurred while processing the request. (SERVER SIDE)", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(MainActivity.this, "Failed to proceed due to an error in connection with server.", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        }
+                    });
+                    break;
+                default:
+                    break;
+            }
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     // region Variables
+    private final static int EVENT_ACTIVITY = 0;
+
     private GridLayout event_grid;
     private ViewGroup[][] cells = new ViewGroup[7][5];
     private TextView monthName;
@@ -208,8 +303,8 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
         Intent intent = new Intent(MainActivity.this, SignInActivity.class);
         startActivity(intent);
-        overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
         finish();
+        overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
     }
 
     public void selectMonth(View view) {
