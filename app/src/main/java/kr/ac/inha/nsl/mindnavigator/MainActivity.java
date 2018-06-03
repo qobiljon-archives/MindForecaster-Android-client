@@ -24,6 +24,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setSupportActionBar((Toolbar) findViewById(R.id.my_toolbar));
+        Event.init(this);
         init();
     }
 
@@ -70,8 +72,13 @@ public class MainActivity extends AppCompatActivity {
                                 body.put("stressLevel", event.getStressLevel());
                                 body.put("startTime", event.getStartTime().getTimeInMillis());
                                 body.put("endTime", event.getEndTime().getTimeInMillis());
-                                body.put("intervention", event.getIntervention());
-                                body.put("interventionReminder", event.getInterventionReminder());
+                                if (event.getIntervention() == null) {
+                                    body.put("intervention", "");
+                                    body.put("interventionReminder", 0);
+                                } else {
+                                    body.put("intervention", event.getIntervention());
+                                    body.put("interventionReminder", event.getInterventionReminder());
+                                }
                                 body.put("stressType", event.getStressType());
                                 body.put("stressCause", event.getStressCause());
                                 body.put("isShared", event.isShared());
@@ -178,9 +185,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onGlobalLayout() {
                 event_grid.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
                 Tools.setCellSize(event_grid.getWidth() / event_grid.getColumnCount(), event_grid.getHeight() / event_grid.getRowCount());
                 updateCalendarView();
+                reloadMonth();
             }
         });
     }
@@ -258,19 +265,35 @@ public class MainActivity extends AppCompatActivity {
             clone.set(Calendar.DAY_OF_MONTH, count);
             cells[col][row].setTag(clone.getTimeInMillis());
         }
+    }
 
-//        for (row = 0; row < event_grid.getRowCount(); row++)
-//            for (col = 0; col < event_grid.getColumnCount(); col++) {
-//                Calendar day = Calendar.getInstance();
-//                day.setTimeInMillis((long) cells[col][row].getTag());
-//                ArrayList<Event> dayEvents = Event.getOneDayEvents(day);
-//                for (Event event : dayEvents) {
-//                    getLayoutInflater().inflate(R.layout.event_element, cells[col][row]);
-//                    TextView res = (TextView) cells[col][row].getChildAt(cells[col][row].getChildCount() - 1);
-//                    res.setBackgroundColor(event.getStressColor());
-//                    res.setText(event.getTitle());
-//                }
-//            }
+    public void reloadMonth() {
+        Tools.execute(new MyRunnable(
+                getString(R.string.url_events_fetch),
+                SignInActivity.loginPrefs.getString(SignInActivity.username, null),
+                SignInActivity.loginPrefs.getString(SignInActivity.password, null),
+                cells[0][0].getTag(),
+                cells[cells.length - 1][cells[0].length - 1].getTag()
+        ) {
+            @Override
+            public void run() {
+//                String url = (String) args[0];
+//                JSONObject res = Tools.post();
+//
+//                for (int row = 0; row < event_grid.getRowCount(); row++)
+//                    for (int col = 0; col < event_grid.getColumnCount(); col++) {
+//                        Calendar day = Calendar.getInstance();
+//                        day.setTimeInMillis((long) cells[col][row].getTag());
+//                        ArrayList<Event> dayEvents = Event.getOneDayEvents(, day);
+//                        for (Event event : dayEvents) {
+//                            getLayoutInflater().inflate(R.layout.event_element, cells[col][row]);
+//                            TextView res = (TextView) cells[col][row].getChildAt(cells[col][row].getChildCount() - 1);
+//                            res.setBackgroundColor(event.getStressColor());
+//                            res.setText(event.getTitle());
+//                        }
+//                    }
+            }
+        });
     }
 
     public int getFirstWeekdayIndex(int day, int month, int year) {

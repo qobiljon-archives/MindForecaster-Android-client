@@ -2,6 +2,7 @@ package kr.ac.inha.nsl.mindnavigator;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -144,6 +145,12 @@ class Event {
             this.id = id;
     }
 
+    static void init(@NonNull Activity activity) {
+        stressColors[0] = activity.getColor(R.color.slvl0_color);
+        stressColors[1] = activity.getColor(R.color.slvl1_color);
+        stressColors[2] = activity.getColor(R.color.slvl2_color);
+    }
+
     static ArrayList<Event> getOneDayEvents(@NonNull Event[] events, @NonNull Calendar day) {
         ArrayList<Event> res = new ArrayList<>();
 
@@ -171,6 +178,8 @@ class Event {
     }
 
     //region Variables
+    @ColorInt
+    private static int[] stressColors = new int[3];
     static final int NO_REPEAT = 0, REPEAT_EVERYDAY = 1, REPEAT_WEEKLY = 2;
 
     private boolean newEvent;
@@ -218,6 +227,10 @@ class Event {
 
     void setStressLevel(int stressLevel) {
         this.stressLevel = stressLevel;
+    }
+
+    int getStressColor() {
+        return stressColors[stressLevel];
     }
 
     int getStressLevel() {
