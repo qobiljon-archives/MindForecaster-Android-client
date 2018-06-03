@@ -84,59 +84,74 @@ public class InterventionsActivity extends AppCompatActivity {
                 interv_choice.setVisibility(View.VISIBLE);
                 interv_list.removeAllViews();
                 Tools.toggle_keyboard(this, interv_text, false);
-                Tools.execute(new MyRunnable(
-                        SignInActivity.loginPrefs.getString(SignInActivity.username, null),
-                        SignInActivity.loginPrefs.getString(SignInActivity.password, null),
-                        getString(R.string.url_fetch_interv_system)
-                ) {
-                    @Override
-                    public void run() {
-                        String username = (String) args[0];
-                        String password = (String) args[1];
-                        String url = (String) args[2];
+                if (Tools.isNetworkAvailable(this))
+                    Tools.execute(new MyRunnable(
+                            SignInActivity.loginPrefs.getString(SignInActivity.username, null),
+                            SignInActivity.loginPrefs.getString(SignInActivity.password, null),
+                            getString(R.string.url_fetch_interv_system)
+                    ) {
+                        @Override
+                        public void run() {
+                            String username = (String) args[0];
+                            String password = (String) args[1];
+                            String url = (String) args[2];
 
-                        JSONObject body = new JSONObject();
-                        try {
-                            body.put("username", username);
-                            body.put("password", password);
+                            JSONObject body = new JSONObject();
+                            try {
+                                body.put("username", username);
+                                body.put("password", password);
 
-                            JSONObject res = new JSONObject(Tools.post(url, body));
-                            switch (res.getInt("result")) {
-                                case Tools.RES_OK:
-                                    runOnUiThread(new MyRunnable(
-                                            res.getJSONArray("names")
-                                    ) {
-                                        @Override
-                                        public void run() {
-                                            JSONArray arr = (JSONArray) args[0];
-                                            while (interv_list.getChildCount() > 1)
-                                                interv_list.removeViewAt(1);
-                                            LayoutInflater inflater = getLayoutInflater();
-                                            try {
-                                                for (int n = 0; n < arr.length(); n++) {
-                                                    inflater.inflate(R.layout.intervention_element, interv_list);
-                                                    TextView interv_text = interv_list.getChildAt(n).findViewById(R.id.intervention_text);
-                                                    interv_text.setText(arr.getString(n));
+                                JSONObject res = new JSONObject(Tools.post(url, body));
+                                switch (res.getInt("result")) {
+                                    case Tools.RES_OK:
+                                        runOnUiThread(new MyRunnable(
+                                                res.getJSONArray("names")
+                                        ) {
+                                            @Override
+                                            public void run() {
+                                                JSONArray arr = (JSONArray) args[0];
+                                                while (interv_list.getChildCount() > 1)
+                                                    interv_list.removeViewAt(1);
+                                                LayoutInflater inflater = getLayoutInflater();
+                                                try {
+                                                    String[] interv = new String[arr.length()];
+                                                    for (int n = 0; n < arr.length(); n++) {
+                                                        inflater.inflate(R.layout.intervention_element, interv_list);
+                                                        TextView interv_text = interv_list.getChildAt(n).findViewById(R.id.intervention_text);
+                                                        interv_text.setText(interv[n] = arr.getString(n));
+                                                    }
+                                                    Tools.cacheSystemInterventions(InterventionsActivity.this, interv);
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
                                                 }
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
                                             }
-                                        }
-                                    });
-                                    break;
-                                case Tools.RES_FAIL:
-                                    break;
-                                case Tools.RES_SRV_ERR:
-                                    break;
-                                default:
-                                    break;
-                            }
+                                        });
+                                        break;
+                                    case Tools.RES_FAIL:
+                                        break;
+                                    case Tools.RES_SRV_ERR:
+                                        break;
+                                    default:
+                                        break;
+                                }
 
-                        } catch (JSONException | IOException e) {
-                            e.printStackTrace();
+                            } catch (JSONException | IOException e) {
+                                e.printStackTrace();
+                            }
                         }
+                    });
+                else {
+                    String[] interventions = Tools.readOfflineSystemInterventions(this);
+                    if (interventions == null)
+                        return;
+
+                    LayoutInflater inflater = getLayoutInflater();
+                    for (int n = 0; n < interventions.length; n++) {
+                        inflater.inflate(R.layout.intervention_element, interv_list);
+                        TextView interv_text = interv_list.getChildAt(n).findViewById(R.id.intervention_text);
+                        interv_text.setText(interventions[n]);
                     }
-                });
+                }
                 saveIntervention = false;
                 break;
             case R.id.button_peer_interventions:
@@ -144,60 +159,75 @@ public class InterventionsActivity extends AppCompatActivity {
                 interv_choice.setVisibility(View.VISIBLE);
                 interv_list.removeAllViews();
                 Tools.toggle_keyboard(this, interv_text, false);
-                Tools.execute(new MyRunnable(
-                        SignInActivity.loginPrefs.getString(SignInActivity.username, null),
-                        SignInActivity.loginPrefs.getString(SignInActivity.password, null),
-                        getString(R.string.url_fetch_interv_peer)
-                ) {
-                    @Override
-                    public void run() {
-                        String username = (String) args[0];
-                        String password = (String) args[1];
-                        String url = (String) args[2];
+                if (Tools.isNetworkAvailable(this))
+                    Tools.execute(new MyRunnable(
+                            SignInActivity.loginPrefs.getString(SignInActivity.username, null),
+                            SignInActivity.loginPrefs.getString(SignInActivity.password, null),
+                            getString(R.string.url_fetch_interv_peer)
+                    ) {
+                        @Override
+                        public void run() {
+                            String username = (String) args[0];
+                            String password = (String) args[1];
+                            String url = (String) args[2];
 
-                        JSONObject body = new JSONObject();
-                        try {
-                            body.put("username", username);
-                            body.put("password", password);
+                            JSONObject body = new JSONObject();
+                            try {
+                                body.put("username", username);
+                                body.put("password", password);
 
-                            JSONObject res = new JSONObject(Tools.post(url, body));
-                            switch (res.getInt("result")) {
-                                case Tools.RES_OK:
-                                    runOnUiThread(new MyRunnable(
-                                            res.getJSONArray("names")
-                                    ) {
-                                        @Override
-                                        public void run() {
-                                            JSONArray arr = (JSONArray) args[0];
-                                            while (interv_list.getChildCount() > 1)
-                                                interv_list.removeViewAt(1);
+                                JSONObject res = new JSONObject(Tools.post(url, body));
+                                switch (res.getInt("result")) {
+                                    case Tools.RES_OK:
+                                        runOnUiThread(new MyRunnable(
+                                                res.getJSONArray("names")
+                                        ) {
+                                            @Override
+                                            public void run() {
+                                                JSONArray arr = (JSONArray) args[0];
+                                                while (interv_list.getChildCount() > 1)
+                                                    interv_list.removeViewAt(1);
 
-                                            LayoutInflater inflater = getLayoutInflater();
-                                            try {
-                                                for (int n = 0; n < arr.length(); n++) {
-                                                    inflater.inflate(R.layout.intervention_element, interv_list);
-                                                    TextView interv_text = interv_list.getChildAt(n).findViewById(R.id.intervention_text);
-                                                    interv_text.setText(arr.getString(n));
+                                                LayoutInflater inflater = getLayoutInflater();
+                                                try {
+                                                    String[] interv = new String[arr.length()];
+                                                    for (int n = 0; n < arr.length(); n++) {
+                                                        inflater.inflate(R.layout.intervention_element, interv_list);
+                                                        TextView interv_text = interv_list.getChildAt(n).findViewById(R.id.intervention_text);
+                                                        interv_text.setText(interv[n] = arr.getString(n));
+                                                    }
+                                                    Tools.cachePeerInterventions(InterventionsActivity.this, interv);
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
                                                 }
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
                                             }
-                                        }
-                                    });
-                                    break;
-                                case Tools.RES_FAIL:
-                                    break;
-                                case Tools.RES_SRV_ERR:
-                                    break;
-                                default:
-                                    break;
-                            }
+                                        });
+                                        break;
+                                    case Tools.RES_FAIL:
+                                        break;
+                                    case Tools.RES_SRV_ERR:
+                                        break;
+                                    default:
+                                        break;
+                                }
 
-                        } catch (JSONException | IOException e) {
-                            e.printStackTrace();
+                            } catch (JSONException | IOException e) {
+                                e.printStackTrace();
+                            }
                         }
+                    });
+                else {
+                    String[] interventions = Tools.readOfflinePeerInterventions(this);
+                    if (interventions == null)
+                        return;
+
+                    LayoutInflater inflater = getLayoutInflater();
+                    for (int n = 0; n < interventions.length; n++) {
+                        inflater.inflate(R.layout.intervention_element, interv_list);
+                        TextView interv_text = interv_list.getChildAt(n).findViewById(R.id.intervention_text);
+                        interv_text.setText(interventions[n]);
                     }
-                });
+                }
                 saveIntervention = false;
                 break;
             default:
@@ -235,83 +265,94 @@ public class InterventionsActivity extends AppCompatActivity {
                 Toast.makeText(this, "To create an intervention first you need to type it's name first!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            Tools.execute(new MyRunnable(
-                    getString(R.string.url_interv_create),
-                    SignInActivity.loginPrefs.getString(SignInActivity.username, null),
-                    SignInActivity.loginPrefs.getString(SignInActivity.password, null),
-                    interv_text.getText().toString()
-            ) {
-                @Override
-                public void run() {
-                    String url = (String) args[0];
-                    String username = (String) args[1];
-                    String password = (String) args[2];
-                    final String interv_name = (String) args[3];
+            if (Tools.isNetworkAvailable(this))
+                Tools.execute(new MyRunnable(
+                        getString(R.string.url_interv_create),
+                        SignInActivity.loginPrefs.getString(SignInActivity.username, null),
+                        SignInActivity.loginPrefs.getString(SignInActivity.password, null),
+                        interv_text.getText().toString()
+                ) {
+                    @Override
+                    public void run() {
+                        String url = (String) args[0];
+                        String username = (String) args[1];
+                        String password = (String) args[2];
+                        final String interv_name = (String) args[3];
 
-                    JSONObject body = new JSONObject();
-                    try {
-                        body.put("username", username);
-                        body.put("password", password);
-                        body.put("interventionName", interv_name);
+                        JSONObject body = new JSONObject();
+                        try {
+                            body.put("username", username);
+                            body.put("password", password);
+                            body.put("interventionName", interv_name);
 
-                        JSONObject res = new JSONObject(Tools.post(url, body));
-                        switch (res.getInt("result")) {
-                            case Tools.RES_OK:
-                                runOnUiThread(new MyRunnable(
-                                        interv_name
-                                ) {
-                                    @Override
-                                    public void run() {
-                                        String interv_name = (String) args[0];
-                                        Toast.makeText(InterventionsActivity.this, "Intervention successfully created!", Toast.LENGTH_SHORT).show();
-                                        result = interv_name;
-                                        resultSchedule = Short.parseShort((String) intervScheduling.findViewById(intervScheduling.getCheckedRadioButtonId()).getTag());
-                                        setResult(Activity.RESULT_OK);
-                                        finish();
-                                        overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
-                                    }
-                                });
-                                break;
-                            case Tools.RES_FAIL:
-                                runOnUiThread(new MyRunnable(
-                                        interv_name
-                                ) {
-                                    @Override
-                                    public void run() {
-                                        String interv_name = (String) args[0];
-                                        Toast.makeText(InterventionsActivity.this, "Intervention already exists. Thus, it was picked for you.", Toast.LENGTH_SHORT).show();
-                                        result = interv_name;
-                                        resultSchedule = Short.parseShort((String) intervScheduling.findViewById(intervScheduling.getCheckedRadioButtonId()).getTag());
-                                        setResult(Activity.RESULT_OK);
-                                        finish();
-                                        overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
-                                    }
-                                });
-                                break;
-                            case Tools.RES_SRV_ERR:
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(InterventionsActivity.this, "Failure in intervention creation. (SERVER SIDE)", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                                break;
-                            default:
-                                break;
-                        }
-
-                    } catch (JSONException | IOException e) {
-                        e.printStackTrace();
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(InterventionsActivity.this, "Failed to create the intervention.", Toast.LENGTH_SHORT).show();
+                            JSONObject res = new JSONObject(Tools.post(url, body));
+                            switch (res.getInt("result")) {
+                                case Tools.RES_OK:
+                                    runOnUiThread(new MyRunnable(
+                                            interv_name
+                                    ) {
+                                        @Override
+                                        public void run() {
+                                            String interv_name = (String) args[0];
+                                            Toast.makeText(InterventionsActivity.this, "Intervention successfully created!", Toast.LENGTH_SHORT).show();
+                                            result = interv_name;
+                                            resultSchedule = Short.parseShort((String) intervScheduling.findViewById(intervScheduling.getCheckedRadioButtonId()).getTag());
+                                            setResult(Activity.RESULT_OK);
+                                            finish();
+                                            overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
+                                        }
+                                    });
+                                    break;
+                                case Tools.RES_FAIL:
+                                    runOnUiThread(new MyRunnable(
+                                            interv_name
+                                    ) {
+                                        @Override
+                                        public void run() {
+                                            String interv_name = (String) args[0];
+                                            Toast.makeText(InterventionsActivity.this, "Intervention already exists. Thus, it was picked for you.", Toast.LENGTH_SHORT).show();
+                                            result = interv_name;
+                                            resultSchedule = Short.parseShort((String) intervScheduling.findViewById(intervScheduling.getCheckedRadioButtonId()).getTag());
+                                            setResult(Activity.RESULT_OK);
+                                            finish();
+                                            overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
+                                        }
+                                    });
+                                    break;
+                                case Tools.RES_SRV_ERR:
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(InterventionsActivity.this, "Failure in intervention creation. (SERVER SIDE)", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                    break;
+                                default:
+                                    break;
                             }
-                        });
+
+                        } catch (JSONException | IOException e) {
+                            e.printStackTrace();
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(InterventionsActivity.this, "Failed to create the intervention.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
                     }
-                }
-            });
+                });
+            else {
+                result = interv_text.getText().toString();
+                resultSchedule = Short.parseShort((String) intervScheduling.findViewById(intervScheduling.getCheckedRadioButtonId()).getTag());
+                setResult(Activity.RESULT_OK);
+                finish();
+                overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
+
+
+                // TODO: Save an action for later
+            }
         } else {
             if (result == null) {
                 Toast.makeText(this, "Please pick an intervention first!", Toast.LENGTH_SHORT).show();

@@ -121,11 +121,15 @@ public class EventActivity extends AppCompatActivity {
         intervReminderTxt.setVisibility(View.GONE);
 
         Calendar selCal = Calendar.getInstance();
-        selCal.setTimeInMillis(getIntent().getLongExtra("selectedDayMillis", 0));
+        if (getIntent().hasExtra("selectedDayMillis"))
+            selCal.setTimeInMillis(getIntent().getLongExtra("selectedDayMillis", 0));
         if (getIntent().hasExtra("eventId"))
-            event = new Event(getIntent().getLongExtra("eventId", 0));
+            event = Event.getEventById(getIntent().getLongExtra("eventId", 0));
         else
             event = new Event(0);
+
+        if (!event.isNewEvent())
+            selCal = event.getStartTime();
 
         startDateText.setText(String.format(Locale.US,
                 "%s, %s %d, %d",
@@ -144,7 +148,10 @@ public class EventActivity extends AppCompatActivity {
         startTimeText.setTag(selCal.getTimeInMillis());
         startTime = (Calendar) selCal.clone();
 
-        selCal.add(Calendar.HOUR, 1);
+        if (event.isNewEvent())
+            selCal.add(Calendar.HOUR_OF_DAY, 1);
+        else
+            selCal = event.getEndTime();
         endDateText.setText(String.format(Locale.US,
                 "%s, %s %d, %d",
                 selCal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
@@ -175,6 +182,8 @@ public class EventActivity extends AppCompatActivity {
                     endTime.setTimeInMillis(startTime.getTimeInMillis());
                     endTime.add(Calendar.HOUR_OF_DAY, 1);
 
+                    startDateText.removeTextChangedListener(this);
+                    startTimeText.removeTextChangedListener(this);
                     endDateText.removeTextChangedListener(this);
                     endTimeText.removeTextChangedListener(this);
                     endDateText.setText(String.format(Locale.US,
@@ -189,11 +198,14 @@ public class EventActivity extends AppCompatActivity {
                             endTime.get(Calendar.HOUR_OF_DAY),
                             endTime.get(Calendar.MINUTE))
                     );
+                    startDateText.addTextChangedListener(this);
+                    startTimeText.addTextChangedListener(this);
                     endDateText.addTextChangedListener(this);
                     endTimeText.addTextChangedListener(this);
                 }
 
-                startTimeText.setTag(startTime.getTimeInMillis());
+                endDateText.setTag(endTime.getTimeInMillis());
+                endTimeText.setTag(endTime.getTimeInMillis());
             }
         };
         startDateText.addTextChangedListener(timePickingCorrector);
@@ -234,7 +246,7 @@ public class EventActivity extends AppCompatActivity {
                     startTimeText.setVisibility(View.GONE);
                     endTimeText.setVisibility(View.GONE);
 
-                    startTime.set(Calendar.HOUR, 0);
+                    startTime.set(Calendar.HOUR_OF_DAY, 0);
                     startTime.set(Calendar.MINUTE, 0);
                     startTime.set(Calendar.SECOND, 0);
                     startTime.set(Calendar.MILLISECOND, 0);
@@ -244,6 +256,74 @@ public class EventActivity extends AppCompatActivity {
                 }
             }
         });
+
+        if (!event.isNewEvent())
+            fillOutExistingValues();
+    }
+
+    private void fillOutExistingValues() {
+        eventTitle.setText(event.getTitle());
+        stressLvl.setProgress(event.getStressLevel());
+        switch (event.getStressType()) {
+            case "positive":
+                stressTypeGroup.check(R.id.stressor_positive);
+                break;
+            case "negative":
+                stressTypeGroup.check(R.id.stressor_negative);
+                break;
+            case "unknown":
+                stressTypeGroup.check(R.id.stressor_unknown);
+                break;
+            default:
+                break;
+        }
+        stressCause.setText(event.getStressCause());
+        switch (event.getRepeatMode()) {
+            case Event.NO_REPEAT:
+                repeatModeGroup.check(R.id.no_repeat_radio);
+                break;
+            case Event.REPEAT_EVERYDAY:
+                repeatModeGroup.check(R.id.everyday_repeat_radio);
+                break;
+            case Event.REPEAT_WEEKLY:
+                repeatModeGroup.check(R.id.everyweek_repeat_radio);
+                break;
+            default:
+                break;
+        }
+        switchAllDay.setChecked(event.getStartTime().get(Calendar.HOUR_OF_DAY) == 0 && event.getStartTime().get(Calendar.MINUTE) == 0 && event.getStartTime().get(Calendar.SECOND) == 0 &&
+                event.getStartTime().get(Calendar.MILLISECOND) == 0 && event.getEndTime().get(Calendar.HOUR_OF_DAY) == 0 && event.getEndTime().get(Calendar.MINUTE) == 0 &&
+                event.getEndTime().get(Calendar.SECOND) == 0 && event.getEndTime().get(Calendar.MILLISECOND) == 0
+        );
+        selectedInterv.setText(event.getIntervention());
+        switch (event.getInterventionReminder()) {
+            case -1440:
+                intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_before)));
+                break;
+            case -60:
+                intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_before)));
+                break;
+            case -30:
+                intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._30_minutes_before)));
+                break;
+            case -10:
+                intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_before)));
+                break;
+            case 1440:
+                intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_after)));
+                break;
+            case 60:
+                intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_after)));
+                break;
+            case 30:
+                intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._30_minutes_after)));
+                break;
+            case 10:
+                intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_after)));
+                break;
+        }
+
+        eventTitle.setSelection(eventTitle.length());
     }
 
     public void moreOptionsClick(View view) {
@@ -284,6 +364,8 @@ public class EventActivity extends AppCompatActivity {
         } else {
             interventionDetails.setVisibility(View.VISIBLE);
             optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
+            if (!event.isNewEvent())
+                intervReminderTxt.setVisibility(View.VISIBLE);
         }
 
     }
@@ -321,20 +403,19 @@ public class EventActivity extends AppCompatActivity {
         Tools.copy_date((long) endDateText.getTag(), endTime);
         Tools.copy_time((long) endTimeText.getTag(), endTime);
         if (switchAllDay.isChecked()) {
-            startTime.set(Calendar.HOUR, 0);
+            startTime.set(Calendar.HOUR_OF_DAY, 0);
             startTime.set(Calendar.MINUTE, 0);
             startTime.set(Calendar.SECOND, 0);
             startTime.set(Calendar.MILLISECOND, 0);
 
             endTime.add(Calendar.DAY_OF_MONTH, 1);
-            endTime.set(Calendar.HOUR, 0);
+            endTime.set(Calendar.HOUR_OF_DAY, 0);
             endTime.set(Calendar.MINUTE, 0);
             endTime.set(Calendar.SECOND, 0);
             endTime.set(Calendar.MILLISECOND, 0);
         }
         event.setStartTime(startTime);
         event.setEndTime(endTime);
-
         switch (stressTypeGroup.getCheckedRadioButtonId()) {
             case R.id.stressor_positive:
                 event.setStressType("positive");
@@ -349,7 +430,6 @@ public class EventActivity extends AppCompatActivity {
                 break;
         }
         event.setStressCause(stressCause.getText().toString());
-
         switch (repeatModeGroup.getCheckedRadioButtonId()) {
             case R.id.no_repeat_radio:
                 event.setRepeatMode(Event.NO_REPEAT);
@@ -414,7 +494,7 @@ public class EventActivity extends AppCompatActivity {
         };
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis((long) view.getTag());
-        TimePickerDialog dialog = new TimePickerDialog(this, listener, cal.get(Calendar.HOUR), cal.get(Calendar.MINUTE), true);
+        TimePickerDialog dialog = new TimePickerDialog(this, listener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true);
         dialog.show();
     }
 

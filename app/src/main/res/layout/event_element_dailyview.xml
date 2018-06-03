@@ -46,13 +46,14 @@
 
         <TextView
             android:id="@+id/stress_lvl_box"
-            android:layout_width="20dp"
+            android:layout_width="35dp"
             android:layout_height="20dp"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:textAlignment="center"
             android:layout_gravity="center_vertical|end"
-            android:background="@android:color/darker_gray" />
+            android:background="@android:color/darker_gray"
+            android:minWidth="40dp"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
     </FrameLayout>
 
 </LinearLayout>

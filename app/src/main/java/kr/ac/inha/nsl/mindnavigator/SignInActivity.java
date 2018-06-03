@@ -67,79 +67,86 @@ public class SignInActivity extends AppCompatActivity {
     public void signIn(String username, String password) {
         loadingPanel.setVisibility(View.VISIBLE);
 
-        Tools.execute(new MyRunnable(
-                getString(R.string.url_user_login),
-                username,
-                password
-        ) {
-            @Override
-            public void run() {
-                String url = (String) args[0];
-                String username = (String) args[1];
-                String password = (String) args[2];
+        if (Tools.isNetworkAvailable(this))
+            Tools.execute(new MyRunnable(
+                    getString(R.string.url_user_login),
+                    username,
+                    password
+            ) {
+                @Override
+                public void run() {
+                    String url = (String) args[0];
+                    String username = (String) args[1];
+                    String password = (String) args[2];
 
-                try {
-                    JSONObject body = new JSONObject();
-                    body.put("username", username);
-                    body.put("password", password);
+                    try {
+                        JSONObject body = new JSONObject();
+                        body.put("username", username);
+                        body.put("password", password);
 
-                    JSONObject json = new JSONObject(Tools.post(url, body));
+                        JSONObject json = new JSONObject(Tools.post(url, body));
 
-                    switch (json.getInt("result")) {
-                        case Tools.RES_OK:
-                            runOnUiThread(new MyRunnable(args) {
-                                @Override
-                                public void run() {
-                                    String username = (String) args[1];
-                                    String password = (String) args[2];
+                        switch (json.getInt("result")) {
+                            case Tools.RES_OK:
+                                runOnUiThread(new MyRunnable(args) {
+                                    @Override
+                                    public void run() {
+                                        String username = (String) args[1];
+                                        String password = (String) args[2];
 
-                                    SharedPreferences.Editor editor = SignInActivity.loginPrefs.edit();
-                                    editor.putString(SignInActivity.username, username);
-                                    editor.putString(SignInActivity.password, password);
-                                    editor.apply();
+                                        SharedPreferences.Editor editor = SignInActivity.loginPrefs.edit();
+                                        editor.putString(SignInActivity.username, username);
+                                        editor.putString(SignInActivity.password, password);
+                                        editor.apply();
 
-                                    Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                                    startActivity(intent);
-                                    overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-                                    finish();
-                                }
-                            });
-                            break;
-                        case Tools.RES_FAIL:
-                            Thread.sleep(2000);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(SignInActivity.this, "Failed to sign in.", Toast.LENGTH_SHORT).show();
-                                    loadingPanel.setVisibility(View.GONE);
-                                }
-                            });
-                            break;
-                        case Tools.RES_SRV_ERR:
-                            Thread.sleep(2000);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(SignInActivity.this, "Failed to sign in. (SERVER SIDE ERROR)", Toast.LENGTH_SHORT).show();
-                                    loadingPanel.setVisibility(View.GONE);
-                                }
-                            });
-                            break;
-                        default:
-                            break;
-                    }
-                } catch (JSONException | InterruptedException | IOException e) {
-                    e.printStackTrace();
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(SignInActivity.this, "Failed to sign in.", Toast.LENGTH_SHORT).show();
-                            loadingPanel.setVisibility(View.GONE);
+                                        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                                    }
+                                });
+                                break;
+                            case Tools.RES_FAIL:
+                                Thread.sleep(2000);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(SignInActivity.this, "Failed to sign in.", Toast.LENGTH_SHORT).show();
+                                        loadingPanel.setVisibility(View.GONE);
+                                    }
+                                });
+                                break;
+                            case Tools.RES_SRV_ERR:
+                                Thread.sleep(2000);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(SignInActivity.this, "Failed to sign in. (SERVER SIDE ERROR)", Toast.LENGTH_SHORT).show();
+                                        loadingPanel.setVisibility(View.GONE);
+                                    }
+                                });
+                                break;
+                            default:
+                                break;
                         }
-                    });
+                    } catch (JSONException | InterruptedException | IOException e) {
+                        e.printStackTrace();
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(SignInActivity.this, "Failed to sign in.", Toast.LENGTH_SHORT).show();
+                                loadingPanel.setVisibility(View.GONE);
+                            }
+                        });
+                    }
                 }
-            }
-        });
+            });
+        else if (loginPrefs.getString(SignInActivity.username, null) != null && loginPrefs.getString(SignInActivity.password, null) != null) {
+            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+            overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+        }
     }
 }

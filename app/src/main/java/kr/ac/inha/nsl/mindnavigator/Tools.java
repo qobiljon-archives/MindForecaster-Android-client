@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.util.LongSparseArray;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -21,7 +22,6 @@ import org.json.JSONObject;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -199,7 +199,7 @@ public class Tools {
         return ret;
     }
 
-    static void saveMonthlyEvents(Context context, Event[] events, int month, int year) {
+    static void cacheMonthlyEvents(Context context, Event[] events, int month, int year) {
         if (events.length == 0)
             return;
 
@@ -210,7 +210,7 @@ public class Tools {
         Tools.writeToFile(context, String.format(Locale.US, "events_%02d_%d.json", month, year), array.toString());
     }
 
-    static Event[] readMonthlyEvents(Context context, int month, int year) {
+    static Event[] readOfflineMonthlyEvents(Context context, int month, int year) {
         JSONArray array;
         try {
             array = new JSONArray(readFromFile(context, String.format(Locale.US, "events_%02d_%d.json", month, year)));
@@ -230,6 +230,53 @@ public class Tools {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private static void cacheInterventions(Context context, String[] interventions, String type) {
+        if (interventions.length == 0)
+            return;
+
+        JSONArray array = new JSONArray();
+        for (String intervention : interventions)
+            array.put(intervention);
+
+        Tools.writeToFile(context, String.format(Locale.US, "%s_interventions.json", type), array.toString());
+    }
+
+    static void cacheSystemInterventions(Context context, String[] sysInterventions) {
+        cacheInterventions(context, sysInterventions, "system");
+    }
+
+    static void cachePeerInterventions(Context context, String[] peerInterventions) {
+        cacheInterventions(context, peerInterventions, "peer");
+    }
+
+    private static String[] readOfflineInterventions(Context context, String type) {
+        JSONArray array;
+        try {
+            array = new JSONArray(readFromFile(context, String.format(Locale.US, "%s_interventions.json", type)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        try {
+            String[] res = new String[array.length()];
+            for (int n = 0; n < array.length(); n++)
+                res[n] = array.getString(n);
+            return res;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    static String[] readOfflineSystemInterventions(Context context) {
+        return readOfflineInterventions(context, "system");
+    }
+
+    public static String[] readOfflinePeerInterventions(Context context) {
+        return readOfflineInterventions(context, "peer");
     }
 }
 
@@ -284,6 +331,7 @@ class Event {
 
     //region Variables
     private static Event[] currentEventBank;
+    private static LongSparseArray<Event> idEventMap = new LongSparseArray<>();
     static final int NO_REPEAT = 0, REPEAT_EVERYDAY = 1, REPEAT_WEEKLY = 2;
 
     private boolean newEvent;
@@ -302,6 +350,14 @@ class Event {
 
     static void setCurrentEventBank(Event[] bank) {
         currentEventBank = bank;
+
+        idEventMap.clear();
+        for (Event event : currentEventBank)
+            idEventMap.put(event.id, event);
+    }
+
+    static Event getEventById(long key) {
+        return idEventMap.get(key);
     }
 
     boolean isNewEvent() {
@@ -388,7 +444,7 @@ class Event {
         return interventionReminder;
     }
 
-    String toJson() {
+    JSONObject toJson() {
         JSONObject eventJson = new JSONObject();
 
         try {
@@ -407,7 +463,7 @@ class Event {
             return null;
         }
 
-        return eventJson.toString();
+        return eventJson;
     }
 
     void fromJson(JSONObject eventJson) {
