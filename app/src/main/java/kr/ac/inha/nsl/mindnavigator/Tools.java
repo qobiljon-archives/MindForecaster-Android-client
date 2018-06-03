@@ -194,7 +194,6 @@ class Event {
     private short interventionReminder;
     private String stressType;
     private String stressCause;
-    private boolean is_shared;
     private int repeatMode;
     //endregion
 
@@ -264,14 +263,6 @@ class Event {
 
     String getStressCause() {
         return stressCause;
-    }
-
-    void setSharing(boolean isShared) {
-        this.is_shared = isShared;
-    }
-
-    boolean isShared() {
-        return is_shared;
     }
 
     void setRepeatMode(int repeatMode) {

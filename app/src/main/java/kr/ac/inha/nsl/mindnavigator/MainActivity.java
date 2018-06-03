@@ -82,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
                                 }
                                 body.put("stressType", event.getStressType());
                                 body.put("stressCause", event.getStressCause());
-                                body.put("isShared", event.isShared());
                                 body.put("repeatMode", event.getRepeatMode());
 
                                 JSONObject res = new JSONObject(Tools.post(url, body));
@@ -314,7 +313,6 @@ public class MainActivity extends AppCompatActivity {
                                 events[n].setInterventionReminder((short) event.getInt("interventionReminder"));
                                 events[n].setStressType(event.getString("stressType"));
                                 events[n].setStressCause(event.getString("stressCause"));
-                                events[n].setSharing(event.getBoolean("isShared"));
                                 events[n].setRepeatMode(event.getInt("repeatMode"));
                             }
 
