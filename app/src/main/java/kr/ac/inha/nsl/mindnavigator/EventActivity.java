@@ -95,7 +95,7 @@ public class EventActivity extends AppCompatActivity {
     private TextView startDateText, startTimeText, endDateText, endTimeText, selectedInterv, intervReminderTxt;
     private RadioGroup stressTypeGroup, repeatModeGroup;
     private EditText eventTitle, stressCause;
-    private Switch switchAllDay, shareSwitch;
+    private Switch switchAllDay;
     private SeekBar stressLvl;
 
     private Calendar startTime, endTime;
@@ -115,7 +115,6 @@ public class EventActivity extends AppCompatActivity {
         stressLevelDetails = findViewById(R.id.stress_level_details);
         interventionDetails = findViewById(R.id.intervention_details);
         repeatNotificationDetails = findViewById(R.id.repeat_notification_details);
-        shareSwitch = findViewById(R.id.share_switch);
         selectedInterv = findViewById(R.id.selected_intervention);
         repeatModeGroup = findViewById(R.id.repeat_mode_group);
         intervReminderTxt = findViewById(R.id.txt_interv_reminder_time);
@@ -357,7 +356,7 @@ public class EventActivity extends AppCompatActivity {
                 break;
         }
         event.setStressCause(stressCause.getText().toString());
-        event.setSharing(shareSwitch.isChecked());
+
         switch (repeatModeGroup.getCheckedRadioButtonId()) {
             case R.id.no_repeat_radio:
                 event.setRepeatMode(Event.NO_REPEAT);

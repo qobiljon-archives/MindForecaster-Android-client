@@ -552,20 +552,6 @@
 
                 </LinearLayout>
 
-                <!--Option: Share-->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@color/bright_grey" />
-
-                <Switch
-                    android:id="@+id/share_switch"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="20dp"
-                    android:text="@string/share"
-                    android:textSize="18sp" />
-
                 <!--Option: Evaluation-->
                 <View
                     android:layout_width="match_parent"
