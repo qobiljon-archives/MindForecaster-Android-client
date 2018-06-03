@@ -381,16 +381,19 @@ public class MainActivity extends AppCompatActivity {
     public void navNextWeekClick(View view) {
         currentCal.add(Calendar.MONTH, 1);
         updateCalendarView();
+        reloadMonth();
     }
 
     public void navPrevWeekClick(View view) {
         currentCal.add(Calendar.MONTH, -1);
         updateCalendarView();
+        reloadMonth();
     }
 
     public void todayClick(MenuItem item) {
         currentCal = Calendar.getInstance();
         updateCalendarView();
+        reloadMonth();
     }
 
     public void logoutClick(MenuItem item) {

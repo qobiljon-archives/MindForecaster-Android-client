@@ -158,22 +158,25 @@ class Event {
         ArrayList<Event> res = new ArrayList<>();
 
         Calendar comDay = (Calendar) day.clone();
-
         comDay.set(Calendar.HOUR, 0);
         comDay.set(Calendar.MINUTE, 0);
         comDay.set(Calendar.SECOND, 0);
         comDay.set(Calendar.MILLISECOND, 0);
-        long fromTime = comDay.getTimeInMillis();
+        long periodFrom = comDay.getTimeInMillis();
 
         comDay.add(Calendar.DAY_OF_MONTH, 1);
         comDay.add(Calendar.MINUTE, -1);
-        long toTime = comDay.getTimeInMillis();
+        long periodTill = comDay.getTimeInMillis();
 
         for (Event event : events) {
-            long start = event.getStartTime().getTimeInMillis();
-            long end = event.getEndTime().getTimeInMillis();
+            long evStartTime = event.getStartTime().getTimeInMillis();
+            long evEndTime = event.getEndTime().getTimeInMillis();
 
-            if ((start >= fromTime && start < toTime) || (end >= fromTime && end < toTime))
+            if (periodFrom <= evStartTime && evStartTime < periodTill)
+                res.add(event);
+            else if (periodFrom < evEndTime && evEndTime <= periodTill)
+                res.add(event);
+            else if (evStartTime <= periodFrom && periodTill <= evEndTime)
                 res.add(event);
         }
 
