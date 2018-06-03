@@ -23,7 +23,7 @@ public class EventsListDialog extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        root = (ViewGroup) inflater.inflate(R.layout.dialog_events_list, container, true);
+        root = (ViewGroup) inflater.inflate(R.layout.dialog_daily_eventlist, container, true);
         init(getArguments());
         return root;
     }
@@ -42,26 +42,26 @@ public class EventsListDialog extends DialogFragment {
                 selectedDay.get(Calendar.YEAR)
         ));
 
-//        ArrayList<Event> dayEvents = Event.getOneDayEvents(selectedDay);
-//        for (Event event : dayEvents) {
-//            getActivity().getLayoutInflater().inflate(R.layout.event_element_for_view, root);
-//            ViewGroup view = (ViewGroup) root.getChildAt(root.getChildCount() - 1);
-//            TextView titleText = view.findViewById(R.id.event_title_text_view);
-//            TextView dateText = view.findViewById(R.id.event_date_text_view);
-//            TextView stressLevel = view.findViewById(R.id.stress_lvl_box);
-//
-//            stressLevel.setText(String.valueOf(event.getStressLevel()));
-//            stressLevel.setBackgroundColor(event.getStressColor());
-//            titleText.setText(event.getTitle());
-//
-//            dateText.setText(String.format(Locale.US,
-//                    "%02d:%02d - %02d:%02d",
-//                    event.getStartTime().get(Calendar.HOUR),
-//                    event.getStartTime().get(Calendar.MINUTE),
-//                    event.getEndTime().get(Calendar.HOUR),
-//                    event.getEndTime().get(Calendar.MINUTE))
-//            );
-//        }
+        ArrayList<Event> dayEvents = Event.getOneDayEvents(selectedDay);
+        for (Event event : dayEvents) {
+            getActivity().getLayoutInflater().inflate(R.layout.event_element_dailyview, root);
+            ViewGroup view = (ViewGroup) root.getChildAt(root.getChildCount() - 1);
+            TextView titleText = view.findViewById(R.id.event_title_text_view);
+            TextView dateText = view.findViewById(R.id.event_date_text_view);
+            TextView stressLevel = view.findViewById(R.id.stress_lvl_box);
+
+            stressLevel.setText(String.valueOf(event.getStressLevel()));
+            stressLevel.setBackgroundColor(Tools.stressLevelToColor(event.getStressLevel()));
+            titleText.setText(event.getTitle());
+
+            dateText.setText(String.format(Locale.US,
+                    "%02d:%02d - %02d:%02d",
+                    event.getStartTime().get(Calendar.HOUR),
+                    event.getStartTime().get(Calendar.MINUTE),
+                    event.getEndTime().get(Calendar.HOUR),
+                    event.getEndTime().get(Calendar.MINUTE))
+            );
+        }
 
         //Inflating a "Close" button to the end of dialog
         getActivity().getLayoutInflater().inflate(R.layout.button_close, root);

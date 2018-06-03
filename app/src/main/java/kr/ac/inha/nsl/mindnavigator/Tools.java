@@ -154,8 +154,11 @@ class Event {
             this.id = id;
     }
 
-    static ArrayList<Event> getOneDayEvents(@NonNull Event[] events, @NonNull Calendar day) {
+    static ArrayList<Event> getOneDayEvents(@NonNull Calendar day) {
         ArrayList<Event> res = new ArrayList<>();
+
+        if (currentEventBank == null || currentEventBank.length == 0)
+            return res;
 
         Calendar comDay = (Calendar) day.clone();
         comDay.set(Calendar.HOUR, 0);
@@ -168,7 +171,7 @@ class Event {
         comDay.add(Calendar.MINUTE, -1);
         long periodTill = comDay.getTimeInMillis();
 
-        for (Event event : events) {
+        for (Event event : currentEventBank) {
             long evStartTime = event.getStartTime().getTimeInMillis();
             long evEndTime = event.getEndTime().getTimeInMillis();
 
@@ -184,6 +187,7 @@ class Event {
     }
 
     //region Variables
+    private static Event[] currentEventBank;
     static final int NO_REPEAT = 0, REPEAT_EVERYDAY = 1, REPEAT_WEEKLY = 2;
 
     private boolean newEvent;
@@ -199,6 +203,10 @@ class Event {
     private String stressCause;
     private int repeatMode;
     //endregion
+
+    static void setCurrentEventBank(Event[] bank) {
+        currentEventBank = bank;
+    }
 
     boolean isNewEvent() {
         return newEvent;

@@ -95,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
                                                 boolean isNewEvent = (boolean) args[0];
                                                 Toast.makeText(MainActivity.this, isNewEvent ? "Event successfully created!" : "Event successfully edited!", Toast.LENGTH_SHORT).show();
                                                 updateCalendarView();
-                                                reloadMonth();
                                             }
                                         });
                                         break;
@@ -189,7 +188,6 @@ public class MainActivity extends AppCompatActivity {
                 event_grid.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 Tools.setCellSize(event_grid.getWidth() / event_grid.getColumnCount(), event_grid.getHeight() / event_grid.getRowCount());
                 updateCalendarView();
-                reloadMonth();
             }
         });
     }
@@ -267,9 +265,8 @@ public class MainActivity extends AppCompatActivity {
             clone.set(Calendar.DAY_OF_MONTH, count);
             cells[col][row].setTag(clone.getTimeInMillis());
         }
-    }
 
-    public void reloadMonth() {
+        // Download events from internet and display them
         Tools.execute(new MyRunnable(
                 getString(R.string.url_events_fetch),
                 SignInActivity.loginPrefs.getString(SignInActivity.username, null),
@@ -315,6 +312,7 @@ public class MainActivity extends AppCompatActivity {
                                 events[n].setStressCause(event.getString("stressCause"));
                                 events[n].setRepeatMode(event.getInt("repeatMode"));
                             }
+                            Event.setCurrentEventBank(events);
 
                             runOnUiThread(new MyRunnable((Object) events) {
                                 @Override
@@ -325,9 +323,9 @@ public class MainActivity extends AppCompatActivity {
                                         for (int col = 0; col < event_grid.getColumnCount(); col++) {
                                             Calendar day = Calendar.getInstance();
                                             day.setTimeInMillis((long) cells[col][row].getTag());
-                                            ArrayList<Event> dayEvents = Event.getOneDayEvents(events, day);
+                                            ArrayList<Event> dayEvents = Event.getOneDayEvents(day);
                                             for (Event event : dayEvents) {
-                                                getLayoutInflater().inflate(R.layout.event_element, cells[col][row]);
+                                                getLayoutInflater().inflate(R.layout.event_small_element, cells[col][row]);
                                                 TextView tv = (TextView) cells[col][row].getChildAt(cells[col][row].getChildCount() - 1);
                                                 tv.setBackgroundColor(Tools.stressLevelToColor(event.getStressLevel()));
                                                 tv.setText(event.getTitle());
@@ -381,19 +379,16 @@ public class MainActivity extends AppCompatActivity {
     public void navNextWeekClick(View view) {
         currentCal.add(Calendar.MONTH, 1);
         updateCalendarView();
-        reloadMonth();
     }
 
     public void navPrevWeekClick(View view) {
         currentCal.add(Calendar.MONTH, -1);
         updateCalendarView();
-        reloadMonth();
     }
 
     public void todayClick(MenuItem item) {
         currentCal = Calendar.getInstance();
         updateCalendarView();
-        reloadMonth();
     }
 
     public void logoutClick(MenuItem item) {
