@@ -2,9 +2,13 @@ package kr.ac.inha.nsl.mindnavigator;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -177,6 +181,8 @@ public class MainActivity extends AppCompatActivity {
     // endregion
 
     private void init() {
+        notificationEveryDay(22);
+        notificationEverySunday(20);
         currentCal = Calendar.getInstance();
         event_grid = findViewById(R.id.event_grid);
         monthName = findViewById(R.id.header_month_name);
@@ -314,10 +320,9 @@ public class MainActivity extends AppCompatActivity {
                             }
                             Event.setCurrentEventBank(events);
 
-                            runOnUiThread(new MyRunnable((Object) events) {
+                            runOnUiThread(new MyRunnable() {
                                 @Override
                                 public void run() {
-                                    Event[] events = (Event[]) args[0];
 
                                     for (int row = 0; row < event_grid.getRowCount(); row++)
                                         for (int col = 0; col < event_grid.getColumnCount(); col++) {
@@ -387,6 +392,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void todayClick(MenuItem item) {
+        NotificationManager nMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (nMgr != null) {
+            nMgr.cancelAll();
+        }
         currentCal = Calendar.getInstance();
         updateCalendarView();
     }
@@ -416,5 +425,32 @@ public class MainActivity extends AppCompatActivity {
 
         startActivityForResult(intent, 0);
         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+    }
+
+    public void notificationEveryDay(int hourOfDay) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Calendar cal = Calendar.getInstance();
+        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), hourOfDay, 0);
+
+        Intent intent = new Intent(this, AlarmReceiverEverySunday.class);
+        PendingIntent broadcast = PendingIntent.getBroadcast(this, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        if (alarmManager != null) {
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, broadcast);
+        }
+    }
+
+    public void notificationEverySunday(int hourOfDay) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Calendar cal = Calendar.getInstance();
+        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), hourOfDay, 0);
+        cal.set(Calendar.DAY_OF_WEEK, 1);
+
+        Intent intent = new Intent(this, AlaramReceiverEveryDay.class);
+        PendingIntent broadcast = PendingIntent.getBroadcast(this, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        if (alarmManager != null) {
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, broadcast);
+        }
     }
 }

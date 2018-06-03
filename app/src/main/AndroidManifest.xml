@@ -39,7 +39,12 @@
             android:theme="@style/InnerActivityTheme" />
         <activity
             android:name=".FeedbackActivity"
-            android:theme="@style/InnerActivityTheme"/>
+            android:theme="@style/InnerActivityTheme" />
+
+        <receiver android:name=".AlaramReceiverEveryDay" />
+
+        <receiver android:name=".AlarmReceiverEverySunday" />
+
     </application>
 
 </manifest>
