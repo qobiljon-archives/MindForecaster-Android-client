@@ -3,24 +3,37 @@ package kr.ac.inha.nsl.mindnavigator;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -134,6 +147,89 @@ public class Tools {
             return Color.argb(0xff, (int) (level * c), 0xff, 0);
         else
             return Color.argb(0xff, 0xff, (int) (c * (100 - level)), 0);
+    }
+
+    static boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo;
+        if (connectivityManager == null)
+            return false;
+        activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    private static void writeToFile(Context context, String fileName, String data) {
+        try {
+            FileOutputStream outputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
+            outputStreamWriter.write(data);
+            outputStreamWriter.close();
+            outputStream.close();
+        } catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+    }
+
+    private static String readFromFile(Context context, String fileName) {
+        String ret = "";
+
+        try {
+            InputStream inputStream = context.openFileInput(fileName);
+
+            if (inputStream != null) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString;
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ((receiveString = bufferedReader.readLine()) != null) {
+                    stringBuilder.append(receiveString);
+                }
+
+                bufferedReader.close();
+                inputStream.close();
+                ret = stringBuilder.toString();
+            }
+        } catch (FileNotFoundException e) {
+            Log.e("Exception", "File not found: " + e.toString());
+        } catch (IOException e) {
+            Log.e("Exception", "Can not read file: " + e.toString());
+        }
+
+        return ret;
+    }
+
+    static void saveMonthlyEvents(Context context, Event[] events, int month, int year) {
+        if (events.length == 0)
+            return;
+
+        JSONArray array = new JSONArray();
+        for (Event event : events)
+            array.put(event.toJson());
+
+        Tools.writeToFile(context, String.format(Locale.US, "events_%02d_%d.json", month, year), array.toString());
+    }
+
+    static Event[] readMonthlyEvents(Context context, int month, int year) {
+        JSONArray array;
+        try {
+            array = new JSONArray(readFromFile(context, String.format(Locale.US, "events_%02d_%d.json", month, year)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        try {
+            Event[] res = new Event[array.length()];
+            for (int n = 0; n < array.length(); n++) {
+                res[n] = new Event(1);
+                res[n].fromJson(array.getJSONObject(n));
+            }
+            return res;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
 
@@ -290,5 +386,48 @@ class Event {
 
     short getInterventionReminder() {
         return interventionReminder;
+    }
+
+    String toJson() {
+        JSONObject eventJson = new JSONObject();
+
+        try {
+            eventJson.put("id", getEventId());
+            eventJson.put("title", getTitle());
+            eventJson.put("stressLevel", getStressLevel());
+            eventJson.put("startTime", getStartTime().getTimeInMillis());
+            eventJson.put("endTime", getEndTime().getTimeInMillis());
+            eventJson.put("intervention", getIntervention());
+            eventJson.put("interventionReminder", getInterventionReminder());
+            eventJson.put("stressType", getStressType());
+            eventJson.put("stressCause", getStressCause());
+            eventJson.put("repeatMode", getRepeatMode());
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return eventJson.toString();
+    }
+
+    void fromJson(JSONObject eventJson) {
+        try {
+            Calendar startTime = Calendar.getInstance(), endTime = Calendar.getInstance();
+            startTime.setTimeInMillis(eventJson.getLong("startTime"));
+            endTime.setTimeInMillis(eventJson.getLong("endTime"));
+
+            id = eventJson.getLong("id");
+            setTitle(eventJson.getString("title"));
+            setStressLevel(eventJson.getInt("stressLevel"));
+            setStartTime(startTime);
+            setEndTime(endTime);
+            setIntervention(eventJson.getString("intervention"));
+            setInterventionReminder((short) eventJson.getInt("interventionReminder"));
+            setStressType(eventJson.getString("stressType"));
+            setStressCause(eventJson.getString("stressCause"));
+            setRepeatMode(eventJson.getInt("repeatMode"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

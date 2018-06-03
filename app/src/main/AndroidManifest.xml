@@ -4,6 +4,7 @@
     package="kr.ac.inha.nsl.mindnavigator">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="false"
@@ -39,7 +40,7 @@
             android:theme="@style/InnerActivityTheme" />
         <activity
             android:name=".FeedbackActivity"
-            android:theme="@style/InnerActivityTheme"/>
+            android:theme="@style/InnerActivityTheme" />
     </application>
 
 </manifest>
