@@ -201,8 +201,8 @@ public class EventActivity extends AppCompatActivity {
         endDateText.addTextChangedListener(timePickingCorrector);
         endTimeText.addTextChangedListener(timePickingCorrector);
 
-        stressLvl.getProgressDrawable().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.slvl0_color, null), PorterDuff.Mode.SRC_IN);
-        stressLvl.getThumb().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.slvl0_color, null), PorterDuff.Mode.SRC_IN);
+        stressLvl.getProgressDrawable().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.green, null), PorterDuff.Mode.SRC_IN);
+        stressLvl.getThumb().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.green, null), PorterDuff.Mode.SRC_IN);
         stressLvl.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {

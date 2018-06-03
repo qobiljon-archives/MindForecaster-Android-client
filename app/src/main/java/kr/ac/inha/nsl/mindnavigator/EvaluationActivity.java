@@ -45,25 +45,14 @@ public class EvaluationActivity extends AppCompatActivity {
         eventLayout = findViewById(R.id.event_layout);
         interventionLayout = findViewById(R.id.intervention_layout);
 
-        stressLvl.getProgressDrawable().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.slvl0_color, null), PorterDuff.Mode.SRC_IN);
-        stressLvl.getThumb().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.slvl0_color, null), PorterDuff.Mode.SRC_IN);
+        stressLvl.getProgressDrawable().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.green, null), PorterDuff.Mode.SRC_IN);
+        stressLvl.getThumb().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.green, null), PorterDuff.Mode.SRC_IN);
         stressLvl.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                stressLvl.getProgressDrawable().setColorFilter(Tools.stressLevelToColor(progress), PorterDuff.Mode.SRC_IN);
+                stressLvl.getThumb().setColorFilter(Tools.stressLevelToColor(progress), PorterDuff.Mode.SRC_IN);
                 stressValue = progress;
-                if (progress >= 0 && progress < 50) {
-                    int slvl0Col = ResourcesCompat.getColor(getResources(), R.color.slvl0_color, null);
-                    stressLvl.getProgressDrawable().setColorFilter(slvl0Col, PorterDuff.Mode.SRC_IN);
-                    stressLvl.getThumb().setColorFilter(slvl0Col, PorterDuff.Mode.SRC_IN);
-                } else if (progress > 50 && progress < 80) {
-                    int slvl1Col = ResourcesCompat.getColor(getResources(), R.color.slvl1_color, null);
-                    stressLvl.getProgressDrawable().setColorFilter(slvl1Col, PorterDuff.Mode.SRC_IN);
-                    stressLvl.getThumb().setColorFilter(slvl1Col, PorterDuff.Mode.SRC_IN);
-                } else {
-                    int slvl2Col = ResourcesCompat.getColor(getResources(), R.color.slvl2_color, null);
-                    stressLvl.getProgressDrawable().setColorFilter(slvl2Col, PorterDuff.Mode.SRC_IN);
-                    stressLvl.getThumb().setColorFilter(slvl2Col, PorterDuff.Mode.SRC_IN);
-                }
             }
 
             @Override

@@ -28,6 +28,8 @@
     <color name="dark_yellow">#FABB37</color>
     <color name="dark_yellow_pressed">#eaa206</color>
 
+    <color name="green">#0f0</color>
+
 
     <color name="interv_method_unchecked">#F8CBAC</color>
     <color name="interv_method_checked">#ED7D31</color>
