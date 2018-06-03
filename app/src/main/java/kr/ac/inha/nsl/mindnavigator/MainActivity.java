@@ -21,9 +21,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -34,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setSupportActionBar((Toolbar) findViewById(R.id.my_toolbar));
-        Event.init(this);
         init();
     }
 
@@ -94,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
                                             public void run() {
                                                 boolean isNewEvent = (boolean) args[0];
                                                 Toast.makeText(MainActivity.this, isNewEvent ? "Event successfully created!" : "Event successfully edited!", Toast.LENGTH_SHORT).show();
+                                                updateCalendarView();
+                                                reloadMonth();
                                             }
                                         });
                                         break;
@@ -119,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                                     default:
                                         break;
                                 }
-                            } catch (JSONException e) {
+                            } catch (JSONException | IOException e) {
                                 e.printStackTrace();
 
                                 runOnUiThread(new Runnable() {
@@ -277,21 +280,93 @@ public class MainActivity extends AppCompatActivity {
         ) {
             @Override
             public void run() {
-//                String url = (String) args[0];
-//                JSONObject res = Tools.post();
-//
-//                for (int row = 0; row < event_grid.getRowCount(); row++)
-//                    for (int col = 0; col < event_grid.getColumnCount(); col++) {
-//                        Calendar day = Calendar.getInstance();
-//                        day.setTimeInMillis((long) cells[col][row].getTag());
-//                        ArrayList<Event> dayEvents = Event.getOneDayEvents(, day);
-//                        for (Event event : dayEvents) {
-//                            getLayoutInflater().inflate(R.layout.event_element, cells[col][row]);
-//                            TextView res = (TextView) cells[col][row].getChildAt(cells[col][row].getChildCount() - 1);
-//                            res.setBackgroundColor(event.getStressColor());
-//                            res.setText(event.getTitle());
-//                        }
-//                    }
+                String url = (String) args[0];
+                String username = (String) args[1];
+                String password = (String) args[2];
+                long period_from = (long) args[3];
+                long period_till = (long) args[4];
+
+                JSONObject body = new JSONObject();
+                try {
+                    body.put("username", username);
+                    body.put("password", password);
+                    body.put("period_from", period_from);
+                    body.put("period_till", period_till);
+
+                    JSONObject res = new JSONObject(Tools.post(url, body));
+                    switch (res.getInt("result")) {
+                        case Tools.RES_OK:
+                            JSONArray array = res.getJSONArray("array");
+                            Event[] events = new Event[array.length()];
+
+                            for (int n = 0; n < array.length(); n++) {
+                                JSONObject event = array.getJSONObject(n);
+                                Calendar startTimeCal = Calendar.getInstance(), endTimeCal = Calendar.getInstance();
+                                startTimeCal.setTimeInMillis(event.getLong("startTime"));
+                                endTimeCal.setTimeInMillis(event.getLong("endTime"));
+
+                                events[n] = new Event(event.getLong("eventId"));
+                                events[n].setTitle(event.getString("title"));
+                                events[n].setStressLevel(event.getInt("stressLevel"));
+                                events[n].setStartTime(startTimeCal);
+                                events[n].setEndTime(endTimeCal);
+                                events[n].setIntervention(event.getString("intervention"));
+                                events[n].setInterventionReminder((short) event.getInt("interventionReminder"));
+                                events[n].setStressType(event.getString("stressType"));
+                                events[n].setStressCause(event.getString("stressCause"));
+                                events[n].setSharing(event.getBoolean("isShared"));
+                                events[n].setRepeatMode(event.getInt("repeatMode"));
+                            }
+
+                            runOnUiThread(new MyRunnable((Object) events) {
+                                @Override
+                                public void run() {
+                                    Event[] events = (Event[]) args[0];
+
+                                    for (int row = 0; row < event_grid.getRowCount(); row++)
+                                        for (int col = 0; col < event_grid.getColumnCount(); col++) {
+                                            Calendar day = Calendar.getInstance();
+                                            day.setTimeInMillis((long) cells[col][row].getTag());
+                                            ArrayList<Event> dayEvents = Event.getOneDayEvents(events, day);
+                                            for (Event event : dayEvents) {
+                                                getLayoutInflater().inflate(R.layout.event_element, cells[col][row]);
+                                                TextView tv = (TextView) cells[col][row].getChildAt(cells[col][row].getChildCount() - 1);
+                                                tv.setBackgroundColor(Tools.stressLevelToColor(event.getStressLevel()));
+                                                tv.setText(event.getTitle());
+                                            }
+                                        }
+                                }
+                            });
+                            break;
+                        case Tools.RES_FAIL:
+                            runOnUiThread(new MyRunnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(MainActivity.this, "Failed to load the events for this month.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            break;
+                        case Tools.RES_SRV_ERR:
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(MainActivity.this, "Failure occurred while processing the request. (SERVER SIDE)", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            break;
+                        default:
+                            break;
+                    }
+                } catch (JSONException | IOException e) {
+                    e.printStackTrace();
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this, "Failed to proceed due to an error in connection with server.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         });
     }

@@ -2,6 +2,7 @@ package kr.ac.inha.nsl.mindnavigator;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -57,41 +59,36 @@ public class Tools {
         }
     }
 
-    static String post(String _url, JSONObject json_body) {
-        try {
-            URL url = new URL(_url);
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setDoOutput(json_body != null);
-            con.setDoInput(true);
-            con.setRequestMethod("POST");
-            con.setRequestProperty("Content-Type", "application/json");
-            con.connect();
+    static String post(String _url, JSONObject json_body) throws IOException {
+        URL url = new URL(_url);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setDoOutput(json_body != null);
+        con.setDoInput(true);
+        con.setRequestMethod("POST");
+        con.setRequestProperty("Content-Type", "application/json");
+        con.connect();
 
-            if (json_body != null) {
-                DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-                wr.writeBytes(json_body.toString());
-                wr.flush();
-                wr.close();
-            }
+        if (json_body != null) {
+            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+            wr.writeBytes(json_body.toString());
+            wr.flush();
+            wr.close();
+        }
 
-            int status = con.getResponseCode();
-            if (status != HttpURLConnection.HTTP_OK) {
-                con.disconnect();
-                return null;
-            } else {
-                byte[] buf = new byte[1024];
-                int rd;
-                StringBuilder sb = new StringBuilder();
-                BufferedInputStream is = new BufferedInputStream(con.getInputStream());
-                while ((rd = is.read(buf)) > 0)
-                    sb.append(new String(buf, 0, rd, "utf-8"));
-                is.close();
-                con.disconnect();
-                return sb.toString();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        int status = con.getResponseCode();
+        if (status != HttpURLConnection.HTTP_OK) {
+            con.disconnect();
             return null;
+        } else {
+            byte[] buf = new byte[1024];
+            int rd;
+            StringBuilder sb = new StringBuilder();
+            BufferedInputStream is = new BufferedInputStream(con.getInputStream());
+            while ((rd = is.read(buf)) > 0)
+                sb.append(new String(buf, 0, rd, "utf-8"));
+            is.close();
+            con.disconnect();
+            return sb.toString();
         }
     }
 
@@ -126,6 +123,18 @@ public class Tools {
         toCal.set(Calendar.SECOND, 0);
         toCal.set(Calendar.MILLISECOND, 0);
     }
+
+    @ColorInt
+    static int stressLevelToColor(int level) {
+        float c = 5.11f;
+
+        if (level > 98)
+            return Color.RED;
+        else if (level < 50)
+            return Color.argb(0xff, (int) (level * c), 0xff, 0);
+        else
+            return Color.argb(0xff, 0xff, (int) (c * (100 - level)), 0);
+    }
 }
 
 abstract class MyRunnable implements Runnable {
@@ -143,12 +152,6 @@ class Event {
             this.id = System.currentTimeMillis() / 1000;
         else
             this.id = id;
-    }
-
-    static void init(@NonNull Activity activity) {
-        stressColors[0] = activity.getColor(R.color.slvl0_color);
-        stressColors[1] = activity.getColor(R.color.slvl1_color);
-        stressColors[2] = activity.getColor(R.color.slvl2_color);
     }
 
     static ArrayList<Event> getOneDayEvents(@NonNull Event[] events, @NonNull Calendar day) {
@@ -178,8 +181,6 @@ class Event {
     }
 
     //region Variables
-    @ColorInt
-    private static int[] stressColors = new int[3];
     static final int NO_REPEAT = 0, REPEAT_EVERYDAY = 1, REPEAT_WEEKLY = 2;
 
     private boolean newEvent;
@@ -227,10 +228,6 @@ class Event {
 
     void setStressLevel(int stressLevel) {
         this.stressLevel = stressLevel;
-    }
-
-    int getStressColor() {
-        return stressColors[stressLevel];
     }
 
     int getStressLevel() {

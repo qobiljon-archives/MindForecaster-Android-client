@@ -17,6 +17,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 public class InterventionsActivity extends AppCompatActivity {
 
     @Override
@@ -130,7 +132,7 @@ public class InterventionsActivity extends AppCompatActivity {
                                     break;
                             }
 
-                        } catch (JSONException e) {
+                        } catch (JSONException | IOException e) {
                             e.printStackTrace();
                         }
                     }
@@ -191,7 +193,7 @@ public class InterventionsActivity extends AppCompatActivity {
                                     break;
                             }
 
-                        } catch (JSONException e) {
+                        } catch (JSONException | IOException e) {
                             e.printStackTrace();
                         }
                     }
@@ -298,7 +300,7 @@ public class InterventionsActivity extends AppCompatActivity {
                                 break;
                         }
 
-                    } catch (JSONException e) {
+                    } catch (JSONException | IOException e) {
                         e.printStackTrace();
 
                         runOnUiThread(new Runnable() {

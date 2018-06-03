@@ -12,6 +12,8 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 public class SignInActivity extends AppCompatActivity {
 
     @Override
@@ -126,7 +128,7 @@ public class SignInActivity extends AppCompatActivity {
                         default:
                             break;
                     }
-                } catch (JSONException | InterruptedException e) {
+                } catch (JSONException | InterruptedException | IOException e) {
                     e.printStackTrace();
 
                     runOnUiThread(new Runnable() {
