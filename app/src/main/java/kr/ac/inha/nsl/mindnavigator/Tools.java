@@ -179,11 +179,12 @@ class Event {
     static final int NO_REPEAT = 0, REPEAT_EVERYDAY = 1, REPEAT_WEEKLY = 2;
 
     private long id;
-    private int stressLevel;
     private String title;
+    private int stressLevel;
     private Calendar startTime;
     private Calendar endTime;
     private String intervention;
+    private short interventionReminder;
     private String stressType;
     private String stressCause;
     private boolean is_shared;
@@ -268,5 +269,13 @@ class Event {
 
     int getRepeatMode() {
         return repeatMode;
+    }
+
+    void setInterventionReminder(short interventionReminder) {
+        this.interventionReminder = interventionReminder;
+    }
+
+    short getInterventionReminder() {
+        return interventionReminder;
     }
 }

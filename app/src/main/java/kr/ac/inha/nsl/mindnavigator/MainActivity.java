@@ -28,35 +28,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Toolbar mTopToolbar = findViewById(R.id.my_toolbar);
-        mTopToolbar.setTitle("MindNavigator");
-        mTopToolbar.setTitleTextColor(Color.WHITE);
-        setSupportActionBar(mTopToolbar);
-
-
+        setSupportActionBar((Toolbar) findViewById(R.id.my_toolbar));
         Event.init(this);
         init();
-
-        // region Add fake events
-//        Calendar startTime = Calendar.getInstance(), endTime = Calendar.getInstance();
-//
-//        startTime.set(Calendar.MINUTE, 0);
-//        endTime.set(Calendar.MINUTE, 30);
-//        new Event("UCL final match", 2, startTime, endTime);
-//
-//        startTime.add(Calendar.HOUR, 1);
-//        endTime.add(Calendar.HOUR, 1);
-//        new Event("Movie with Debbie", 0, startTime, endTime);
-//
-//        startTime.add(Calendar.DAY_OF_MONTH, 1);
-//        endTime.add(Calendar.DAY_OF_MONTH, 1);
-//        new Event("NSL meeting", 2, startTime, endTime);
-//
-//        startTime.add(Calendar.DAY_OF_MONTH, 1);
-//        endTime.add(Calendar.DAY_OF_MONTH, 1);
-//        new Event("Shopping", 1, startTime, endTime);
-        // endregion
     }
 
     @Override

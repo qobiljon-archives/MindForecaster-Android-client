@@ -26,10 +26,10 @@
         android:id="@+id/btn_edit_interv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
         android:layout_gravity="end|center_vertical"
+        android:background="@android:color/transparent"
         android:onClick="editIntervClick"
         android:text="@string/edit"
         android:textColor="@color/dark_blue"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 </FrameLayout>

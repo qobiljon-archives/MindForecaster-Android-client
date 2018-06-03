@@ -40,6 +40,7 @@ public class EventActivity extends AppCompatActivity {
             switch (requestCode) {
                 case INTERVENTION_ACTIVITY:
                     event.setIntervention(InterventionsActivity.result);
+                    event.setInterventionReminder(InterventionsActivity.resultSchedule);
                     InterventionsActivity.result = null;
                     selectedInterv.setText(event.getIntervention());
                     //region Setting a text for intervention reminder
@@ -314,12 +315,14 @@ public class EventActivity extends AppCompatActivity {
     }
 
     public void cancelClick(View view) {
+        setResult(Activity.RESULT_CANCELED);
         finish();
         overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
     }
 
     public void saveClick(View view) {
         event.setTitle(eventTitle.getText().toString());
+        event.setStressLevel(stressLvl.getProgress());
 
         Tools.copy_date((long) startDateText.getTag(), startTime);
         Tools.copy_time((long) startTimeText.getTag(), startTime);
@@ -337,9 +340,9 @@ public class EventActivity extends AppCompatActivity {
             endTime.set(Calendar.SECOND, 0);
             endTime.set(Calendar.MILLISECOND, 0);
         }
-
         event.setStartTime(startTime);
         event.setEndTime(endTime);
+
         switch (stressTypeGroup.getCheckedRadioButtonId()) {
             case R.id.stressor_positive:
                 event.setStressType("positive");
@@ -369,6 +372,7 @@ public class EventActivity extends AppCompatActivity {
                 break;
         }
 
+        setResult(Activity.RESULT_OK);
         finish();
         overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
     }
