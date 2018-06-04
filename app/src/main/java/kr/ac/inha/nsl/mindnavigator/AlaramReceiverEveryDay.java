@@ -24,7 +24,7 @@ public class AlaramReceiverEveryDay extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel");
 
         Notification notification = builder.setContentTitle("MindNavigator")
-                .setContentText("This is everyday 10pm notification")
+                .setContentText(intent.getStringExtra("NotificationContext"))
                 .setTicker("New Message Alert!")
                 .setAutoCancel(true)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
