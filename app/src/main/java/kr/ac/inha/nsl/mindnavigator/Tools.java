@@ -40,6 +40,10 @@ import java.util.concurrent.Executors;
 public class Tools {
     // region Variables
     static final short
+            NOTIF_PENDING_INTENT_EVERY_DAY = 0,
+            NOTIF_PENDING_INTENT_EVERY_SUNDAY = 1;
+
+    static final short
             RES_OK = 0,
             RES_SRV_ERR = -1,
             RES_FAIL = 1;

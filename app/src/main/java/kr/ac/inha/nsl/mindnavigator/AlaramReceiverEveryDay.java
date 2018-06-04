@@ -19,7 +19,7 @@ public class AlaramReceiverEveryDay extends BroadcastReceiver {
         stackBuilder.addParentStack(SignInActivity.class);
         stackBuilder.addNextIntent(notificationIntent);
 
-        PendingIntent pendingIntent = stackBuilder.getPendingIntent(100, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent(Tools.NOTIF_PENDING_INTENT_EVERY_DAY, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel");
 
@@ -33,7 +33,7 @@ public class AlaramReceiverEveryDay extends BroadcastReceiver {
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (notificationManager != null) {
-            notificationManager.notify(0, notification);
+            notificationManager.notify(Tools.NOTIF_PENDING_INTENT_EVERY_DAY, notification);
         }
     }
 }
