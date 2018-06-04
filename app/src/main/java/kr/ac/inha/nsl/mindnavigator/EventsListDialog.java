@@ -27,23 +27,18 @@ public class EventsListDialog extends DialogFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.e("HOME", "DIALOG HOME ACTIVITY RESULT");
         if (resultCode == Activity.RESULT_OK)
             switch (requestCode) {
                 case MainActivity.EVENT_ACTIVITY:
+                    if (getActivity() instanceof MainActivity)
+                        ((MainActivity) getActivity()).updateCalendarView();
                     dismiss();
                     break;
                 default:
                     break;
             }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onDismiss(DialogInterface dialog) {
-        if (getActivity() instanceof MainActivity)
-            ((MainActivity) getActivity()).updateCalendarView();
-
-        super.onDismiss(dialog);
     }
 
     // region Variables
