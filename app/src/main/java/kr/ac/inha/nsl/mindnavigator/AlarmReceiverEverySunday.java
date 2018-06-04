@@ -19,12 +19,13 @@ public class AlarmReceiverEverySunday extends BroadcastReceiver {
         stackBuilder.addParentStack(SignInActivity.class);
         stackBuilder.addNextIntent(notificationIntent);
 
-        PendingIntent pendingIntent = stackBuilder.getPendingIntent(Tools.NOTIF_PENDING_INTENT_EVERY_SUNDAY, PendingIntent.FLAG_UPDATE_CURRENT);
+        int notificaiton_id = (int)intent.getLongExtra("notification_id", 0);
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent(notificaiton_id, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel");
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel_for_days_evening");
 
         Notification notification = builder.setContentTitle("MindNavigator")
-                .setContentText(intent.getStringExtra("NotificationContext"))
+                .setContentText(intent.getStringExtra("Content"))
                 .setTicker("New Message Alert!")
                 .setAutoCancel(true)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
@@ -33,7 +34,7 @@ public class AlarmReceiverEverySunday extends BroadcastReceiver {
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (notificationManager != null) {
-            notificationManager.notify(Tools.NOTIF_PENDING_INTENT_EVERY_SUNDAY, notification);
+            notificationManager.notify(notificaiton_id, notification);
         }
     }
 }

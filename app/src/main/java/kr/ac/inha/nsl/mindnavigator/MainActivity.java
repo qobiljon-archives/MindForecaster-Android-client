@@ -43,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
     Intent intentSundays;
     PendingIntent broadcastSundays;
 
+    Intent intentEvent;
+    PendingIntent broadcastEvent;
+
     //endregion
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -375,28 +378,38 @@ public class MainActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
     }
 
-    public void notificationEveryDay(int hourOfDay) {
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 15);
+    public void notificationEveryDay(Calendar when, String text) {
         intentEveryDay = new Intent(this, AlaramReceiverEveryDay.class);
-        intentEveryDay.putExtra("NotificationContext", "This is every day notification");
-        broadcastEveryDay = PendingIntent.getBroadcast(this, Tools.NOTIF_PENDING_INTENT_EVERY_DAY, intentEveryDay, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, broadcastEveryDay);
+        intentEveryDay.putExtra("Content", text);
+        intentEvent.putExtra("notification_id", when);
+        broadcastEveryDay = PendingIntent.getBroadcast(this, (int) when.getTimeInMillis(), intentEveryDay, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), AlarmManager.INTERVAL_DAY, broadcastEveryDay);
     }
 
-    public void notificationEverySunday(int hourOfDay) {
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 15);
-        cal.set(Calendar.DAY_OF_WEEK, 1);
+    public void notificationEverySunday(Calendar when, String text) {
         intentSundays = new Intent(this, AlarmReceiverEverySunday.class);
-        intentSundays.putExtra("NotificationContext", "This is every Sunday notification");
-        broadcastSundays = PendingIntent.getBroadcast(this, Tools.NOTIF_PENDING_INTENT_EVERY_SUNDAY, intentSundays, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, broadcastSundays);
+        intentSundays.putExtra("Content", text);
+        intentEvent.putExtra("notification_id", when);
+        broadcastSundays = PendingIntent.getBroadcast(this, (int) when.getTimeInMillis(), intentSundays, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, broadcastSundays);
 
+    }
+
+    public void notificationEvent(long event_id, String text) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(event_id);
+        intentEvent = new Intent(this, AlarmReceiverEvent.class);
+        intentEvent.putExtra("Content", text);
+        intentEvent.putExtra("EventId", event_id);
+        broadcastEvent = PendingIntent.getBroadcast(this, (int) cal.getTimeInMillis(), intentEvent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), broadcastEvent);
+
+    }
+
+    public void cancelNotification(PendingIntent pendingIntent, int notif_id) {
+        alarmManager.cancel(pendingIntent);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager != null)
+            notificationManager.cancel(notif_id);
     }
 }

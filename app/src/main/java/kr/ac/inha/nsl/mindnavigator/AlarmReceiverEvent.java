@@ -9,20 +9,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
-public class AlaramReceiverEveryDay extends BroadcastReceiver {
+public class AlarmReceiverEvent extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Intent notificationIntent = new Intent(context, SignInActivity.class);
+        Intent notificationIntent = new Intent(context, MainActivity.class);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addParentStack(SignInActivity.class);
+        stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(notificationIntent);
 
-        int notificaiton_id = (int)intent.getLongExtra("notification_id", 0);
+        int notificaiton_id = (int)intent.getLongExtra("EventId", 0);
         PendingIntent pendingIntent = stackBuilder.getPendingIntent(notificaiton_id, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel");
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel_for_event");
 
         Notification notification = builder.setContentTitle("MindNavigator")
                 .setContentText(intent.getStringExtra("Content"))
