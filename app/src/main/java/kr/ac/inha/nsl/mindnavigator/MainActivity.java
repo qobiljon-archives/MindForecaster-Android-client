@@ -1,7 +1,6 @@
 package kr.ac.inha.nsl.mindnavigator;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.DialogFragment;
 import android.app.Fragment;
@@ -52,94 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK)
-            switch (requestCode) {
-                case EVENT_ACTIVITY:
-                    Event event = EventActivity.event;
-                    if (Tools.isNetworkAvailable(this))
-                        Tools.execute(new MyRunnable(
-                                getString(R.string.url_event_create),
-                                SignInActivity.loginPrefs.getString(SignInActivity.username, null),
-                                SignInActivity.loginPrefs.getString(SignInActivity.password, null),
-                                event
-                        ) {
-                            @Override
-                            public void run() {
-                                String url = (String) args[0];
-                                String username = (String) args[1];
-                                String password = (String) args[2];
-                                Event event = (Event) args[3];
-
-                                JSONObject body = new JSONObject();
-                                try {
-                                    body.put("username", username);
-                                    body.put("password", password);
-                                    body.put("event_id", event.getEventId());
-                                    body.put("title", event.getTitle());
-                                    body.put("stressLevel", event.getStressLevel());
-                                    body.put("startTime", event.getStartTime().getTimeInMillis());
-                                    body.put("endTime", event.getEndTime().getTimeInMillis());
-                                    if (event.getIntervention() == null) {
-                                        body.put("intervention", "");
-                                        body.put("interventionReminder", 0);
-                                    } else {
-                                        body.put("intervention", event.getIntervention());
-                                        body.put("interventionReminder", event.getInterventionReminder());
-                                    }
-                                    body.put("stressType", event.getStressType());
-                                    body.put("stressCause", event.getStressCause());
-                                    body.put("repeatMode", event.getRepeatMode());
-
-                                    JSONObject res = new JSONObject(Tools.post(url, body));
-                                    switch (res.getInt("result")) {
-                                        case Tools.RES_OK:
-                                            runOnUiThread(new MyRunnable() {
-                                                @Override
-                                                public void run() {
-                                                    Toast.makeText(MainActivity.this, "Action successfully created!", Toast.LENGTH_SHORT).show();
-                                                    updateCalendarView();
-                                                }
-                                            });
-                                            break;
-                                        case Tools.RES_FAIL:
-                                            runOnUiThread(new MyRunnable() {
-                                                @Override
-                                                public void run() {
-                                                    Toast.makeText(MainActivity.this, "Failed to create the event.", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                            break;
-                                        case Tools.RES_SRV_ERR:
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    Toast.makeText(MainActivity.this, "Failure occurred while processing the request. (SERVER SIDE)", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                } catch (JSONException | IOException e) {
-                                    e.printStackTrace();
-
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(MainActivity.this, "Failed to proceed due to an error in connection with server.", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-                            }
-                        });
-                    else {
-                        // TODO: Save an action for later
-                    }
-                    break;
-                default:
-                    break;
-            }
-
+        updateCalendarView();
         super.onActivityResult(requestCode, resultCode, data);
     }
 

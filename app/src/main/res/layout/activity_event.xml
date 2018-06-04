@@ -26,6 +26,20 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/btn_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:fontFamily="monospace"
+            android:onClick="deleteClick"
+            android:padding="10dp"
+            android:text="@string/delete"
+            android:textAllCaps="true"
+            android:textColor="@color/inner_activity_action_color"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -452,6 +466,7 @@
                             android:typeface="monospace" />
 
                         <Button
+                            android:id="@+id/interv_edit_button"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -552,6 +567,15 @@
 
                 </LinearLayout>
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/postEventLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
                 <!--Option: Evaluation-->
                 <View
                     android:layout_width="match_parent"
@@ -583,6 +607,7 @@
                     android:textSize="18sp" />
 
             </LinearLayout>
+
         </LinearLayout>
 
     </ScrollView>

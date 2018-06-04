@@ -3,15 +3,18 @@ package kr.ac.inha.nsl.mindnavigator;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -20,7 +23,12 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -91,8 +99,11 @@ public class EventActivity extends AppCompatActivity {
     private final int EVALUATION_ACTIVITY = 0, INTERVENTION_ACTIVITY = 1, FEEDBACK_ACTIVITY = 2;
     static Event event;
 
-    private ViewGroup inactiveLayout, stressLevelDetails, interventionDetails, repeatNotificationDetails;
-    private TextView startDateText, startTimeText, endDateText, endTimeText, selectedInterv, intervReminderTxt;
+    private ViewGroup inactiveLayout;
+    private ViewGroup stressLevelDetails;
+    private ViewGroup interventionDetails;
+    private ViewGroup repeatNotificationDetails;
+    private TextView startDateText, startTimeText, endDateText, endTimeText, selectedInterv, intervReminderTxt, expandDetails, saveButton, cancelButton, deleteButton;
     private RadioGroup stressTypeGroup, repeatModeGroup;
     private EditText eventTitle, stressCause;
     private Switch switchAllDay;
@@ -118,7 +129,12 @@ public class EventActivity extends AppCompatActivity {
         selectedInterv = findViewById(R.id.selected_intervention);
         repeatModeGroup = findViewById(R.id.repeat_mode_group);
         intervReminderTxt = findViewById(R.id.txt_interv_reminder_time);
-        intervReminderTxt.setVisibility(View.GONE);
+        expandDetails = findViewById(R.id.text_more_event_options);
+        saveButton = findViewById(R.id.btn_save);
+        cancelButton = findViewById(R.id.btn_cancel);
+        deleteButton = findViewById(R.id.btn_delete);
+        ViewGroup postEventLayout = findViewById(R.id.postEventLayout);
+        Button intervEditButton = findViewById(R.id.interv_edit_button);
 
         Calendar selCal = Calendar.getInstance();
         if (getIntent().hasExtra("selectedDayMillis"))
@@ -128,8 +144,38 @@ public class EventActivity extends AppCompatActivity {
         else
             event = new Event(0);
 
-        if (!event.isNewEvent())
+        if (event.isNewEvent())
+            deleteButton.setVisibility(View.GONE);
+        else {
+            // Editing an existing event
             selCal = event.getStartTime();
+
+            if (event.getEndTime().before(Calendar.getInstance())) {
+                saveButton.setVisibility(View.GONE);
+                cancelButton.setVisibility(View.GONE);
+
+                switchAllDay.setEnabled(false);
+                eventTitle.setEnabled(false);
+                startDateText.setEnabled(false);
+                startTimeText.setEnabled(false);
+                endDateText.setEnabled(false);
+                endTimeText.setEnabled(false);
+                stressLvl.setEnabled(false);
+                stressCause.setEnabled(false);
+                stressTypeGroup.setEnabled(false);
+                for (int n = 0; n < stressTypeGroup.getChildCount(); n++)
+                    stressTypeGroup.getChildAt(n).setEnabled(false);
+                repeatModeGroup.setEnabled(false);
+                for (int n = 0; n < repeatModeGroup.getChildCount(); n++)
+                    repeatModeGroup.getChildAt(n).setEnabled(false);
+                intervEditButton.setEnabled(false);
+
+                postEventLayout.setVisibility(View.VISIBLE);
+            } else {
+                saveButton.setText(getString(R.string.edit));
+                cancelButton.setVisibility(View.GONE);
+            }
+        }
 
         startDateText.setText(String.format(Locale.US,
                 "%s, %s %d, %d",
@@ -299,6 +345,7 @@ public class EventActivity extends AppCompatActivity {
         switch (event.getInterventionReminder()) {
             case -1440:
                 intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_before)));
+
                 break;
             case -60:
                 intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_before)));
@@ -321,13 +368,16 @@ public class EventActivity extends AppCompatActivity {
             case 10:
                 intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_after)));
                 break;
+            default:
+                intervReminderTxt.setVisibility(View.GONE);
+                break;
         }
 
         eventTitle.setSelection(eventTitle.length());
     }
 
     public void moreOptionsClick(View view) {
-        findViewById(R.id.text_more_event_options).setVisibility(View.GONE);
+        expandDetails.setVisibility(View.GONE);
         findViewById(R.id.more_options_layout).setVisibility(View.VISIBLE);
     }
 
@@ -364,7 +414,7 @@ public class EventActivity extends AppCompatActivity {
         } else {
             interventionDetails.setVisibility(View.VISIBLE);
             optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
-            if (!event.isNewEvent())
+            if (selectedInterv.length() > 1)
                 intervReminderTxt.setVisibility(View.VISIBLE);
         }
 
@@ -394,7 +444,99 @@ public class EventActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
     }
 
+    public void deleteClick(View view) {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        if (Tools.isNetworkAvailable(EventActivity.this))
+                            Tools.execute(new MyRunnable(
+                                    getString(R.string.url_event_delete),
+                                    SignInActivity.loginPrefs.getString(SignInActivity.username, null),
+                                    SignInActivity.loginPrefs.getString(SignInActivity.password, null),
+                                    event.getEventId()
+                            ) {
+                                @Override
+                                public void run() {
+                                    String url = (String) args[0];
+                                    String username = (String) args[1];
+                                    String password = (String) args[2];
+                                    long eventId = (long) args[3];
+
+                                    JSONObject body = new JSONObject();
+                                    try {
+                                        body.put("username", username);
+                                        body.put("password", password);
+                                        body.put("event_id", eventId);
+
+                                        JSONObject res = new JSONObject(Tools.post(url, body));
+                                        switch (res.getInt("result")) {
+                                            case Tools.RES_OK:
+                                                runOnUiThread(new MyRunnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Toast.makeText(EventActivity.this, "Event has been deleted!", Toast.LENGTH_SHORT).show();
+
+                                                        setResult(Activity.RESULT_OK);
+                                                        finish();
+                                                        overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
+                                                    }
+                                                });
+                                                break;
+                                            case Tools.RES_FAIL:
+                                                runOnUiThread(new MyRunnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Toast.makeText(EventActivity.this, "Failed to create delete the event.", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                                break;
+                                            case Tools.RES_SRV_ERR:
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Toast.makeText(EventActivity.this, "Failure occurred while processing the request. (SERVER SIDE)", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    } catch (JSONException | IOException e) {
+                                        e.printStackTrace();
+
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(EventActivity.this, "Failed to proceed due to an error in connection with server.", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to delete this event?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+    }
+
     public void saveClick(View view) {
+        if (saveButton.getText().equals(getString(R.string.edit))) {
+            // if edit is clicked
+            saveButton.setText(getString(R.string.save));
+            cancelButton.setVisibility(View.VISIBLE);
+            deleteButton.setVisibility(View.GONE);
+            return;
+        }
+
         event.setTitle(eventTitle.getText().toString());
         event.setStressLevel(stressLvl.getProgress());
 
@@ -444,9 +586,96 @@ public class EventActivity extends AppCompatActivity {
                 break;
         }
 
-        setResult(Activity.RESULT_OK);
-        finish();
-        overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
+        Event event = EventActivity.event;
+        if (Tools.isNetworkAvailable(this))
+            Tools.execute(new MyRunnable(
+                    event.isNewEvent() ? getString(R.string.url_event_create) : getString(R.string.url_event_edit),
+                    SignInActivity.loginPrefs.getString(SignInActivity.username, null),
+                    SignInActivity.loginPrefs.getString(SignInActivity.password, null),
+                    event
+            ) {
+                @Override
+                public void run() {
+                    String url = (String) args[0];
+                    String username = (String) args[1];
+                    String password = (String) args[2];
+                    Event event = (Event) args[3];
+
+                    JSONObject body = new JSONObject();
+                    try {
+                        body.put("username", username);
+                        body.put("password", password);
+                        body.put("event_id", event.getEventId());
+                        body.put("title", event.getTitle());
+                        body.put("stressLevel", event.getStressLevel());
+                        body.put("startTime", event.getStartTime().getTimeInMillis());
+                        body.put("endTime", event.getEndTime().getTimeInMillis());
+                        if (event.getIntervention() == null) {
+                            body.put("intervention", "");
+                            body.put("interventionReminder", 0);
+                        } else {
+                            body.put("intervention", event.getIntervention());
+                            body.put("interventionReminder", event.getInterventionReminder());
+                        }
+                        body.put("stressType", event.getStressType());
+                        body.put("stressCause", event.getStressCause());
+                        body.put("repeatMode", event.getRepeatMode());
+
+                        JSONObject res = new JSONObject(Tools.post(url, body));
+                        switch (res.getInt("result")) {
+                            case Tools.RES_OK:
+                                runOnUiThread(new MyRunnable(
+                                        event.isNewEvent()
+                                ) {
+                                    @Override
+                                    public void run() {
+                                        boolean isNewEvent = (boolean) args[0];
+                                        Toast.makeText(EventActivity.this, isNewEvent ? "Event successfully created!" : "Failed to edit the event.", Toast.LENGTH_SHORT).show();
+
+                                        setResult(Activity.RESULT_OK);
+                                        finish();
+                                        overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
+                                    }
+                                });
+                                break;
+                            case Tools.RES_FAIL:
+                                runOnUiThread(new MyRunnable(
+                                        event.isNewEvent()
+                                ) {
+                                    @Override
+                                    public void run() {
+                                        boolean isNewEvent = (boolean) args[0];
+                                        Toast.makeText(EventActivity.this, isNewEvent ? "Failed to create the event." : "Failed to edit the event.", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                break;
+                            case Tools.RES_SRV_ERR:
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(EventActivity.this, "Failure occurred while processing the request. (SERVER SIDE)", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                break;
+                            default:
+                                break;
+                        }
+                    } catch (JSONException | IOException e) {
+                        e.printStackTrace();
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(EventActivity.this, "Failed to proceed due to an error in connection with server.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+            });
+        else {
+            // TODO: Save an action for later
+            Toast.makeText(this, "No network! Please connect to network first!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void pickDateClick(View view) {
