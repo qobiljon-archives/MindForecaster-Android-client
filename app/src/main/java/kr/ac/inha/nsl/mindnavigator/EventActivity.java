@@ -108,6 +108,7 @@ public class EventActivity extends AppCompatActivity {
     private EditText eventTitle, stressCause;
     private Switch switchAllDay;
     private SeekBar stressLvl;
+    private Button intervEditButton;
 
     private Calendar startTime, endTime;
     //endregion
@@ -134,7 +135,7 @@ public class EventActivity extends AppCompatActivity {
         cancelButton = findViewById(R.id.btn_cancel);
         deleteButton = findViewById(R.id.btn_delete);
         ViewGroup postEventLayout = findViewById(R.id.postEventLayout);
-        Button intervEditButton = findViewById(R.id.interv_edit_button);
+        intervEditButton = findViewById(R.id.interv_edit_button);
 
         Calendar selCal = Calendar.getInstance();
         if (getIntent().hasExtra("selectedDayMillis"))
@@ -149,27 +150,25 @@ public class EventActivity extends AppCompatActivity {
         else {
             // Editing an existing event
             selCal = event.getStartTime();
+            switchAllDay.setEnabled(false);
+            eventTitle.setEnabled(false);
+            startDateText.setEnabled(false);
+            startTimeText.setEnabled(false);
+            endDateText.setEnabled(false);
+            endTimeText.setEnabled(false);
+            stressLvl.setEnabled(false);
+            stressCause.setEnabled(false);
+            stressTypeGroup.setEnabled(false);
+            for (int n = 0; n < stressTypeGroup.getChildCount(); n++)
+                stressTypeGroup.getChildAt(n).setEnabled(false);
+            repeatModeGroup.setEnabled(false);
+            for (int n = 0; n < repeatModeGroup.getChildCount(); n++)
+                repeatModeGroup.getChildAt(n).setEnabled(false);
+            intervEditButton.setEnabled(false);
 
             if (event.getEndTime().before(Calendar.getInstance())) {
                 saveButton.setVisibility(View.GONE);
                 cancelButton.setVisibility(View.GONE);
-
-                switchAllDay.setEnabled(false);
-                eventTitle.setEnabled(false);
-                startDateText.setEnabled(false);
-                startTimeText.setEnabled(false);
-                endDateText.setEnabled(false);
-                endTimeText.setEnabled(false);
-                stressLvl.setEnabled(false);
-                stressCause.setEnabled(false);
-                stressTypeGroup.setEnabled(false);
-                for (int n = 0; n < stressTypeGroup.getChildCount(); n++)
-                    stressTypeGroup.getChildAt(n).setEnabled(false);
-                repeatModeGroup.setEnabled(false);
-                for (int n = 0; n < repeatModeGroup.getChildCount(); n++)
-                    repeatModeGroup.getChildAt(n).setEnabled(false);
-                intervEditButton.setEnabled(false);
-
                 postEventLayout.setVisibility(View.VISIBLE);
             } else {
                 saveButton.setText(getString(R.string.edit));
@@ -534,6 +533,22 @@ public class EventActivity extends AppCompatActivity {
             saveButton.setText(getString(R.string.save));
             cancelButton.setVisibility(View.VISIBLE);
             deleteButton.setVisibility(View.GONE);
+
+            switchAllDay.setEnabled(true);
+            eventTitle.setEnabled(true);
+            startDateText.setEnabled(true);
+            startTimeText.setEnabled(true);
+            endDateText.setEnabled(true);
+            endTimeText.setEnabled(true);
+            stressLvl.setEnabled(true);
+            stressCause.setEnabled(true);
+            stressTypeGroup.setEnabled(true);
+            for (int n = 0; n < stressTypeGroup.getChildCount(); n++)
+                stressTypeGroup.getChildAt(n).setEnabled(true);
+            repeatModeGroup.setEnabled(true);
+            for (int n = 0; n < repeatModeGroup.getChildCount(); n++)
+                repeatModeGroup.getChildAt(n).setEnabled(true);
+            intervEditButton.setEnabled(true);
             return;
         }
 
@@ -630,7 +645,7 @@ public class EventActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         boolean isNewEvent = (boolean) args[0];
-                                        Toast.makeText(EventActivity.this, isNewEvent ? "Event successfully created!" : "Failed to edit the event.", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(EventActivity.this, isNewEvent ? "Event successfully created!" : "Event has been edited.", Toast.LENGTH_SHORT).show();
 
                                         setResult(Activity.RESULT_OK);
                                         finish();

@@ -127,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("CutPasteId")
     public void updateCalendarView() {
+        Log.e("UPDATE", "CALLED");
+
         // Update the value of year and month according to the currently selected month
         monthName.setText(months[currentCal.get(Calendar.MONTH)]);
         year.setText(String.valueOf(currentCal.get(Calendar.YEAR)));
