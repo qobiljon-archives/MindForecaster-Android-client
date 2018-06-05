@@ -533,10 +533,12 @@ public class EventActivity extends AppCompatActivity {
                                         JSONObject res = new JSONObject(Tools.post(url, body));
                                         switch (res.getInt("result")) {
                                             case Tools.RES_OK:
-                                                runOnUiThread(new MyRunnable() {
+                                                runOnUiThread(new MyRunnable(eventId) {
                                                     @Override
                                                     public void run() {
+                                                        long eventId = (long) args[0];
                                                         Toast.makeText(EventActivity.this, "Event has been deleted!", Toast.LENGTH_SHORT).show();
+                                                        Tools.cancelNotif(EventActivity.this, (int) eventId);
                                                         setResult(Activity.RESULT_OK);
                                                         finish();
                                                         overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
@@ -669,16 +671,16 @@ public class EventActivity extends AppCompatActivity {
 
         switch (eventNotificationGroup.getCheckedRadioButtonId()) {
             case R.id.option_day_before:
-                event.setEventReminder((short)-1440);
+                event.setEventReminder((short) -1440);
                 break;
             case R.id.option_hour_before:
-                event.setEventReminder((short)-60);
+                event.setEventReminder((short) -60);
                 break;
             case R.id.option_30mins_before:
-                event.setEventReminder((short)-30);
+                event.setEventReminder((short) -30);
                 break;
             case R.id.option_10mins_before:
-                event.setEventReminder((short)-10);
+                event.setEventReminder((short) -10);
                 break;
             default:
                 break;

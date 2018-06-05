@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -40,8 +41,6 @@ public class EventsListDialog extends DialogFragment {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    // region Variables
-
     private ViewGroup root;
 
     private View.OnClickListener onEventClickListener = new View.OnClickListener() {
@@ -59,6 +58,16 @@ public class EventsListDialog extends DialogFragment {
     }
 
     private void init() {
+        root.findViewById(R.id.btn_add_from_dialog).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), EventActivity.class);
+                intent.putExtra("selectedDayMillis", getArguments().getLong("selectedDayMillis"));
+                startActivityForResult(intent, 0);
+                getActivity().overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+            }
+        });
+
         Calendar selectedDay = Calendar.getInstance();
         selectedDay.setTimeInMillis(getArguments().getLong("selectedDayMillis"));
 

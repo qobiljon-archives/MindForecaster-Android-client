@@ -29,7 +29,6 @@
             android:layout_gravity="end"
             android:background="@android:color/transparent"
             android:contentDescription="@string/app_name"
-            android:onClick="onNewEventClick"
             android:src="@drawable/img_add_event" />
 
 

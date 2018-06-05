@@ -13,6 +13,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.util.LongSparseArray;
+import android.util.SparseArray;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -49,8 +50,11 @@ public class Tools {
             RES_FAIL = 1;
 
     private static int cellWidth, cellHeight;
-
     private static ExecutorService executor = Executors.newCachedThreadPool();
+    private static SparseArray<PendingIntent> eventNotifs = new SparseArray<>();
+    private static SparseArray<PendingIntent> sundayNotifs = new SparseArray<>();
+    private static SparseArray<PendingIntent> dailyNotifs = new SparseArray<>();
+
     // endregion
 
     static void setCellSize(int width, int height) {
@@ -285,42 +289,58 @@ public class Tools {
 
     static void addDailyNotif(Context context, Calendar when, String text) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intentEveryDay = new Intent(context, AlaramReceiverEveryDay.class);
-        intentEveryDay.putExtra("Content", text);
-        intentEveryDay.putExtra("notification_id", when);
-        PendingIntent broadcastEveryDay = PendingIntent.getBroadcast(context, (int) when.getTimeInMillis(), intentEveryDay, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent intent = new Intent(context, AlaramReceiverEveryDay.class);
+        intent.putExtra("Content", text);
+        intent.putExtra("notification_id", when.getTimeInMillis());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int) when.getTimeInMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         if (alarmManager != null)
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), AlarmManager.INTERVAL_DAY, broadcastEveryDay);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        dailyNotifs.put((int) when.getTimeInMillis(), pendingIntent);
     }
 
     static void addSundayNotif(Context context, Calendar when, String text) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intentSundays = new Intent(context, AlarmReceiverEverySunday.class);
-        intentSundays.putExtra("Content", text);
-        intentSundays.putExtra("notification_id", when);
-        PendingIntent broadcastSundays = PendingIntent.getBroadcast(context, (int) when.getTimeInMillis(), intentSundays, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent intent = new Intent(context, AlarmReceiverEverySunday.class);
+        intent.putExtra("Content", text);
+        intent.putExtra("notification_id", when.getTimeInMillis());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int) when.getTimeInMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         if (alarmManager != null)
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, broadcastSundays);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, pendingIntent);
+        sundayNotifs.put((int) when.getTimeInMillis(), pendingIntent);
     }
 
     static void addEventNotif(Context context, Calendar when, long event_id, String text) {
+        Log.e("EVENT REMINDER", when.getTime() + "");
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intentEvent = new Intent(context, AlarmReceiverEvent.class);
-        intentEvent.putExtra("Content", text);
-        intentEvent.putExtra("EventId", event_id);
-        intentEvent.putExtra("When", when.getTimeInMillis());
-        PendingIntent broadcastEvent = PendingIntent.getBroadcast(context, (int) event_id, intentEvent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent intent = new Intent(context, AlarmReceiverEvent.class);
+        intent.putExtra("Content", text);
+        intent.putExtra("EventId", event_id);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int) event_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         if (alarmManager != null)
-            alarmManager.set(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), broadcastEvent);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), pendingIntent);
+        eventNotifs.put((int) event_id, pendingIntent);
     }
 
-    static void cancelNotif(Context context, PendingIntent pendingIntent, int notif_id) {
+    static void cancelNotif(Context context, int notif_id) {
+        SparseArray<PendingIntent> map;
+        if (dailyNotifs.get(notif_id, null) != null)
+            map = dailyNotifs;
+        else if (sundayNotifs.get(notif_id, null) != null)
+            map = sundayNotifs;
+        else if (eventNotifs.get(notif_id, null) != null)
+            map = eventNotifs;
+        else
+            return;
+
+        Log.e("CANCEL", "cancel notification is being called");
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null)
-            alarmManager.cancel(pendingIntent);
+            alarmManager.cancel(map.get(notif_id));
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (notificationManager != null)
             notificationManager.cancel(notif_id);
+
+        map.remove(notif_id);
     }
 
 }
@@ -486,7 +506,7 @@ class Event {
         this.interventionReminder = interventionReminder;
     }
 
-    void setEventReminder(short eventReminder){
+    void setEventReminder(short eventReminder) {
         this.eventReminder = eventReminder;
     }
 
@@ -544,8 +564,17 @@ class Event {
     }
 
     public static void updateReminders(Context context) {
+        Calendar today = Calendar.getInstance(), cal;
         for (Event event : currentEventBank) {
-            // TODO: Nematjon
+            cal = event.getStartTime();
+            cal.add(Calendar.MINUTE, event.getEventReminder());
+            if (cal.before(today))
+                Tools.cancelNotif(context, (int) event.getEventId());
+            else {
+                cal = (Calendar) event.getStartTime().clone();
+                cal.add(Calendar.MINUTE, event.getEventReminder());
+                Tools.addEventNotif(context, cal, event.getEventId(), String.format(Locale.US, "%s after %d mins", event.getTitle(), Math.abs(event.getEventReminder())));
+            }
         }
     }
 }

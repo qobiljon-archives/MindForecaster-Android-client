@@ -46,6 +46,8 @@
 
         <receiver android:name=".AlarmReceiverEverySunday" />
 
+        <receiver android:name=".AlarmReceiverEvent" />
+
     </application>
 
 </manifest>

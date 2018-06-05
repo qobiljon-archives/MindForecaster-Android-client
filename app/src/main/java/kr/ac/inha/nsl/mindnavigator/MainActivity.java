@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
-    //endregion
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView monthName;
     private TextView year;
     private Calendar currentCal;
-    private Calendar clickedCellCal;
 
     private String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 
@@ -69,29 +67,43 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout.OnClickListener cellClick = new LinearLayout.OnClickListener() {
         @Override
         public void onClick(View view) {
-            clickedCellCal = Calendar.getInstance();
-            clickedCellCal.setTimeInMillis((long) view.getTag());
-
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             Fragment prev = getFragmentManager().findFragmentByTag("dialog");
             if (prev != null) {
                 ft.remove(prev);
             }
             ft.addToBackStack(null);
-            Bundle args = new Bundle();
-            args.putLong("selectedDayMillis", clickedCellCal.getTimeInMillis());
             DialogFragment dialogFragment = new EventsListDialog();
+            Bundle args = new Bundle();
+            args.putLong("selectedDayMillis", (long) view.getTag());
             dialogFragment.setArguments(args);
             dialogFragment.show(ft, "dialog");
-
         }
     };
     // endregion
     // endregion
 
     private void init() {
-        //addDailyNotif(22);
-        //addSundayNotif(20);
+
+//        Calendar cal = Calendar.getInstance();
+//        cal.add(Calendar.MINUTE, 10);
+//        cal.set(Calendar.SECOND, 0);
+//
+//        Tools.addEventNotif(this, cal, 15, "I am here Bitch!!!");
+
+        Calendar sundayNotifTime = Calendar.getInstance();
+        sundayNotifTime.set(Calendar.DAY_OF_WEEK, 1);
+        sundayNotifTime.set(Calendar.HOUR_OF_DAY, 20);
+        sundayNotifTime.set(Calendar.MINUTE, 0);
+        sundayNotifTime.set(Calendar.SECOND, 0);
+        Log.e("SUNDAY", sundayNotifTime.getTime() + "");
+        Tools.addSundayNotif(this, sundayNotifTime, "Do you have a new schedule for the next week?");
+
+        Calendar dailyNotifTime = Calendar.getInstance();
+        dailyNotifTime.set(Calendar.HOUR_OF_DAY, 22);
+        dailyNotifTime.set(Calendar.MINUTE, 0);
+        dailyNotifTime.set(Calendar.SECOND, 0);
+        Tools.addDailyNotif(this, dailyNotifTime, "Please, evaluate today's events!");
 
         currentCal = Calendar.getInstance();
         event_grid = findViewById(R.id.event_grid);
@@ -238,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
                                     events[n].setEventReminder((short) event.getInt("eventReminder"));
                                 }
                                 Event.setCurrentEventBank(events);
+                                Event.updateReminders(MainActivity.this);
                                 Tools.cacheMonthlyEvents(MainActivity.this, events, month, year);
 
                                 runOnUiThread(new MyRunnable() {
@@ -248,9 +261,6 @@ public class MainActivity extends AppCompatActivity {
                                                 Calendar day = Calendar.getInstance();
                                                 day.setTimeInMillis((long) cells[col][row].getTag());
                                                 ArrayList<Event> dayEvents = Event.getOneDayEvents(day);
-                                                if (dayEvents.size() == 2) {
-                                                    Log.e("ERRORCOUNT", "CASE SIZE 2");
-                                                }
                                                 for (Event event : dayEvents) {
                                                     getLayoutInflater().inflate(R.layout.event_small_element, cells[col][row]);
                                                     TextView tv = (TextView) cells[col][row].getChildAt(cells[col][row].getChildCount() - 1);
@@ -358,11 +368,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onNewEventClick(View view) {
         Intent intent = new Intent(this, EventActivity.class);
-        if (view == findViewById(R.id.btn_add_from_dialog))
-            intent.putExtra("selectedDayMillis", clickedCellCal.getTimeInMillis());
-        else
-            intent.putExtra("selectedDayMillis", Calendar.getInstance().getTimeInMillis());
-
+        intent.putExtra("selectedDayMillis", Calendar.getInstance().getTimeInMillis());
         startActivityForResult(intent, 0);
         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
     }
