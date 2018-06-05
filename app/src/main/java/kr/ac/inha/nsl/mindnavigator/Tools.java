@@ -44,10 +44,6 @@ import java.util.concurrent.Executors;
 public class Tools {
     // region Variables
     static final short
-            NOTIF_PENDING_INTENT_EVERY_DAY = 0,
-            NOTIF_PENDING_INTENT_EVERY_SUNDAY = 1;
-
-    static final short
             RES_OK = 0,
             RES_SRV_ERR = -1,
             RES_FAIL = 1;
@@ -287,7 +283,7 @@ public class Tools {
         return readOfflineInterventions(context, "peer");
     }
 
-    static int addDailyNotif(Context context, Calendar when, String text) {
+    static void addDailyNotif(Context context, Calendar when, String text) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intentEveryDay = new Intent(context, AlaramReceiverEveryDay.class);
         intentEveryDay.putExtra("Content", text);
@@ -295,10 +291,9 @@ public class Tools {
         PendingIntent broadcastEveryDay = PendingIntent.getBroadcast(context, (int) when.getTimeInMillis(), intentEveryDay, PendingIntent.FLAG_UPDATE_CURRENT);
         if (alarmManager != null)
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), AlarmManager.INTERVAL_DAY, broadcastEveryDay);
-        return (int) when.getTimeInMillis();
     }
 
-    static int addSundayNotif(Context context, Calendar when, String text) {
+    static void addSundayNotif(Context context, Calendar when, String text) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intentSundays = new Intent(context, AlarmReceiverEverySunday.class);
         intentSundays.putExtra("Content", text);
@@ -306,20 +301,16 @@ public class Tools {
         PendingIntent broadcastSundays = PendingIntent.getBroadcast(context, (int) when.getTimeInMillis(), intentSundays, PendingIntent.FLAG_UPDATE_CURRENT);
         if (alarmManager != null)
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, broadcastSundays);
-        return (int) when.getTimeInMillis();
     }
 
-    static int addEventNotif(Context context, long event_id, String text) {
+    static void addEventNotif(Context context, long event_id, String text) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(event_id);
         Intent intentEvent = new Intent(context, AlarmReceiverEvent.class);
         intentEvent.putExtra("Content", text);
         intentEvent.putExtra("EventId", event_id);
-        PendingIntent broadcastEvent = PendingIntent.getBroadcast(context, (int) cal.getTimeInMillis(), intentEvent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent broadcastEvent = PendingIntent.getBroadcast(context, (int) event_id, intentEvent, PendingIntent.FLAG_UPDATE_CURRENT);
         if (alarmManager != null)
-            alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), broadcastEvent);
-        return (int) cal.getTimeInMillis();
+            alarmManager.set(AlarmManager.RTC_WAKEUP, event_id, broadcastEvent);
     }
 
     static void cancelNotif(Context context, PendingIntent pendingIntent, int notif_id) {
@@ -536,6 +527,12 @@ class Event {
             setRepeatMode(eventJson.getInt("repeatMode"));
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void updateReminders(Context context) {
+        for (Event event : currentEventBank) {
+            // TODO: Nematjon
         }
     }
 }

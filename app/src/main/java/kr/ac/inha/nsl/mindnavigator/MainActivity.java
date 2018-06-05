@@ -293,6 +293,7 @@ public class MainActivity extends AppCompatActivity {
             });
         else {
             Event.setCurrentEventBank(Tools.readOfflineMonthlyEvents(this, currentCal.get(Calendar.MONTH), currentCal.get(Calendar.YEAR)));
+            Event.updateReminders(MainActivity.this);
             for (row = 0; row < event_grid.getRowCount(); row++)
                 for (col = 0; col < event_grid.getColumnCount(); col++) {
                     Calendar day = Calendar.getInstance();
