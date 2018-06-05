@@ -1,7 +1,11 @@
 package kr.ac.inha.nsl.mindnavigator;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -281,6 +285,50 @@ public class Tools {
 
     public static String[] readOfflinePeerInterventions(Context context) {
         return readOfflineInterventions(context, "peer");
+    }
+
+    static int addDailyNotif(Context context, Calendar when, String text) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intentEveryDay = new Intent(context, AlaramReceiverEveryDay.class);
+        intentEveryDay.putExtra("Content", text);
+        intentEveryDay.putExtra("notification_id", when);
+        PendingIntent broadcastEveryDay = PendingIntent.getBroadcast(context, (int) when.getTimeInMillis(), intentEveryDay, PendingIntent.FLAG_UPDATE_CURRENT);
+        if (alarmManager != null)
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), AlarmManager.INTERVAL_DAY, broadcastEveryDay);
+        return (int) when.getTimeInMillis();
+    }
+
+    static int addSundayNotif(Context context, Calendar when, String text) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intentSundays = new Intent(context, AlarmReceiverEverySunday.class);
+        intentSundays.putExtra("Content", text);
+        intentSundays.putExtra("notification_id", when);
+        PendingIntent broadcastSundays = PendingIntent.getBroadcast(context, (int) when.getTimeInMillis(), intentSundays, PendingIntent.FLAG_UPDATE_CURRENT);
+        if (alarmManager != null)
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, broadcastSundays);
+        return (int) when.getTimeInMillis();
+    }
+
+    static int addEventNotif(Context context, long event_id, String text) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(event_id);
+        Intent intentEvent = new Intent(context, AlarmReceiverEvent.class);
+        intentEvent.putExtra("Content", text);
+        intentEvent.putExtra("EventId", event_id);
+        PendingIntent broadcastEvent = PendingIntent.getBroadcast(context, (int) cal.getTimeInMillis(), intentEvent, PendingIntent.FLAG_UPDATE_CURRENT);
+        if (alarmManager != null)
+            alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), broadcastEvent);
+        return (int) cal.getTimeInMillis();
+    }
+
+    static void cancelNotif(Context context, PendingIntent pendingIntent, int notif_id) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        if (alarmManager != null)
+            alarmManager.cancel(pendingIntent);
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager != null)
+            notificationManager.cancel(notif_id);
     }
 }
 

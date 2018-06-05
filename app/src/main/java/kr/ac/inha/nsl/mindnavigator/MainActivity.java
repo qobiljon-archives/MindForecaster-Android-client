@@ -1,12 +1,10 @@
 package kr.ac.inha.nsl.mindnavigator;
 
 import android.annotation.SuppressLint;
-import android.app.AlarmManager;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -34,18 +32,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
-
-    //region Notification variables
-    AlarmManager alarmManager;
-    Intent intentEveryDay;
-    PendingIntent broadcastEveryDay;
-
-    Intent intentSundays;
-    PendingIntent broadcastSundays;
-
-    Intent intentEvent;
-    PendingIntent broadcastEvent;
-
     //endregion
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,11 +90,8 @@ public class MainActivity extends AppCompatActivity {
     // endregion
 
     private void init() {
-        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-
-
-        //notificationEveryDay(22);
-        //notificationEverySunday(20);
+        //addDailyNotif(22);
+        //addSundayNotif(20);
 
         currentCal = Calendar.getInstance();
         event_grid = findViewById(R.id.event_grid);
@@ -345,6 +328,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void todayClick(MenuItem item) {
+        Log.e("LONG", Calendar.getInstance().getTimeInMillis() + "");
+
         NotificationManager nMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (nMgr != null) {
             nMgr.cancelAll();
@@ -378,40 +363,5 @@ public class MainActivity extends AppCompatActivity {
 
         startActivityForResult(intent, 0);
         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-    }
-
-    public void notificationEveryDay(Calendar when, String text) {
-        intentEveryDay = new Intent(this, AlaramReceiverEveryDay.class);
-        intentEveryDay.putExtra("Content", text);
-        intentEvent.putExtra("notification_id", when);
-        broadcastEveryDay = PendingIntent.getBroadcast(this, (int) when.getTimeInMillis(), intentEveryDay, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), AlarmManager.INTERVAL_DAY, broadcastEveryDay);
-    }
-
-    public void notificationEverySunday(Calendar when, String text) {
-        intentSundays = new Intent(this, AlarmReceiverEverySunday.class);
-        intentSundays.putExtra("Content", text);
-        intentEvent.putExtra("notification_id", when);
-        broadcastSundays = PendingIntent.getBroadcast(this, (int) when.getTimeInMillis(), intentSundays, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, broadcastSundays);
-
-    }
-
-    public void notificationEvent(long event_id, String text) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(event_id);
-        intentEvent = new Intent(this, AlarmReceiverEvent.class);
-        intentEvent.putExtra("Content", text);
-        intentEvent.putExtra("EventId", event_id);
-        broadcastEvent = PendingIntent.getBroadcast(this, (int) cal.getTimeInMillis(), intentEvent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), broadcastEvent);
-
-    }
-
-    public void cancelNotification(PendingIntent pendingIntent, int notif_id) {
-        alarmManager.cancel(pendingIntent);
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if (notificationManager != null)
-            notificationManager.cancel(notif_id);
     }
 }

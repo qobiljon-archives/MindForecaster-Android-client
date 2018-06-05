@@ -476,7 +476,6 @@ public class EventActivity extends AppCompatActivity {
                                                     @Override
                                                     public void run() {
                                                         Toast.makeText(EventActivity.this, "Event has been deleted!", Toast.LENGTH_SHORT).show();
-
                                                         setResult(Activity.RESULT_OK);
                                                         finish();
                                                         overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
