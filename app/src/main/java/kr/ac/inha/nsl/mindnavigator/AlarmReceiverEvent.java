@@ -20,6 +20,7 @@ public class AlarmReceiverEvent extends BroadcastReceiver {
         stackBuilder.addNextIntent(notificationIntent);
 
         int notificaiton_id = (int)intent.getLongExtra("EventId", 0);
+        long cal = intent.getLongExtra("When", 0);
         PendingIntent pendingIntent = stackBuilder.getPendingIntent(notificaiton_id, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel_for_event");

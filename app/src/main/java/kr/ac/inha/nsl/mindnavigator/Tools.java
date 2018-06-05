@@ -303,14 +303,15 @@ public class Tools {
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, broadcastSundays);
     }
 
-    static void addEventNotif(Context context, long event_id, String text) {
+    static void addEventNotif(Context context, Calendar when, long event_id, String text) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intentEvent = new Intent(context, AlarmReceiverEvent.class);
         intentEvent.putExtra("Content", text);
         intentEvent.putExtra("EventId", event_id);
+        intentEvent.putExtra("When", when.getTimeInMillis());
         PendingIntent broadcastEvent = PendingIntent.getBroadcast(context, (int) event_id, intentEvent, PendingIntent.FLAG_UPDATE_CURRENT);
         if (alarmManager != null)
-            alarmManager.set(AlarmManager.RTC_WAKEUP, event_id, broadcastEvent);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), broadcastEvent);
     }
 
     static void cancelNotif(Context context, PendingIntent pendingIntent, int notif_id) {
@@ -321,6 +322,7 @@ public class Tools {
         if (notificationManager != null)
             notificationManager.cancel(notif_id);
     }
+
 }
 
 abstract class MyRunnable implements Runnable {
