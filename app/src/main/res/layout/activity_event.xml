@@ -505,13 +505,12 @@
                     android:textSize="18sp" />
 
                 <LinearLayout
-                    android:id="@+id/repeat_notification_details"
+                    android:id="@+id/repeat_details"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
                     android:layout_marginStart="20dp"
-                    android:background="@drawable/bg_solid_wrap"
-                    android:gravity="center_horizontal"
+                    android:gravity=""
                     android:orientation="vertical"
                     android:visibility="gone">
 
@@ -525,14 +524,16 @@
 
                     <RadioGroup
                         android:id="@+id/repeat_mode_group"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/bg_solid_wrap"
                         android:checkedButton="@+id/no_repeat_radio"
                         android:orientation="horizontal">
 
                         <RadioButton
                             android:id="@id/no_repeat_radio"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:background="@drawable/bg_radio_button"
@@ -543,7 +544,8 @@
 
                         <RadioButton
                             android:id="@+id/everyday_repeat_radio"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:background="@drawable/bg_radio_button"
@@ -554,7 +556,8 @@
 
                         <RadioButton
                             android:id="@+id/everyweek_repeat_radio"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:background="@drawable/bg_radio_button"
@@ -564,6 +567,80 @@
                             android:textAllCaps="true" />
 
                     </RadioGroup>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/notification_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="6dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/event_notification"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:typeface="monospace" />
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_solid_wrap">
+
+                        <RadioGroup
+                            android:id="@+id/event_notification_group"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:checkedButton="@+id/option_10mins_before"
+                            android:orientation="vertical">
+
+                            <RadioButton
+                                android:id="@+id/option_day_before"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:tag="-1440"
+                                android:text="@string/_1_day_before"
+                                android:textSize="14sp" />
+
+                            <RadioButton
+                                android:id="@+id/option_hour_before"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:tag="-60"
+                                android:text="@string/_1_hour_before"
+                                android:textSize="14sp" />
+
+                            <RadioButton
+                                android:id="@+id/option_30mins_before"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:tag="-30"
+                                android:text="@string/_30_minutes_before"
+                                android:textSize="14sp" />
+
+                            <RadioButton
+                                android:id="@id/option_10mins_before"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:tag="-10"
+                                android:text="@string/_10_minutes_before"
+                                android:textSize="14sp" />
+
+                        </RadioGroup>
+
+                    </ScrollView>
 
                 </LinearLayout>
 

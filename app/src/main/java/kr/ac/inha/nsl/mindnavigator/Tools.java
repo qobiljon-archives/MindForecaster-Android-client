@@ -389,6 +389,7 @@ class Event {
     private String stressType;
     private String stressCause;
     private int repeatMode;
+    private short eventReminder;
     //endregion
 
     static void setCurrentEventBank(Event[] bank) {
@@ -483,8 +484,16 @@ class Event {
         this.interventionReminder = interventionReminder;
     }
 
+    void setEventReminder(short eventReminder){
+        this.eventReminder = eventReminder;
+    }
+
     short getInterventionReminder() {
         return interventionReminder;
+    }
+
+    short getEventReminder() {
+        return eventReminder;
     }
 
     JSONObject toJson() {
@@ -501,6 +510,7 @@ class Event {
             eventJson.put("stressType", getStressType());
             eventJson.put("stressCause", getStressCause());
             eventJson.put("repeatMode", getRepeatMode());
+            eventJson.put("eventReminder", getEventReminder());
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
@@ -525,6 +535,7 @@ class Event {
             setStressType(eventJson.getString("stressType"));
             setStressCause(eventJson.getString("stressCause"));
             setRepeatMode(eventJson.getInt("repeatMode"));
+            setEventReminder((short) eventJson.getInt("eventReminder"));
         } catch (JSONException e) {
             e.printStackTrace();
         }

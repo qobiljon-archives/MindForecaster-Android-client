@@ -235,6 +235,7 @@ public class MainActivity extends AppCompatActivity {
                                     events[n].setStressType(event.getString("stressType"));
                                     events[n].setStressCause(event.getString("stressCause"));
                                     events[n].setRepeatMode(event.getInt("repeatMode"));
+                                    events[n].setEventReminder((short) event.getInt("eventReminder"));
                                 }
                                 Event.setCurrentEventBank(events);
                                 Tools.cacheMonthlyEvents(MainActivity.this, events, month, year);

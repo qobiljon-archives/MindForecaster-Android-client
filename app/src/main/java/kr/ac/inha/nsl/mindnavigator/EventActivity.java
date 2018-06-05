@@ -102,9 +102,9 @@ public class EventActivity extends AppCompatActivity {
     private ViewGroup inactiveLayout;
     private ViewGroup stressLevelDetails;
     private ViewGroup interventionDetails;
-    private ViewGroup repeatNotificationDetails;
+    private ViewGroup repeatDetails, notificationDetails;
     private TextView startDateText, startTimeText, endDateText, endTimeText, selectedInterv, intervReminderTxt, expandDetails, saveButton, cancelButton, deleteButton;
-    private RadioGroup stressTypeGroup, repeatModeGroup;
+    private RadioGroup stressTypeGroup, repeatModeGroup, eventNotificationGroup;
     private EditText eventTitle, stressCause;
     private Switch switchAllDay;
     private SeekBar stressLvl;
@@ -126,9 +126,11 @@ public class EventActivity extends AppCompatActivity {
         stressCause = findViewById(R.id.txt_stress_cause);
         stressLevelDetails = findViewById(R.id.stress_level_details);
         interventionDetails = findViewById(R.id.intervention_details);
-        repeatNotificationDetails = findViewById(R.id.repeat_notification_details);
+        repeatDetails = findViewById(R.id.repeat_details);
+        notificationDetails = findViewById(R.id.notification_details);
         selectedInterv = findViewById(R.id.selected_intervention);
         repeatModeGroup = findViewById(R.id.repeat_mode_group);
+        eventNotificationGroup = findViewById(R.id.event_notification_group);
         intervReminderTxt = findViewById(R.id.txt_interv_reminder_time);
         expandDetails = findViewById(R.id.text_more_event_options);
         saveButton = findViewById(R.id.btn_save);
@@ -216,21 +218,34 @@ public class EventActivity extends AppCompatActivity {
 
         MyTextWatcher timePickingCorrector = new MyTextWatcher(startDateText, startTimeText, endDateText, endTimeText) {
             @Override
-            public void afterTextChanged(Editable s) {
-                Calendar startTime = Calendar.getInstance(), endTime = Calendar.getInstance();
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 Tools.copy_date((long) startDateText.getTag(), startTime);
                 Tools.copy_time((long) startTimeText.getTag(), startTime);
                 Tools.copy_date((long) endDateText.getTag(), endTime);
                 Tools.copy_time((long) endTimeText.getTag(), endTime);
 
-                if (endTime.before(startTime)) {
+                if (startTime.before(Calendar.getInstance())) {
+                    removeListeners();
+                    startTime = Calendar.getInstance();
+                    startTime.set(Calendar.MINUTE, 0);
+                    startTime.set(Calendar.SECOND, 0);
+                    startTime.set(Calendar.MILLISECOND, 0);
+                    startTime.add(Calendar.HOUR_OF_DAY, 1);
                     endTime.setTimeInMillis(startTime.getTimeInMillis());
                     endTime.add(Calendar.HOUR_OF_DAY, 1);
 
-                    startDateText.removeTextChangedListener(this);
-                    startTimeText.removeTextChangedListener(this);
-                    endDateText.removeTextChangedListener(this);
-                    endTimeText.removeTextChangedListener(this);
+                    startDateText.setText(String.format(Locale.US,
+                            "%s, %s %d, %d",
+                            startTime.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
+                            startTime.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
+                            startTime.get(Calendar.DAY_OF_MONTH),
+                            startTime.get(Calendar.YEAR)
+                    ));
+                    startTimeText.setText(String.format(Locale.US,
+                            "%02d:%02d",
+                            startTime.get(Calendar.HOUR_OF_DAY),
+                            startTime.get(Calendar.MINUTE))
+                    );
                     endDateText.setText(String.format(Locale.US,
                             "%s, %s %d, %d",
                             endTime.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
@@ -243,10 +258,35 @@ public class EventActivity extends AppCompatActivity {
                             endTime.get(Calendar.HOUR_OF_DAY),
                             endTime.get(Calendar.MINUTE))
                     );
-                    startDateText.addTextChangedListener(this);
-                    startTimeText.addTextChangedListener(this);
-                    endDateText.addTextChangedListener(this);
-                    endTimeText.addTextChangedListener(this);
+                    startDateText.setTag(startTime.getTimeInMillis());
+                    startTimeText.setTag(startTime.getTimeInMillis());
+                    endDateText.setTag(endTime.getTimeInMillis());
+                    endTimeText.setTag(endTime.getTimeInMillis());
+                    addListeners();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (endTime.before(startTime)) {
+                    endTime.setTimeInMillis(startTime.getTimeInMillis());
+                    endTime.add(Calendar.HOUR_OF_DAY, 1);
+
+                    removeListeners();
+                    endDateText.setText(String.format(Locale.US,
+                            "%s, %s %d, %d",
+                            endTime.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
+                            endTime.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
+                            endTime.get(Calendar.DAY_OF_MONTH),
+                            endTime.get(Calendar.YEAR)
+                    ));
+                    endTimeText.setText(String.format(Locale.US,
+                            "%02d:%02d",
+                            endTime.get(Calendar.HOUR_OF_DAY),
+                            endTime.get(Calendar.MINUTE))
+                    );
+                    addListeners();
                 }
 
                 endDateText.setTag(endTime.getTimeInMillis());
@@ -322,6 +362,7 @@ public class EventActivity extends AppCompatActivity {
             default:
                 break;
         }
+
         stressCause.setText(event.getStressCause());
         switch (event.getRepeatMode()) {
             case Event.NO_REPEAT:
@@ -336,6 +377,24 @@ public class EventActivity extends AppCompatActivity {
             default:
                 break;
         }
+
+        switch (event.getEventReminder()) {
+            case -1440:
+                eventNotificationGroup.check(R.id.option_day_before);
+                break;
+            case -60:
+                eventNotificationGroup.check(R.id.option_hour_before);
+                break;
+            case -30:
+                eventNotificationGroup.check(R.id.option_30mins_before);
+                break;
+            case -10:
+                eventNotificationGroup.check(R.id.option_10mins_before);
+                break;
+            default:
+                break;
+        }
+
         switchAllDay.setChecked(event.getStartTime().get(Calendar.HOUR_OF_DAY) == 0 && event.getStartTime().get(Calendar.MINUTE) == 0 && event.getStartTime().get(Calendar.SECOND) == 0 &&
                 event.getStartTime().get(Calendar.MILLISECOND) == 0 && event.getEndTime().get(Calendar.HOUR_OF_DAY) == 0 && event.getEndTime().get(Calendar.MINUTE) == 0 &&
                 event.getEndTime().get(Calendar.SECOND) == 0 && event.getEndTime().get(Calendar.MILLISECOND) == 0
@@ -395,11 +454,13 @@ public class EventActivity extends AppCompatActivity {
     public void expandRepeatNotificationClick(View view) {
         TextView optionView = (TextView) view;
 
-        if (repeatNotificationDetails.getVisibility() == View.VISIBLE) {
-            repeatNotificationDetails.setVisibility(View.GONE);
+        if (repeatDetails.getVisibility() == View.VISIBLE) {
+            repeatDetails.setVisibility(View.GONE);
+            notificationDetails.setVisibility(View.GONE);
             optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_expand), null);
         } else {
-            repeatNotificationDetails.setVisibility(View.VISIBLE);
+            repeatDetails.setVisibility(View.VISIBLE);
+            notificationDetails.setVisibility(View.VISIBLE);
             optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
         }
     }
@@ -547,6 +608,12 @@ public class EventActivity extends AppCompatActivity {
             repeatModeGroup.setEnabled(true);
             for (int n = 0; n < repeatModeGroup.getChildCount(); n++)
                 repeatModeGroup.getChildAt(n).setEnabled(true);
+
+            eventNotificationGroup.setEnabled(true);
+            for (int n = 0; n < eventNotificationGroup.getChildCount(); n++)
+                eventNotificationGroup.getChildAt(n).setEnabled(true);
+
+
             intervEditButton.setEnabled(true);
             return;
         }
@@ -600,6 +667,23 @@ public class EventActivity extends AppCompatActivity {
                 break;
         }
 
+        switch (eventNotificationGroup.getCheckedRadioButtonId()) {
+            case R.id.option_day_before:
+                event.setEventReminder((short)-1440);
+                break;
+            case R.id.option_hour_before:
+                event.setEventReminder((short)-60);
+                break;
+            case R.id.option_30mins_before:
+                event.setEventReminder((short)-30);
+                break;
+            case R.id.option_10mins_before:
+                event.setEventReminder((short)-10);
+                break;
+            default:
+                break;
+        }
+
         Event event = EventActivity.event;
         if (Tools.isNetworkAvailable(this))
             Tools.execute(new MyRunnable(
@@ -634,6 +718,7 @@ public class EventActivity extends AppCompatActivity {
                         body.put("stressType", event.getStressType());
                         body.put("stressCause", event.getStressCause());
                         body.put("repeatMode", event.getRepeatMode());
+                        body.put("eventReminder", event.getEventReminder());
 
                         JSONObject res = new JSONObject(Tools.post(url, body));
                         switch (res.getInt("result")) {
@@ -763,18 +848,31 @@ public class EventActivity extends AppCompatActivity {
             this.startTimeText = startTimeText;
             this.endDateText = endDateText;
             this.endTimeText = endTimeText;
+
+            startTime = Calendar.getInstance();
+            endTime = Calendar.getInstance();
         }
 
         TextView startDateText, startTimeText, endDateText, endTimeText;
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
+        Calendar startTime, endTime;
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+        }
+
+        void removeListeners() {
+            startDateText.removeTextChangedListener(this);
+            startTimeText.removeTextChangedListener(this);
+            endDateText.removeTextChangedListener(this);
+            endTimeText.removeTextChangedListener(this);
+        }
+
+        void addListeners() {
+            startDateText.addTextChangedListener(this);
+            startTimeText.addTextChangedListener(this);
+            endDateText.addTextChangedListener(this);
+            endTimeText.addTextChangedListener(this);
         }
     }
 }

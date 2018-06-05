@@ -108,6 +108,7 @@
     <string name="_1_hour_after">1 hour after</string>
     <string name="_1_day_after">1 day after</string>
     <string name="intervention_reminder_text">Remind me %1$s event</string>
+    <string name="event_notification">Event notification:</string>
 
     <string-array name="months_array">
         <item>Jan</item>
