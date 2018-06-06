@@ -575,7 +575,6 @@ class Event {
             setStartTime(startTime);
             setEndTime(endTime);
             setIntervention(eventJson.getString("intervention"));
-            Log.e("INTERV FROM JSON", eventJson.getString("intervention"));
             setInterventionReminder((short) eventJson.getInt("interventionReminder"));
             setStressType(eventJson.getString("stressType"));
             setStressCause(eventJson.getString("stressCause"));
@@ -595,8 +594,27 @@ class Event {
             cal.add(Calendar.MINUTE, event.getEventReminder());
             if (cal.before(today))
                 Tools.cancelNotif(context, (int) event.getEventId());
-            else
-                Tools.addEventNotif(context, cal, event.getEventId(), String.format(Locale.US, "%s after %d mins", event.getTitle(), Math.abs(event.getEventReminder())));
+            else {
+                String text = " after 10 minutes";
+                switch (event.getEventReminder()) {
+                    case -1440:
+                        text = " after 1 day";
+                        break;
+                    case -60:
+                        text = " after 1 hour";
+                        break;
+                    case -30:
+                        text = " after 30 minutes";
+                        break;
+                    case -10:
+                        text = " after 10 minutes";
+                        break;
+                    default:
+                        break;
+                }
+                Tools.addEventNotif(context, cal, event.getEventId(), event.getTitle() + text);
+            }
+
         }
     }
 
@@ -607,6 +625,7 @@ class Event {
             calIntervNotifId.setTimeInMillis(event.getEventId());
             calIntervNotifId.add(Calendar.MILLISECOND, 1);
 
+
             if (event.getInterventionReminder() < 0) {
                 calIntervBeforeEvent = (Calendar) event.getStartTime().clone();
                 calIntervBeforeEvent.add(Calendar.MINUTE, event.getInterventionReminder());
@@ -614,7 +633,7 @@ class Event {
                     Tools.cancelNotif(context, (int) calIntervNotifId.getTimeInMillis());
                 else
                     Tools.addIntervNotif(context, calIntervBeforeEvent, (int) calIntervNotifId.getTimeInMillis(), String.format(Locale.US, "Intervention: %s", event.getIntervention()), String.format(Locale.US, "for upcoming event: %s", event.getTitle()));
-            } else {
+            } else if (event.getInterventionReminder() != 0) {
                 calIntervAfterEvent = (Calendar) event.getEndTime().clone();
                 calIntervAfterEvent.add(Calendar.MINUTE, event.getInterventionReminder());
                 if (calIntervAfterEvent.before(today))
@@ -622,8 +641,6 @@ class Event {
                 else
                     Tools.addIntervNotif(context, calIntervAfterEvent, (int) calIntervNotifId.getTimeInMillis(), String.format(Locale.US, "Intervention: %s", event.getIntervention()), String.format(Locale.US, "for passed event: %s", event.getTitle()));
             }
-
-
         }
     }
 

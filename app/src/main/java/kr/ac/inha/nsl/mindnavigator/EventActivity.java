@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -811,9 +810,6 @@ public class EventActivity extends AppCompatActivity {
                         } else {
                             body.put("intervention", EventActivity.event.getIntervention());
                             body.put("interventionReminder", EventActivity.event.getInterventionReminder());
-
-                            Log.e("SENDING STR", EventActivity.event.getIntervention());
-                            Log.e("SENDING INT", EventActivity.event.getInterventionReminder() + "");
                         }
                         body.put("stressType", EventActivity.event.getStressType());
                         body.put("stressCause", EventActivity.event.getStressCause());
