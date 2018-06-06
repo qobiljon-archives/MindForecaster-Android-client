@@ -332,7 +332,7 @@ public class Tools {
         intent.putExtra("Content2", eventText);
         intent.putExtra("notification_id", event_id);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int) event_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        Log.e("INTERV NOTIF TIME", when.getTime()+"");
+        Log.e("INTERV NOTIF TIME", when.getTime() + "");
         if (alarmManager != null)
             alarmManager.set(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), pendingIntent);
         Log.e("INTERV NOTIF ID", (int) event_id + "");
@@ -383,9 +383,13 @@ class Event {
     }
 
     static ArrayList<Event> getOneDayEvents(@NonNull Calendar day) {
+        return getOneDayEvents(currentEventBank, day);
+    }
+
+    private static ArrayList<Event> getOneDayEvents(Event[] eventBank, @NonNull Calendar day) {
         ArrayList<Event> res = new ArrayList<>();
 
-        if (currentEventBank == null || currentEventBank.length == 0)
+        if (eventBank == null || eventBank.length == 0)
             return res;
 
         Calendar comDay = (Calendar) day.clone();
@@ -399,7 +403,7 @@ class Event {
         comDay.add(Calendar.MINUTE, -1);
         long periodTill = comDay.getTimeInMillis();
 
-        for (Event event : currentEventBank) {
+        for (Event event : eventBank) {
             long evStartTime = event.getStartTime().getTimeInMillis();
             long evEndTime = event.getEndTime().getTimeInMillis();
 
@@ -595,22 +599,21 @@ class Event {
         }
     }
 
-    public static void updateIntervReminder(Context context){
+    public static void updateIntervReminder(Context context) {
         Calendar today = Calendar.getInstance(), calIntervBeforeEvent, calIntervAfterEvent;
         for (Event event : currentEventBank) {
             Calendar calIntervNotifId = Calendar.getInstance();
             calIntervNotifId.setTimeInMillis(event.getEventId());
             calIntervNotifId.add(Calendar.MILLISECOND, 1);
 
-            if (event.getInterventionReminder() < 0){
+            if (event.getInterventionReminder() < 0) {
                 calIntervBeforeEvent = (Calendar) event.getStartTime().clone();
                 calIntervBeforeEvent.add(Calendar.MINUTE, event.getInterventionReminder());
                 if (calIntervBeforeEvent.before(today))
                     Tools.cancelNotif(context, (int) calIntervNotifId.getTimeInMillis());
                 else
                     Tools.addIntervNotif(context, calIntervBeforeEvent, (int) calIntervNotifId.getTimeInMillis(), String.format(Locale.US, "Intervention: %s", event.getIntervention()), String.format(Locale.US, "for upcoming event: %s", event.getTitle()));
-            }
-            else{
+            } else {
                 calIntervAfterEvent = (Calendar) event.getEndTime().clone();
                 calIntervAfterEvent.add(Calendar.MINUTE, event.getInterventionReminder());
                 if (calIntervAfterEvent.before(today))

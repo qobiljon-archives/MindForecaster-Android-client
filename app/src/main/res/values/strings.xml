@@ -11,6 +11,8 @@
     <string name="url_interv_create">http://165.246.43.97:4444/interv_crt</string>
     <string name="url_fetch_interv_system">http://165.246.43.97:4444/interv_syst</string>
     <string name="url_fetch_interv_peer">http://165.246.43.97:4444/interv_peer</string>
+    <string name="url_subm_feedback">http://165.246.43.97:4444/feedb_subm</string>
+    <string name="url_subm_eval">http://165.246.43.97:4444/eval_subm</string>
 
     <string name="app_name">Mind-Navigator application</string>
     <string name="month">Month</string>
@@ -111,6 +113,15 @@
     <string name="event_notification">Event notification:</string>
     <string name="log_out">Log out</string>
     <string name="notifications_settings">Notifications settings</string>
+    <string name="current_event_title">Event: %1$s</string>
+    <string name="event_done_check">Please check if this event has been done.</string>
+    <string name="expected_stress_level">Expected stress level</string>
+    <string name="real_stress_level">Real (resulting) stress level</string>
+    <string name="stress_incr_reason">Please, describe here what you think was the reason that made the real stress be higher than expected one.</string>
+    <string name="stress_incr_title">Reason of difference between expected and real stress levels</string>
+    <string name="sunday_time">Sunday evaluation reminder</string>
+    <string name="every_morning_time">Every-morning reminder</string>
+    <string name="every_evening_time">Every-evening reminder</string>
 
     <string-array name="months_array">
         <item>Jan</item>

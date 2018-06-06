@@ -53,181 +53,187 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="30dp"
-        android:layout_marginStart="30dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/current_event_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="15dp"
-            android:text="@string/current_event_title"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:typeface="monospace" />
-
-        <CheckBox
-            android:id="@+id/event_done_check"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/event_done_check" />
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="15dp"
-            android:paddingTop="35dp">
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            android:orientation="vertical">
 
             <TextView
+                android:id="@+id/current_event_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/expected_stress_level"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/current_event_title"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:typeface="monospace" />
 
-            <SeekBar
-                android:id="@+id/expected_stresslvl_seekbar"
+            <CheckBox
+                android:id="@+id/event_done_check"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:max="100" />
+                android:checked="true"
+                android:text="@string/event_done_check" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="15dp"
+                android:paddingTop="35dp">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/low"
-                    android:textColor="@color/slvl0_color"
-                    android:textSize="15sp" />
+                    android:gravity="center"
+                    android:text="@string/expected_stress_level"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:typeface="monospace" />
+
+                <SeekBar
+                    android:id="@+id/expected_stresslvl_seekbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:max="100" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/low"
+                        android:textColor="@color/slvl0_color"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/normal"
+                        android:textAlignment="center"
+                        android:textColor="@color/slvl1_color"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/high"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/slvl2_color"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="15dp">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/normal"
-                    android:textAlignment="center"
-                    android:textColor="@color/slvl1_color"
-                    android:textSize="15sp" />
+                    android:gravity="center"
+                    android:text="@string/real_stress_level"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:typeface="monospace" />
+
+                <SeekBar
+                    android:id="@+id/real_stresslvl_seekbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:max="100" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/low"
+                        android:textColor="@color/slvl0_color"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/normal"
+                        android:textAlignment="center"
+                        android:textColor="@color/slvl1_color"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/high"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/slvl2_color"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/stress_incr_details_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical"
+                android:visibility="visible">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:id="@+id/stress_incr_reason_text"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/high"
-                    android:textAlignment="viewEnd"
-                    android:textColor="@color/slvl2_color"
-                    android:textSize="15sp" />
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center_horizontal"
+                    android:maxLength="128"
+                    android:text="@string/stress_incr_title"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:typeface="monospace" />
+
+                <EditText
+                    android:id="@+id/stress_incr_reason_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_solid_wrap"
+                    android:gravity="top"
+                    android:hint="@string/stress_incr_reason"
+                    android:inputType="textMultiLine"
+                    android:lines="3"
+                    android:maxLength="128"
+                    android:maxLines="5"
+                    android:padding="10dp" />
+
             </LinearLayout>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="15dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/real_stress_level"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:typeface="monospace" />
-
-            <SeekBar
-                android:id="@+id/real_stresslvl_seekbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:max="100" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/low"
-                    android:textColor="@color/slvl0_color"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/normal"
-                    android:textAlignment="center"
-                    android:textColor="@color/slvl1_color"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/high"
-                    android:textAlignment="viewEnd"
-                    android:textColor="@color/slvl2_color"
-                    android:textSize="15sp" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/stress_incr_details_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/stress_incr_reason_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="@string/stress_incr_reason"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:typeface="monospace" />
-
-            <EditText
-                android:id="@+id/stress_incr_reason_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_solid_wrap"
-                android:gravity="top"
-                android:hint="@string/caption"
-                android:inputType="textMultiLine"
-                android:lines="3"
-                android:maxLength="128"
-                android:maxLines="5"
-                android:padding="10dp"
-                android:paddingTop="5dp" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
+    </ScrollView>
 
 </LinearLayout>
