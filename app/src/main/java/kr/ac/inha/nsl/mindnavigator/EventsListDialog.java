@@ -27,16 +27,9 @@ public class EventsListDialog extends DialogFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK)
-            switch (requestCode) {
-                case MainActivity.EVENT_ACTIVITY:
-                    if (getActivity() instanceof MainActivity)
-                        ((MainActivity) getActivity()).updateCalendarView();
-                    dismiss();
-                    break;
-                default:
-                    break;
-            }
+        if (getActivity() instanceof MainActivity)
+            ((MainActivity) getActivity()).updateCalendarView();
+        dismiss();
         super.onActivityResult(requestCode, resultCode, data);
     }
 

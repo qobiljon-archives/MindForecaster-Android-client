@@ -5,6 +5,7 @@ import android.graphics.PorterDuff;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -71,10 +72,14 @@ public class EvaluationActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
-
     }
 
     public void tabClicked(View view) {
+        if (EventActivity.event.getIntervention().length() == 0) {
+            Toast.makeText(this, "Intervention was not selected/created for this event.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         eventLayout.setVisibility(View.GONE);
         interventionLayout.setVisibility(View.GONE);
         for (Button button : tabButtons)

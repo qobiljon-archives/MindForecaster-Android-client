@@ -541,12 +541,12 @@ public class EventActivity extends AppCompatActivity {
                     JSONObject body = new JSONObject();
                     try {
                         body.put("username", username);
-                        body.put("event_id", event.getEventId());
+                        body.put("eventId", event.getEventId());
 
                         JSONObject res = new JSONObject(Tools.post(url, body));
-                        JSONObject eventEval = res.getJSONObject("evaluation");
                         switch (res.getInt("result")) {
                             case Tools.RES_OK:
+                                JSONObject eventEval = res.getJSONObject("evaluation");
                                 runOnUiThread(new MyRunnable(
                                         eventEval.get("eventDone"),
                                         eventEval.get("realStressLevel")
