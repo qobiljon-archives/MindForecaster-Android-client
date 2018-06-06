@@ -108,7 +108,7 @@ public class EvaluationActivity extends AppCompatActivity {
     public void saveClick(View view) {
         if (Tools.isNetworkAvailable(this))
             Tools.execute(new MyRunnable(
-                    getString(R.string.url_eval_subm),
+                    getString(R.string.url_eval_subm, getString(R.string.server_ip)),
                     SignInActivity.loginPrefs.getString(SignInActivity.username, null),
                     SignInActivity.loginPrefs.getString(SignInActivity.password, null)
             ) {

@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
         // Download events from internet and display them
         if (Tools.isNetworkAvailable(this))
             Tools.execute(new MyRunnable(
-                    getString(R.string.url_events_fetch),
+                    getString(R.string.url_events_fetch, getString(R.string.server_ip)),
                     SignInActivity.loginPrefs.getString(SignInActivity.username, null),
                     SignInActivity.loginPrefs.getString(SignInActivity.password, null),
                     cells[0][0].getTag(),

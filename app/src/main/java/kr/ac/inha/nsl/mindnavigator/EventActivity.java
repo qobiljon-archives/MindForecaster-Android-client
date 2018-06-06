@@ -529,7 +529,7 @@ public class EventActivity extends AppCompatActivity {
     public void feedbackClick(View view) {
         if (Tools.isNetworkAvailable(this))
             Tools.execute(new MyRunnable(
-                    getString(R.string.url_eval_fetch),
+                    getString(R.string.url_eval_fetch, getString(R.string.server_ip)),
                     SignInActivity.loginPrefs.getString(SignInActivity.username, null)
             ) {
                 @Override
@@ -613,7 +613,7 @@ public class EventActivity extends AppCompatActivity {
                     case DialogInterface.BUTTON_POSITIVE:
                         if (Tools.isNetworkAvailable(EventActivity.this))
                             Tools.execute(new MyRunnable(
-                                    getString(R.string.url_event_delete),
+                                    getString(R.string.url_event_delete, getString(R.string.server_ip)),
                                     SignInActivity.loginPrefs.getString(SignInActivity.username, null),
                                     SignInActivity.loginPrefs.getString(SignInActivity.password, null),
                                     event.getEventId()
@@ -785,7 +785,7 @@ public class EventActivity extends AppCompatActivity {
 
         if (Tools.isNetworkAvailable(this))
             Tools.execute(new MyRunnable(
-                    EventActivity.event.isNewEvent() ? getString(R.string.url_event_create) : getString(R.string.url_event_edit),
+                    EventActivity.event.isNewEvent() ? getString(R.string.url_event_create, getString(R.string.server_ip)) : getString(R.string.url_event_edit, getString(R.string.server_ip)),
                     SignInActivity.loginPrefs.getString(SignInActivity.username, null),
                     SignInActivity.loginPrefs.getString(SignInActivity.password, null)
             ) {

@@ -70,7 +70,7 @@ public class SignInActivity extends AppCompatActivity {
 
         if (Tools.isNetworkAvailable(this))
             Tools.execute(new MyRunnable(
-                    getString(R.string.url_user_login),
+                    getString(R.string.url_user_login, getString(R.string.server_ip)),
                     username,
                     password
             ) {

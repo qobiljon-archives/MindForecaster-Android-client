@@ -88,7 +88,7 @@ public class InterventionsActivity extends AppCompatActivity {
                     Tools.execute(new MyRunnable(
                             SignInActivity.loginPrefs.getString(SignInActivity.username, null),
                             SignInActivity.loginPrefs.getString(SignInActivity.password, null),
-                            getString(R.string.url_interv_system_fetch)
+                            getString(R.string.url_interv_system_fetch, getString(R.string.server_ip))
                     ) {
                         @Override
                         public void run() {
@@ -163,7 +163,7 @@ public class InterventionsActivity extends AppCompatActivity {
                     Tools.execute(new MyRunnable(
                             SignInActivity.loginPrefs.getString(SignInActivity.username, null),
                             SignInActivity.loginPrefs.getString(SignInActivity.password, null),
-                            getString(R.string.url_interv_peer_fetch)
+                            getString(R.string.url_interv_peer_fetch, getString(R.string.server_ip))
                     ) {
                         @Override
                         public void run() {
@@ -267,7 +267,7 @@ public class InterventionsActivity extends AppCompatActivity {
             }
             if (Tools.isNetworkAvailable(this))
                 Tools.execute(new MyRunnable(
-                        getString(R.string.url_interv_create),
+                        getString(R.string.url_interv_create, getString(R.string.server_ip)),
                         SignInActivity.loginPrefs.getString(SignInActivity.username, null),
                         SignInActivity.loginPrefs.getString(SignInActivity.password, null),
                         interv_text.getText().toString()

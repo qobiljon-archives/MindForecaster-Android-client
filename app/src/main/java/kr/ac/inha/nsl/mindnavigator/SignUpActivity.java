@@ -49,7 +49,7 @@ public class SignUpActivity extends AppCompatActivity {
         loadingPanel.setVisibility(View.VISIBLE);
 
         Tools.execute(new MyRunnable(
-                getString(R.string.url_user_register),
+                getString(R.string.url_user_register, getString(R.string.server_ip)),
                 name,
                 username,
                 password
