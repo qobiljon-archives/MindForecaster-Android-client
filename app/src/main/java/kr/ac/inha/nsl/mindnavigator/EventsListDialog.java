@@ -27,7 +27,6 @@ public class EventsListDialog extends DialogFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.e("HOME", "DIALOG HOME ACTIVITY RESULT");
         if (resultCode == Activity.RESULT_OK)
             switch (requestCode) {
                 case MainActivity.EVENT_ACTIVITY:

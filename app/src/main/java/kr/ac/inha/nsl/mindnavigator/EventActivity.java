@@ -139,19 +139,25 @@ public class EventActivity extends AppCompatActivity {
         ViewGroup postEventLayout = findViewById(R.id.postEventLayout);
         intervEditButton = findViewById(R.id.interv_edit_button);
 
-        Calendar selCal = Calendar.getInstance();
-        if (getIntent().hasExtra("selectedDayMillis"))
-            selCal.setTimeInMillis(getIntent().getLongExtra("selectedDayMillis", 0));
-        if (getIntent().hasExtra("eventId"))
+        if (getIntent().hasExtra("eventId")) {
             event = Event.getEventById(getIntent().getLongExtra("eventId", 0));
-        else
+            startTime = (Calendar) event.getStartTime().clone();
+            endTime = (Calendar) event.getEndTime().clone();
+        } else {
             event = new Event(0);
+            startTime = Calendar.getInstance();
+            endTime = Calendar.getInstance();
+        }
+        if (getIntent().hasExtra("selectedDayMillis")) {
+            startTime.setTimeInMillis(getIntent().getLongExtra("selectedDayMillis", 0));
+            endTime.setTimeInMillis(startTime.getTimeInMillis());
+            endTime.add(Calendar.HOUR_OF_DAY, 1);
+        }
 
         if (event.isNewEvent())
             deleteButton.setVisibility(View.GONE);
         else {
             // Editing an existing event
-            selCal = event.getStartTime();
             switchAllDay.setEnabled(false);
             eventTitle.setEnabled(false);
             startDateText.setEnabled(false);
@@ -172,6 +178,8 @@ public class EventActivity extends AppCompatActivity {
                 saveButton.setVisibility(View.GONE);
                 cancelButton.setVisibility(View.GONE);
                 postEventLayout.setVisibility(View.VISIBLE);
+                eventTitle.setFocusable(false);
+                eventTitle.clearFocus();
             } else {
                 saveButton.setText(getString(R.string.edit));
                 cancelButton.setVisibility(View.GONE);
@@ -180,41 +188,32 @@ public class EventActivity extends AppCompatActivity {
 
         startDateText.setText(String.format(Locale.US,
                 "%s, %s %d, %d",
-                selCal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
-                selCal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
-                selCal.get(Calendar.DAY_OF_MONTH),
-                selCal.get(Calendar.YEAR)
+                startTime.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
+                startTime.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
+                startTime.get(Calendar.DAY_OF_MONTH),
+                startTime.get(Calendar.YEAR)
         ));
-        startDateText.setTag(selCal.getTimeInMillis());
-
+        startDateText.setTag(startTime.getTimeInMillis());
         startTimeText.setText(String.format(Locale.US,
                 "%02d:%02d",
-                selCal.get(Calendar.HOUR_OF_DAY),
-                selCal.get(Calendar.MINUTE))
+                startTime.get(Calendar.HOUR_OF_DAY),
+                startTime.get(Calendar.MINUTE))
         );
-        startTimeText.setTag(selCal.getTimeInMillis());
-        startTime = (Calendar) selCal.clone();
-
-        if (event.isNewEvent())
-            selCal.add(Calendar.HOUR_OF_DAY, 1);
-        else
-            selCal = event.getEndTime();
+        startTimeText.setTag(startTime.getTimeInMillis());
         endDateText.setText(String.format(Locale.US,
                 "%s, %s %d, %d",
-                selCal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
-                selCal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
-                selCal.get(Calendar.DAY_OF_MONTH),
-                selCal.get(Calendar.YEAR)
+                endTime.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
+                endTime.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
+                endTime.get(Calendar.DAY_OF_MONTH),
+                endTime.get(Calendar.YEAR)
         ));
-        endDateText.setTag(selCal.getTimeInMillis());
-
+        endDateText.setTag(endTime.getTimeInMillis());
         endTimeText.setText(String.format(Locale.US,
                 "%02d:%02d",
-                selCal.get(Calendar.HOUR_OF_DAY),
-                selCal.get(Calendar.MINUTE))
+                endTime.get(Calendar.HOUR_OF_DAY),
+                endTime.get(Calendar.MINUTE))
         );
-        endTimeText.setTag(selCal.getTimeInMillis());
-        endTime = (Calendar) selCal.clone();
+        endTimeText.setTag(endTime.getTimeInMillis());
 
         MyTextWatcher timePickingCorrector = new MyTextWatcher(startDateText, startTimeText, endDateText, endTimeText) {
             @Override
@@ -223,7 +222,10 @@ public class EventActivity extends AppCompatActivity {
                 Tools.copy_time((long) startTimeText.getTag(), startTime);
                 Tools.copy_date((long) endDateText.getTag(), endTime);
                 Tools.copy_time((long) endTimeText.getTag(), endTime);
+            }
 
+            @Override
+            public void afterTextChanged(Editable s) {
                 if (startTime.before(Calendar.getInstance())) {
                     removeListeners();
                     startTime = Calendar.getInstance();
@@ -241,11 +243,13 @@ public class EventActivity extends AppCompatActivity {
                             startTime.get(Calendar.DAY_OF_MONTH),
                             startTime.get(Calendar.YEAR)
                     ));
+                    startDateText.setTag(startTime.getTimeInMillis());
                     startTimeText.setText(String.format(Locale.US,
                             "%02d:%02d",
                             startTime.get(Calendar.HOUR_OF_DAY),
                             startTime.get(Calendar.MINUTE))
                     );
+                    startTimeText.setTag(startTime.getTimeInMillis());
                     endDateText.setText(String.format(Locale.US,
                             "%s, %s %d, %d",
                             endTime.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
@@ -253,27 +257,19 @@ public class EventActivity extends AppCompatActivity {
                             endTime.get(Calendar.DAY_OF_MONTH),
                             endTime.get(Calendar.YEAR)
                     ));
+                    endDateText.setTag(endTime.getTimeInMillis());
                     endTimeText.setText(String.format(Locale.US,
                             "%02d:%02d",
                             endTime.get(Calendar.HOUR_OF_DAY),
                             endTime.get(Calendar.MINUTE))
                     );
-                    startDateText.setTag(startTime.getTimeInMillis());
-                    startTimeText.setTag(startTime.getTimeInMillis());
-                    endDateText.setTag(endTime.getTimeInMillis());
                     endTimeText.setTag(endTime.getTimeInMillis());
                     addListeners();
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                if (endTime.before(startTime)) {
-                    endTime.setTimeInMillis(startTime.getTimeInMillis());
-                    endTime.add(Calendar.HOUR_OF_DAY, 1);
-
+                } else if (endTime.before(startTime)) {
                     removeListeners();
+                    endTime.setTimeInMillis(startTime.getTimeInMillis());
+
+                    endTime.add(Calendar.HOUR_OF_DAY, 1);
                     endDateText.setText(String.format(Locale.US,
                             "%s, %s %d, %d",
                             endTime.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
@@ -623,10 +619,6 @@ public class EventActivity extends AppCompatActivity {
         event.setTitle(eventTitle.getText().toString());
         event.setStressLevel(stressLvl.getProgress());
 
-        Tools.copy_date((long) startDateText.getTag(), startTime);
-        Tools.copy_time((long) startTimeText.getTag(), startTime);
-        Tools.copy_date((long) endDateText.getTag(), endTime);
-        Tools.copy_time((long) endTimeText.getTag(), endTime);
         if (switchAllDay.isChecked()) {
             startTime.set(Calendar.HOUR_OF_DAY, 0);
             startTime.set(Calendar.MINUTE, 0);
@@ -797,6 +789,17 @@ public class EventActivity extends AppCompatActivity {
                         cal.get(Calendar.DAY_OF_MONTH),
                         cal.get(Calendar.YEAR)
                 ));
+
+                switch (view.getId()) {
+                    case R.id.txt_event_start_date:
+                        Tools.copy_date(cal.getTimeInMillis(), startTime);
+                        break;
+                    case R.id.txt_event_end_date:
+                        Tools.copy_date(cal.getTimeInMillis(), endTime);
+                        break;
+                    default:
+                        break;
+                }
             }
         };
         Calendar cal = Calendar.getInstance();
@@ -820,6 +823,17 @@ public class EventActivity extends AppCompatActivity {
                         cal.get(Calendar.HOUR_OF_DAY),
                         cal.get(Calendar.MINUTE))
                 );
+
+                switch (view.getId()) {
+                    case R.id.txt_event_start_time:
+                        Tools.copy_time(cal.getTimeInMillis(), startTime);
+                        break;
+                    case R.id.txt_event_end_time:
+                        Tools.copy_time(cal.getTimeInMillis(), endTime);
+                        break;
+                    default:
+                        break;
+                }
             }
         };
         Calendar cal = Calendar.getInstance();

@@ -11,6 +11,8 @@
     <string name="url_interv_create">http://165.246.43.97:4444/interv_crt</string>
     <string name="url_fetch_interv_system">http://165.246.43.97:4444/interv_syst</string>
     <string name="url_fetch_interv_peer">http://165.246.43.97:4444/interv_peer</string>
+    <string name="url_subm_feedback">http://165.246.43.97:4444/feedb_subm</string>
+    <string name="url_subm_evaluation">http://165.246.43.97:4444/eval_subm</string>
 
     <string name="app_name">Mind-Navigator application</string>
     <string name="month">Month</string>
@@ -111,6 +113,12 @@
     <string name="event_notification">Event notification:</string>
     <string name="log_out">Log out</string>
     <string name="notifications_settings">Notifications settings</string>
+    <string name="expected_stress_level">Expected stress level</string>
+    <string name="real_stress_level">Real stress level</string>
+    <string name="stress_incr_reason">The stress level has increased. What do you think the reason?</string>
+    <string name="caption">Write a caption…</string>
+    <string name="current_event_title">Event: %1$s</string>
+    <string name="event_done_check">Please, check if the event has been done.</string>
 
     <string-array name="months_array">
         <item>Jan</item>

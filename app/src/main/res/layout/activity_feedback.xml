@@ -56,66 +56,28 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginEnd="30dp"
-        android:layout_marginStart="30dp">
+        android:layout_marginStart="30dp"
+        android:orientation="vertical">
 
         <TextView
+            android:id="@+id/current_event_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Events of today"
-            android:typeface="monospace"
-            android:textColor="@color/black"
-            android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/current_event_title"
+            android:textColor="@color/black"
+            android:textSize="16sp"
             android:textStyle="bold"
-            android:textSize="16sp"/>
+            android:typeface="monospace" />
 
-        <LinearLayout
+        <CheckBox
+            android:id="@+id/event_done_check"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageButton
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="@drawable/img_arrow_left"/>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="5"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_datetime_view"
-                android:orientation="vertical"
-                android:padding="15dp">
-
-                <TextView
-                    android:id="@+id/txt_event_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:maxLines="2"
-                    android:text="@string/dummy"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/txt_event_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/dummy"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
-
-            <ImageButton
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="@drawable/img_arrow_right"/>
-
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/event_done_check" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -127,15 +89,15 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/sunday_long"
-                android:textColor="@color/black"
                 android:gravity="center"
+                android:text="@string/expected_stress_level"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:typeface="monospace" />
 
             <SeekBar
-                android:id="@+id/stressLvl_sunday"
+                android:id="@+id/expected_stresslvl_seekbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -183,15 +145,15 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/today"
-                android:textColor="@color/black"
                 android:gravity="center"
+                android:text="@string/real_stress_level"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:typeface="monospace" />
 
             <SeekBar
-                android:id="@+id/stressLvl_today"
+                android:id="@+id/real_stresslvl_seekbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -231,43 +193,41 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/stress_reason_view"
+            android:id="@+id/stress_incr_details_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginTop="15dp"
+            android:orientation="vertical"
             android:visibility="gone">
 
             <TextView
-                android:id="@+id/stress_reason"
+                android:id="@+id/stress_incr_reason_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="The stress level has increased. What do you think the reason?"
-                android:typeface="monospace"
-                android:textColor="@color/black"
                 android:layout_marginBottom="10dp"
+                android:text="@string/stress_incr_reason"
+                android:textColor="@color/black"
+                android:textSize="16sp"
                 android:textStyle="bold"
-                android:textSize="16sp"/>
+                android:typeface="monospace" />
 
             <EditText
-                android:id="@+id/intervention_text"
+                android:id="@+id/stress_incr_reason_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_solid_wrap"
                 android:gravity="top"
-                android:hint="Write a caption..."
+                android:hint="@string/caption"
                 android:inputType="textMultiLine"
+                android:lines="3"
                 android:maxLength="128"
                 android:maxLines="5"
-                android:lines="3"
                 android:padding="10dp"
-                android:paddingTop="5dp"/>
+                android:paddingTop="5dp" />
 
         </LinearLayout>
 
     </LinearLayout>
-
-
 
 
 </LinearLayout>
