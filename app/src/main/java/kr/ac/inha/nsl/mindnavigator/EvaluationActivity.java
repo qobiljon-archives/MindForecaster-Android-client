@@ -8,9 +8,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RadioGroup;
+import android.widget.CheckBox;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 public class EvaluationActivity extends AppCompatActivity {
 
@@ -22,14 +28,10 @@ public class EvaluationActivity extends AppCompatActivity {
     }
 
     //region Variables
-    private int stressValue;
-    static Object result = null;
-
-    Button[] tabButtons;
-    RadioGroup eventCompletionBtn;
-    RadioGroup intervCompletion, intervRecommendation;
-    private SeekBar stressLvl;
-    ViewGroup eventLayout, interventionLayout;
+    private Button[] tabButtons;
+    private CheckBox eventCompletionCheck, intervCompletionCheck, intervSharingCheck, intervBeforeEventCheck;
+    private SeekBar realStressLevel, intervEffectiveness;
+    private ViewGroup eventLayout, interventionLayout;
     //endregion
 
     private void init() {
@@ -38,21 +40,26 @@ public class EvaluationActivity extends AppCompatActivity {
                 findViewById(R.id.tab_intervention)
         };
 
-        eventCompletionBtn = findViewById(R.id.event_cempletion);
-        intervCompletion = findViewById(R.id.intervention_completion);
-        stressLvl = findViewById(R.id.stressLvl);
-        intervRecommendation = findViewById(R.id.intervention_recommendation);
+        eventCompletionCheck = findViewById(R.id.event_cempletion_check);
+        intervCompletionCheck = findViewById(R.id.intervention_completion);
+        realStressLevel = findViewById(R.id.real_stress_level_seek);
+        intervSharingCheck = findViewById(R.id.intervention_sharing_check);
         eventLayout = findViewById(R.id.event_layout);
         interventionLayout = findViewById(R.id.intervention_layout);
+        intervEffectiveness = findViewById(R.id.intervention_effectiveness);
+        intervBeforeEventCheck = findViewById(R.id.interv_before_event_check);
+        TextView eventTitle = findViewById(R.id.event_title_text_view);
+        eventTitle.setText(getString(R.string.current_event_title, EventActivity.event.getTitle()));
+        TextView intervTitle = findViewById(R.id.intervention_title_text);
+        intervTitle.setText(getString(R.string.current_interv_title, EventActivity.event.getIntervention()));
 
-        stressLvl.getProgressDrawable().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.green, null), PorterDuff.Mode.SRC_IN);
-        stressLvl.getThumb().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.green, null), PorterDuff.Mode.SRC_IN);
-        stressLvl.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        realStressLevel.getProgressDrawable().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.green, null), PorterDuff.Mode.SRC_IN);
+        realStressLevel.getThumb().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.green, null), PorterDuff.Mode.SRC_IN);
+        realStressLevel.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                stressLvl.getProgressDrawable().setColorFilter(Tools.stressLevelToColor(progress), PorterDuff.Mode.SRC_IN);
-                stressLvl.getThumb().setColorFilter(Tools.stressLevelToColor(progress), PorterDuff.Mode.SRC_IN);
-                stressValue = progress;
+                realStressLevel.getProgressDrawable().setColorFilter(Tools.stressLevelToColor(progress), PorterDuff.Mode.SRC_IN);
+                realStressLevel.getThumb().setColorFilter(Tools.stressLevelToColor(progress), PorterDuff.Mode.SRC_IN);
             }
 
             @Override
@@ -94,40 +101,78 @@ public class EvaluationActivity extends AppCompatActivity {
     }
 
     public void saveClick(View view) {
-        switch (eventCompletionBtn.getCheckedRadioButtonId()) {
-            case R.id.btn_did_event:
-                //TODO: btn "I did it" clicked; Do smth
-                break;
-            case R.id.btn_didnt_do_event:
-                //TODO: btn "I did not do it" clicked; Do smth
-                break;
-            default:
-                break;
-        }
+        if (Tools.isNetworkAvailable(this))
+            Tools.execute(new MyRunnable(
+                    getString(R.string.url_eval_subm),
+                    SignInActivity.loginPrefs.getString(SignInActivity.username, null),
+                    SignInActivity.loginPrefs.getString(SignInActivity.password, null)
+            ) {
+                @Override
+                public void run() {
+                    String url = (String) args[0];
+                    String username = (String) args[1];
+                    String password = (String) args[2];
 
-        switch (intervCompletion.getCheckedRadioButtonId()) {
-            case R.id.btn_did_intervention:
-                //TODO: btn "I did it" clicked; Do smth
-                break;
-            case R.id.btn_didnt_do_intervention:
-                //TODO: btn "I did not do it" clicked; Do smth
-                break;
-            default:
-                break;
-        }
+                    JSONObject body = new JSONObject();
+                    try {
+                        body.put("username", username);
+                        body.put("password", password);
+                        body.put("eventId", EventActivity.event.getEventId());
+                        body.put("interventionName", EventActivity.event.getIntervention());
+                        body.put("startTime", EventActivity.event.getStartTime().getTimeInMillis());
+                        body.put("endTime", EventActivity.event.getEndTime().getTimeInMillis());
+                        body.put("realStressLevel", realStressLevel.getProgress());
+                        body.put("eventDone", eventCompletionCheck.isChecked());
+                        body.put("interventionDone", intervCompletionCheck.isChecked());
+                        body.put("interventionDoneBefore", intervBeforeEventCheck.isChecked());
+                        body.put("sharedIntervention", intervSharingCheck.isChecked());
+                        body.put("intervEffectiveness", intervEffectiveness.getProgress());
 
-        switch (intervRecommendation.getCheckedRadioButtonId()) {
-            case R.id.btn_yes_intervention:
-                //TODO: btn "Yes" clicked; Do smth
-                break;
-            case R.id.btn_no_intervention:
-                //TODO: btn "No" clicked; Do smth
-                break;
-            default:
-                break;
-        }
-        setResult(Activity.RESULT_OK);
-        finish();
-        overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
+                        JSONObject res = new JSONObject(Tools.post(url, body));
+                        switch (res.getInt("result")) {
+                            case Tools.RES_OK:
+                                runOnUiThread(new MyRunnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(EvaluationActivity.this, "Evaluation successfully submitted, thank you!", Toast.LENGTH_SHORT).show();
+
+                                        setResult(Activity.RESULT_OK);
+                                        finish();
+                                        overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
+                                    }
+                                });
+                                break;
+                            case Tools.RES_FAIL:
+                                runOnUiThread(new MyRunnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(EvaluationActivity.this, "Failed to submit the evaluation.", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                break;
+                            case Tools.RES_SRV_ERR:
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(EvaluationActivity.this, "Failure occurred while processing the request. (SERVER SIDE)", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                break;
+                            default:
+                                break;
+                        }
+                    } catch (JSONException | IOException e) {
+                        e.printStackTrace();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(EvaluationActivity.this, "Failed to proceed due to an error in connection with server.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+            });
+        else
+            Toast.makeText(this, "Please connect to a network first!", Toast.LENGTH_SHORT).show();
     }
 }

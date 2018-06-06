@@ -3,7 +3,6 @@ package kr.ac.inha.nsl.mindnavigator;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,7 +82,7 @@ public class NotifSettingsDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
 
-                Tools.addSundayNotif(getActivity(), sunday, "Do you have a new schedule for the next week?");
+                Tools.addSundayNotif(getActivity(), sunday);
                 Tools.addDailyNotif(getActivity(), everyMorning, "Do you have a new schedule today?");
                 Tools.addDailyNotif(getActivity(), everyEvening, "Please, evaluate today's events!");
                 dismiss();

@@ -300,12 +300,12 @@ public class Tools {
         dailyNotifs.put((int) when.getTimeInMillis(), pendingIntent);
     }
 
-    static void addSundayNotif(Context context, Calendar when, String text) {
+    static void addSundayNotif(Context context, Calendar when) {
 
         Log.e("SUNDAY", when.getTime() + "");
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiverEverySunday.class);
-        intent.putExtra("Content", text);
+        intent.putExtra("Content", "Do you have a new schedule for the next week?");
         intent.putExtra("notification_id", when.getTimeInMillis());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int) when.getTimeInMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         if (alarmManager != null)
@@ -324,7 +324,6 @@ public class Tools {
         eventNotifs.put((int) event_id, pendingIntent);
     }
 
-    //TODO: Interv notification is not finished
     static void addIntervNotif(Context context, Calendar when, long event_id, String intervText, String eventText) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiverIntervention.class);
@@ -332,10 +331,8 @@ public class Tools {
         intent.putExtra("Content2", eventText);
         intent.putExtra("notification_id", event_id);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int) event_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        Log.e("INTERV NOTIF TIME", when.getTime() + "");
         if (alarmManager != null)
             alarmManager.set(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), pendingIntent);
-        Log.e("INTERV NOTIF ID", (int) event_id + "");
         intervNotifs.put((int) event_id, pendingIntent);
     }
 
@@ -436,6 +433,7 @@ class Event {
     private String stressCause;
     private int repeatMode;
     private short eventReminder;
+    private boolean evaluated;
     //endregion
 
     static void setCurrentEventBank(Event[] bank) {
@@ -530,12 +528,12 @@ class Event {
         this.interventionReminder = interventionReminder;
     }
 
-    void setEventReminder(short eventReminder) {
-        this.eventReminder = eventReminder;
-    }
-
     short getInterventionReminder() {
         return interventionReminder;
+    }
+
+    void setEventReminder(short eventReminder) {
+        this.eventReminder = eventReminder;
     }
 
     short getEventReminder() {
@@ -571,17 +569,20 @@ class Event {
             startTime.setTimeInMillis(eventJson.getLong("startTime"));
             endTime.setTimeInMillis(eventJson.getLong("endTime"));
 
-            id = eventJson.getLong("id");
+            id = eventJson.getLong("eventId");
             setTitle(eventJson.getString("title"));
             setStressLevel(eventJson.getInt("stressLevel"));
             setStartTime(startTime);
             setEndTime(endTime);
             setIntervention(eventJson.getString("intervention"));
+            Log.e("INTERV FROM JSON", eventJson.getString("intervention"));
             setInterventionReminder((short) eventJson.getInt("interventionReminder"));
             setStressType(eventJson.getString("stressType"));
             setStressCause(eventJson.getString("stressCause"));
             setRepeatMode(eventJson.getInt("repeatMode"));
             setEventReminder((short) eventJson.getInt("eventReminder"));
+            setEventReminder((short) eventJson.getInt("eventReminder"));
+            setEvaluated(eventJson.getBoolean("isEvaluated"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -624,5 +625,13 @@ class Event {
 
 
         }
+    }
+
+    private void setEvaluated(boolean evaluated) {
+        this.evaluated = evaluated;
+    }
+
+    public boolean isEvaluated() {
+        return evaluated;
     }
 }

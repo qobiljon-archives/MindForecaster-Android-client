@@ -95,92 +95,29 @@
                 android:layout_marginStart="30dp"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/event_title_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="15dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="2"
-                        android:text="@string/dummy"
-                        android:textColor="@color/black"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/dummy"
-                        android:textSize="16sp" />
-                </LinearLayout>
+                    android:maxLines="2"
+                    android:padding="15dp"
+                    android:text="@string/dummy"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@android:color/darker_gray" />
 
-                <LinearLayout
+                <CheckBox
+                    android:id="@+id/event_cempletion_check"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingBottom="15dp"
-                    android:paddingTop="15dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/event_completion"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:typeface="monospace" />
-
-                    <RadioGroup
-                        android:id="@+id/event_cempletion"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:checkedButton="@+id/btn_did_event"
-                        android:orientation="vertical">
-
-                        <RadioButton
-                            android:id="@+id/btn_did_event"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="5dp"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginTop="10dp"
-                            android:background="@drawable/bg_radio_button"
-                            android:button="@android:color/transparent"
-                            android:paddingBottom="5dp"
-                            android:paddingTop="5dp"
-                            android:text="@string/did_it"
-                            android:textAlignment="center"
-                            android:textAllCaps="false"
-                            android:textColor="@color/black"
-                            android:textSize="15sp" />
-
-                        <RadioButton
-                            android:id="@+id/btn_didnt_do_event"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="5dp"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginTop="10dp"
-                            android:background="@drawable/bg_radio_button"
-                            android:button="@android:color/transparent"
-                            android:paddingBottom="5dp"
-                            android:paddingTop="5dp"
-                            android:text="@string/did_not_it"
-                            android:textAlignment="center"
-                            android:textAllCaps="false"
-                            android:textColor="@color/black"
-                            android:textSize="15sp" />
-
-                    </RadioGroup>
-
-                </LinearLayout>
+                    android:paddingTop="15dp"
+                    android:text="@string/event_completion" />
 
                 <View
                     android:layout_width="match_parent"
@@ -204,7 +141,7 @@
                         android:typeface="monospace" />
 
                     <SeekBar
-                        android:id="@+id/stressLvl"
+                        android:id="@+id/real_stress_level_seek"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -249,97 +186,43 @@
                 android:id="@+id/intervention_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="30dp"
-                android:layout_marginStart="30dp"
                 android:orientation="vertical"
+                android:padding="15dp"
                 android:visibility="gone">
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/intervention_title_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="15dp">
+                    android:maxLines="2"
+                    android:padding="15dp"
+                    android:text="@string/dummy"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="2"
-                        android:text="@string/dummy"
-                        android:textColor="@color/black"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/dummy"
-                        android:textSize="16sp" />
-                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@android:color/darker_gray" />
 
-                <LinearLayout
+                <CheckBox
+                    android:id="@+id/intervention_completion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingBottom="15dp"
-                    android:paddingTop="15dp">
+                    android:paddingTop="15dp"
+                    android:text="@string/interv_done" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/interv_completion"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:typeface="monospace" />
-
-                    <RadioGroup
-                        android:id="@+id/intervention_completion"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:checkedButton="@+id/btn_did_intervention"
-                        android:orientation="vertical">
-
-                        <RadioButton
-                            android:id="@+id/btn_did_intervention"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="5dp"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginTop="10dp"
-                            android:background="@drawable/bg_radio_button"
-                            android:button="@android:color/transparent"
-                            android:paddingBottom="5dp"
-                            android:paddingTop="5dp"
-                            android:text="@string/did_it"
-                            android:textAlignment="center"
-                            android:textAllCaps="false"
-                            android:textColor="@color/black"
-                            android:textSize="15sp" />
-
-                        <RadioButton
-                            android:id="@+id/btn_didnt_do_intervention"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="5dp"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginTop="10dp"
-                            android:background="@drawable/bg_radio_button"
-                            android:button="@android:color/transparent"
-                            android:paddingBottom="5dp"
-                            android:paddingTop="5dp"
-                            android:text="@string/did_not_it"
-                            android:textAlignment="center"
-                            android:textAllCaps="false"
-                            android:textColor="@color/black"
-                            android:textSize="15sp" />
-
-                    </RadioGroup>
-
-                </LinearLayout>
+                <CheckBox
+                    android:id="@+id/interv_before_event_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp"
+                    android:text="@string/interv_before_event" />
 
                 <View
                     android:layout_width="match_parent"
@@ -363,7 +246,7 @@
                         android:typeface="monospace" />
 
                     <SeekBar
-                        android:id="@+id/intervention_quality"
+                        android:id="@+id/intervention_effectiveness"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -401,67 +284,14 @@
                     android:layout_height="1dp"
                     android:background="@android:color/darker_gray" />
 
-                <LinearLayout
+                <CheckBox
+                    android:id="@+id/intervention_sharing_check"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingBottom="15dp"
-                    android:paddingTop="15dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/interv_recommendation"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:typeface="monospace" />
-
-                    <RadioGroup
-                        android:id="@+id/intervention_recommendation"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:checkedButton="@+id/btn_yes_intervention"
-                        android:orientation="vertical">
-
-                        <RadioButton
-                            android:id="@+id/btn_yes_intervention"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="5dp"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginTop="10dp"
-                            android:background="@drawable/bg_radio_button"
-                            android:button="@android:color/transparent"
-                            android:paddingBottom="5dp"
-                            android:paddingTop="5dp"
-                            android:text="@string/yes"
-                            android:textAlignment="center"
-                            android:textAllCaps="false"
-                            android:textColor="@color/black"
-                            android:textSize="15sp" />
-
-                        <RadioButton
-                            android:id="@+id/btn_no_intervention"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="5dp"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginTop="10dp"
-                            android:background="@drawable/bg_radio_button"
-                            android:button="@android:color/transparent"
-                            android:paddingBottom="5dp"
-                            android:paddingTop="5dp"
-                            android:text="@string/no"
-                            android:textAlignment="center"
-                            android:textAllCaps="false"
-                            android:textColor="@color/black"
-                            android:textSize="15sp" />
-
-                    </RadioGroup>
-
-                </LinearLayout>
-
+                    android:paddingTop="15dp"
+                    android:text="@string/interv_recommendation" />
 
             </LinearLayout>
 

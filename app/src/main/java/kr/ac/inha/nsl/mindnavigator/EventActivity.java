@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -48,45 +49,41 @@ public class EventActivity extends AppCompatActivity {
                 case INTERVENTION_ACTIVITY:
                     event.setIntervention(InterventionsActivity.result);
                     event.setInterventionReminder(InterventionsActivity.resultSchedule);
-                    InterventionsActivity.result = null;
+
                     selectedInterv.setText(event.getIntervention());
-                    //region Setting a text for intervention reminder
-                    String text = null;
                     switch (InterventionsActivity.resultSchedule) {
                         case -1440:
-                            text = getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_before));
+                            intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_before)));
                             break;
                         case -60:
-                            text = getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_before));
+                            intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_before)));
                             break;
                         case -30:
-                            text = getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._30_minutes_before));
+                            intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._30_minutes_before)));
                             break;
                         case -10:
-                            text = getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_before));
+                            intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_before)));
                             break;
                         case 1440:
-                            text = getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_after));
+                            intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_after)));
                             break;
                         case 60:
-                            text = getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_after));
+                            intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_after)));
                             break;
                         case 30:
-                            text = getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._30_minutes_after));
+                            intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._30_minutes_after)));
                             break;
                         case 10:
-                            text = getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_after));
+                            intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_after)));
                             break;
                     }
-                    //endregion
-                    intervReminderTxt.setText(text);
                     intervReminderTxt.setVisibility(View.VISIBLE);
                     break;
                 case EVALUATION_ACTIVITY:
-                    // TODO: Do something
+                    finish();
+                    overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
                     break;
                 case FEEDBACK_ACTIVITY:
-                    // TODO: Do something
                     break;
                 default:
                     break;
@@ -103,7 +100,16 @@ public class EventActivity extends AppCompatActivity {
     private ViewGroup stressLevelDetails;
     private ViewGroup interventionDetails;
     private ViewGroup repeatDetails, notificationDetails;
-    private TextView startDateText, startTimeText, endDateText, endTimeText, selectedInterv, intervReminderTxt, expandDetails, saveButton, cancelButton, deleteButton;
+    private TextView startDateText;
+    private TextView startTimeText;
+    private TextView endDateText;
+    private TextView endTimeText;
+    private TextView selectedInterv;
+    private TextView intervReminderTxt;
+    private TextView expandDetails;
+    private TextView saveButton;
+    private TextView cancelButton;
+    private TextView deleteButton;
     private RadioGroup stressTypeGroup, repeatModeGroup, eventNotificationGroup;
     private EditText eventTitle, stressCause;
     private Switch switchAllDay;
@@ -120,7 +126,7 @@ public class EventActivity extends AppCompatActivity {
         startTimeText = findViewById(R.id.txt_event_start_time);
         endDateText = findViewById(R.id.txt_event_end_date);
         endTimeText = findViewById(R.id.txt_event_end_time);
-        stressLvl = findViewById(R.id.stressLvl);
+        stressLvl = findViewById(R.id.real_stress_level_seek);
         inactiveLayout = findViewById(R.id.layout_to_be_inactive);
         stressTypeGroup = findViewById(R.id.stress_type_group);
         stressCause = findViewById(R.id.txt_stress_cause);
@@ -140,24 +146,11 @@ public class EventActivity extends AppCompatActivity {
         intervEditButton = findViewById(R.id.interv_edit_button);
 
         if (getIntent().hasExtra("eventId")) {
+            // Editing an existing event
             event = Event.getEventById(getIntent().getLongExtra("eventId", 0));
             startTime = (Calendar) event.getStartTime().clone();
             endTime = (Calendar) event.getEndTime().clone();
-        } else {
-            event = new Event(0);
-            startTime = Calendar.getInstance();
-            endTime = Calendar.getInstance();
-        }
-        if (getIntent().hasExtra("selectedDayMillis")) {
-            startTime.setTimeInMillis(getIntent().getLongExtra("selectedDayMillis", 0));
-            endTime.setTimeInMillis(startTime.getTimeInMillis());
-            endTime.add(Calendar.HOUR_OF_DAY, 1);
-        }
 
-        if (event.isNewEvent())
-            deleteButton.setVisibility(View.GONE);
-        else {
-            // Editing an existing event
             switchAllDay.setEnabled(false);
             eventTitle.setEnabled(false);
             startDateText.setEnabled(false);
@@ -174,15 +167,33 @@ public class EventActivity extends AppCompatActivity {
                 repeatModeGroup.getChildAt(n).setEnabled(false);
             intervEditButton.setEnabled(false);
 
+            // recover existing values
+            fillOutExistingValues();
+
             if (event.getEndTime().before(Calendar.getInstance())) {
                 saveButton.setVisibility(View.GONE);
                 cancelButton.setVisibility(View.GONE);
                 postEventLayout.setVisibility(View.VISIBLE);
+
+                if (event.isEvaluated())
+                    findViewById(R.id.feedback_text).setVisibility(View.VISIBLE);
+
                 eventTitle.setFocusable(false);
                 eventTitle.clearFocus();
             } else {
                 saveButton.setText(getString(R.string.edit));
                 cancelButton.setVisibility(View.GONE);
+            }
+        } else {
+            event = new Event(0);
+            startTime = Calendar.getInstance();
+            endTime = Calendar.getInstance();
+            deleteButton.setVisibility(View.GONE);
+
+            if (getIntent().hasExtra("selectedDayMillis")) {
+                startTime.setTimeInMillis(getIntent().getLongExtra("selectedDayMillis", 0));
+                endTime.setTimeInMillis(startTime.getTimeInMillis());
+                endTime.add(Calendar.HOUR_OF_DAY, 1);
             }
         }
 
@@ -337,12 +348,12 @@ public class EventActivity extends AppCompatActivity {
                 }
             }
         });
-
-        if (!event.isNewEvent())
-            fillOutExistingValues();
     }
 
     private void fillOutExistingValues() {
+        InterventionsActivity.result = event.getIntervention();
+        InterventionsActivity.resultSchedule = event.getInterventionReminder();
+
         eventTitle.setText(event.getTitle());
         stressLvl.setProgress(event.getStressLevel());
         switch (event.getStressType()) {
@@ -399,7 +410,6 @@ public class EventActivity extends AppCompatActivity {
         switch (event.getInterventionReminder()) {
             case -1440:
                 intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_before)));
-
                 break;
             case -60:
                 intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_before)));
@@ -470,8 +480,37 @@ public class EventActivity extends AppCompatActivity {
         } else {
             interventionDetails.setVisibility(View.VISIBLE);
             optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
-            if (selectedInterv.length() > 1)
+
+            if (event.getIntervention() != null && event.getIntervention().length() > 0) {
+                switch (event.getInterventionReminder()) {
+                    case -1440:
+                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_before)));
+                        break;
+                    case -60:
+                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_before)));
+                        break;
+                    case -30:
+                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._30_minutes_before)));
+                        break;
+                    case -10:
+                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_before)));
+                        break;
+                    case 1440:
+                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_after)));
+                        break;
+                    case 60:
+                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_after)));
+                        break;
+                    case 30:
+                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._30_minutes_after)));
+                        break;
+                    case 10:
+                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_after)));
+                        break;
+                }
                 intervReminderTxt.setVisibility(View.VISIBLE);
+            } else
+                intervReminderTxt.setVisibility(View.GONE);
         }
 
     }
@@ -489,9 +528,76 @@ public class EventActivity extends AppCompatActivity {
     }
 
     public void feedbackClick(View view) {
-        Intent intent = new Intent(this, FeedbackActivity.class);
-        startActivityForResult(intent, FEEDBACK_ACTIVITY);
-        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+        if (Tools.isNetworkAvailable(this))
+            Tools.execute(new MyRunnable(
+                    getString(R.string.url_eval_fetch),
+                    SignInActivity.loginPrefs.getString(SignInActivity.username, null)
+            ) {
+                @Override
+                public void run() {
+                    String url = (String) args[0];
+                    String username = (String) args[1];
+
+                    JSONObject body = new JSONObject();
+                    try {
+                        body.put("username", username);
+                        body.put("event_id", event.getEventId());
+
+                        JSONObject res = new JSONObject(Tools.post(url, body));
+                        JSONObject eventEval = res.getJSONObject("evaluation");
+                        switch (res.getInt("result")) {
+                            case Tools.RES_OK:
+                                runOnUiThread(new MyRunnable(
+                                        eventEval.get("eventDone"),
+                                        eventEval.get("realStressLevel")
+                                ) {
+                                    @Override
+                                    public void run() {
+                                        boolean eventDone = (boolean) args[0];
+                                        int realStressLevel = (int) args[1];
+
+                                        Intent intent = new Intent(EventActivity.this, FeedbackActivity.class);
+                                        intent.putExtra("eventDone", eventDone);
+                                        intent.putExtra("realStressLevel", realStressLevel);
+                                        startActivityForResult(intent, FEEDBACK_ACTIVITY);
+                                        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                                    }
+                                });
+                                break;
+                            case Tools.RES_FAIL:
+                                runOnUiThread(new MyRunnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(EventActivity.this, "Failed to fetch evaluation for this event.", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                break;
+                            case Tools.RES_SRV_ERR:
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(EventActivity.this, "Failure occurred while processing the request. (SERVER SIDE)", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                break;
+                            default:
+                                break;
+                        }
+                    } catch (JSONException | IOException e) {
+                        e.printStackTrace();
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(EventActivity.this, "Failed to proceed due to an error in connection with server.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+            });
+        else {
+            Toast.makeText(this, "Please connect to a network first!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void cancelClick(View view) {
@@ -678,52 +784,49 @@ public class EventActivity extends AppCompatActivity {
                 break;
         }
 
-        Event event = EventActivity.event;
         if (Tools.isNetworkAvailable(this))
             Tools.execute(new MyRunnable(
-                    event.isNewEvent() ? getString(R.string.url_event_create) : getString(R.string.url_event_edit),
+                    EventActivity.event.isNewEvent() ? getString(R.string.url_event_create) : getString(R.string.url_event_edit),
                     SignInActivity.loginPrefs.getString(SignInActivity.username, null),
-                    SignInActivity.loginPrefs.getString(SignInActivity.password, null),
-                    event
+                    SignInActivity.loginPrefs.getString(SignInActivity.password, null)
             ) {
                 @Override
                 public void run() {
                     String url = (String) args[0];
                     String username = (String) args[1];
                     String password = (String) args[2];
-                    Event event = (Event) args[3];
 
                     JSONObject body = new JSONObject();
                     try {
                         body.put("username", username);
                         body.put("password", password);
-                        body.put("event_id", event.getEventId());
-                        body.put("title", event.getTitle());
-                        body.put("stressLevel", event.getStressLevel());
-                        body.put("startTime", event.getStartTime().getTimeInMillis());
-                        body.put("endTime", event.getEndTime().getTimeInMillis());
-                        if (event.getIntervention() == null) {
+                        body.put("event_id", EventActivity.event.getEventId());
+                        body.put("title", EventActivity.event.getTitle());
+                        body.put("stressLevel", EventActivity.event.getStressLevel());
+                        body.put("startTime", EventActivity.event.getStartTime().getTimeInMillis());
+                        body.put("endTime", EventActivity.event.getEndTime().getTimeInMillis());
+                        if (EventActivity.event.getIntervention() == null) {
                             body.put("intervention", "");
                             body.put("interventionReminder", 0);
                         } else {
-                            body.put("intervention", event.getIntervention());
-                            body.put("interventionReminder", event.getInterventionReminder());
+                            body.put("intervention", EventActivity.event.getIntervention());
+                            body.put("interventionReminder", EventActivity.event.getInterventionReminder());
+
+                            Log.e("SENDING STR", EventActivity.event.getIntervention());
+                            Log.e("SENDING INT", EventActivity.event.getInterventionReminder() + "");
                         }
-                        body.put("stressType", event.getStressType());
-                        body.put("stressCause", event.getStressCause());
-                        body.put("repeatMode", event.getRepeatMode());
-                        body.put("eventReminder", event.getEventReminder());
+                        body.put("stressType", EventActivity.event.getStressType());
+                        body.put("stressCause", EventActivity.event.getStressCause());
+                        body.put("repeatMode", EventActivity.event.getRepeatMode());
+                        body.put("eventReminder", EventActivity.event.getEventReminder());
 
                         JSONObject res = new JSONObject(Tools.post(url, body));
                         switch (res.getInt("result")) {
                             case Tools.RES_OK:
-                                runOnUiThread(new MyRunnable(
-                                        event.isNewEvent()
-                                ) {
+                                runOnUiThread(new MyRunnable() {
                                     @Override
                                     public void run() {
-                                        boolean isNewEvent = (boolean) args[0];
-                                        Toast.makeText(EventActivity.this, isNewEvent ? "Event successfully created!" : "Event has been edited.", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(EventActivity.this, EventActivity.event.isNewEvent() ? "Event successfully created!" : "Event has been edited.", Toast.LENGTH_SHORT).show();
 
                                         setResult(Activity.RESULT_OK);
                                         finish();
@@ -732,13 +835,10 @@ public class EventActivity extends AppCompatActivity {
                                 });
                                 break;
                             case Tools.RES_FAIL:
-                                runOnUiThread(new MyRunnable(
-                                        event.isNewEvent()
-                                ) {
+                                runOnUiThread(new MyRunnable() {
                                     @Override
                                     public void run() {
-                                        boolean isNewEvent = (boolean) args[0];
-                                        Toast.makeText(EventActivity.this, isNewEvent ? "Failed to create the event." : "Failed to edit the event.", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(EventActivity.this, EventActivity.event.isNewEvent() ? "Failed to create the event." : "Failed to edit the event.", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                                 break;

@@ -9,10 +9,11 @@
     <string name="url_event_delete">http://165.246.43.97:4444/event_del</string>
     <string name="url_events_fetch">http://165.246.43.97:4444/events_fetch</string>
     <string name="url_interv_create">http://165.246.43.97:4444/interv_crt</string>
-    <string name="url_fetch_interv_system">http://165.246.43.97:4444/interv_syst</string>
-    <string name="url_fetch_interv_peer">http://165.246.43.97:4444/interv_peer</string>
-    <string name="url_subm_feedback">http://165.246.43.97:4444/feedb_subm</string>
-    <string name="url_subm_eval">http://165.246.43.97:4444/eval_subm</string>
+    <string name="url_interv_system_fetch">http://165.246.43.97:4444/interv_syst</string>
+    <string name="url_interv_peer_fetch">http://165.246.43.97:4444/interv_peer</string>
+    <string name="url_feedback_subm">http://165.246.43.97:4444/feedb_subm</string>
+    <string name="url_eval_subm">http://165.246.43.97:4444/eval_subm</string>
+    <string name="url_eval_fetch">http://165.246.43.97:4444/eval_fetch</string>
 
     <string name="app_name">Mind-Navigator application</string>
     <string name="month">Month</string>
@@ -67,8 +68,6 @@
     <string name="event_details">Event details</string>
     <string name="event">Event</string>
     <string name="intervention">Intervention</string>
-    <string name="did_it">I did it</string>
-    <string name="did_not_it">I did not do it</string>
     <string name="bad">Bad</string>
     <string name="good">Good</string>
     <string name="yes">Yes</string>
@@ -89,11 +88,11 @@
     <string name="sunday_long">Sunday</string>
     <string name="event_title_hint">Title</string>
     <string name="text_image">Image of a letter</string>
-    <string name="event_completion">Did you complete this event?</string>
-    <string name="ask_stress_level">How stressful was the event?</string>
-    <string name="interv_completion">Did you perform this intervention?</string>
-    <string name="interv_effectiveness">How effective was the intervention?</string>
-    <string name="interv_recommendation">Do you want to recommend your intervention to others?</string>
+    <string name="event_completion">Event has been done</string>
+    <string name="ask_stress_level">How stressful was the event in real?</string>
+    <string name="interv_done">Please check if this intervention has been done.</string>
+    <string name="interv_effectiveness">How effective was the intervention in real?</string>
+    <string name="interv_recommendation">Please check if you would like this intervention to be shared among peers.</string>
     <string name="intervention_scheduling">Intervention scheduling:</string>
     <string name="before_event">Before event</string>
     <string name="after_ecvent">After ecvent</string>
@@ -114,7 +113,8 @@
     <string name="log_out">Log out</string>
     <string name="notifications_settings">Notifications settings</string>
     <string name="current_event_title">Event: %1$s</string>
-    <string name="event_done_check">Please check if this event has been done.</string>
+    <string name="current_interv_title">Intervention: %1$s</string>
+    <string name="event_done_check">Current event has been done.</string>
     <string name="expected_stress_level">Expected stress level</string>
     <string name="real_stress_level">Real (resulting) stress level</string>
     <string name="stress_incr_reason">Please, describe here what you think was the reason that made the real stress be higher than expected one.</string>
@@ -122,6 +122,7 @@
     <string name="sunday_time">Sunday evaluation reminder</string>
     <string name="every_morning_time">Every-morning reminder</string>
     <string name="every_evening_time">Every-evening reminder</string>
+    <string name="interv_before_event">Please check if intervention has been done before the event, or uncheck if it has been done after.</string>
 
     <string-array name="months_array">
         <item>Jan</item>

@@ -80,7 +80,7 @@
                 android:id="@+id/event_done_check"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:checked="true"
+                android:enabled="false"
                 android:text="@string/event_done_check" />
 
             <LinearLayout
@@ -105,7 +105,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:max="100" />
+                    android:enabled="false"
+                    android:max="100"
+                    android:progress="50" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -161,7 +163,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:max="100" />
+                    android:enabled="false"
+                    android:max="100"
+                    android:progress="50" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

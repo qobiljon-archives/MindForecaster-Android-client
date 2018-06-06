@@ -26,52 +26,49 @@ public class FeedbackActivity extends AppCompatActivity {
         init();
     }
 
-    //region Variables
-    private SeekBar expectedStressLevel;
-    private SeekBar realStressLevel;
-    private CheckBox eventDone;
+    // region Variables
     private EditText stressIncrReason;
-    private ViewGroup stressIncrDetails;
     //endregion
 
     public void init() {
-        expectedStressLevel = findViewById(R.id.expected_stresslvl_seekbar);
-        realStressLevel = findViewById(R.id.real_stresslvl_seekbar);
-        stressIncrDetails = findViewById(R.id.stress_incr_details_view);
-        eventDone = findViewById(R.id.event_done_check);
+        int realStressLevel = 0;
+        boolean eventDone = false;
+        if (getIntent().hasExtra("realStressLevel"))
+            realStressLevel = getIntent().getIntExtra("realStressLevel", 0);
+        if (getIntent().hasExtra("eventDone"))
+            eventDone = getIntent().getBooleanExtra("eventDone", false);
+
+        SeekBar expectedStressLevelSeek = findViewById(R.id.expected_stresslvl_seekbar);
+        SeekBar realStressLevelSeek = findViewById(R.id.real_stresslvl_seekbar);
+        ViewGroup stressIncrDetails = findViewById(R.id.stress_incr_details_view);
+        CheckBox eventDoneCheck = findViewById(R.id.event_done_check);
         TextView eventTitle = findViewById(R.id.current_event_title);
         stressIncrReason = findViewById(R.id.stress_incr_reason_edit);
 
         eventTitle.setText(getResources().getString(R.string.current_event_title, EventActivity.event.getTitle()));
 
-        expectedStressLevel.setEnabled(false);
-        expectedStressLevel.setProgress(EventActivity.event.getStressLevel());
+        // check 'event is done' checkbox if event has been done
+        eventDoneCheck.setEnabled(false);
+        eventDoneCheck.setChecked(eventDone);
+
+        // set expected stress level from event variable
+        expectedStressLevelSeek.setEnabled(false);
+        expectedStressLevelSeek.setProgress(EventActivity.event.getStressLevel());
         int expectedStressColor = Tools.stressLevelToColor(EventActivity.event.getStressLevel());
-        expectedStressLevel.getProgressDrawable().setColorFilter(expectedStressColor, PorterDuff.Mode.SRC_IN);
-        expectedStressLevel.getThumb().setColorFilter(expectedStressColor, PorterDuff.Mode.SRC_IN);
+        expectedStressLevelSeek.getProgressDrawable().setColorFilter(expectedStressColor, PorterDuff.Mode.SRC_IN);
+        expectedStressLevelSeek.getThumb().setColorFilter(expectedStressColor, PorterDuff.Mode.SRC_IN);
 
-        realStressLevel.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                realStressLevel.getProgressDrawable().setColorFilter(Tools.stressLevelToColor(progress), PorterDuff.Mode.SRC_IN);
-                realStressLevel.getThumb().setColorFilter(Tools.stressLevelToColor(progress), PorterDuff.Mode.SRC_IN);
+        // set real stress level from evaluation
+        realStressLevelSeek.setEnabled(false);
+        realStressLevelSeek.setProgress(realStressLevel);
+        realStressLevelSeek.getProgressDrawable().setColorFilter(Tools.stressLevelToColor(realStressLevel), PorterDuff.Mode.SRC_IN);
+        realStressLevelSeek.getThumb().setColorFilter(Tools.stressLevelToColor(realStressLevel), PorterDuff.Mode.SRC_IN);
 
-                if (expectedStressLevel.getProgress() < realStressLevel.getProgress())
-                    stressIncrDetails.setVisibility(View.VISIBLE);
-                else
-                    stressIncrDetails.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
+        // compare and get expectation and reality discrepancy details if needed
+        if (expectedStressLevelSeek.getProgress() < realStressLevelSeek.getProgress())
+            stressIncrDetails.setVisibility(View.VISIBLE);
+        else
+            stressIncrDetails.setVisibility(View.GONE);
     }
 
     public void cancelClick(View view) {
@@ -83,7 +80,7 @@ public class FeedbackActivity extends AppCompatActivity {
     public void saveClick(View view) {
         if (Tools.isNetworkAvailable(this))
             Tools.execute(new MyRunnable(
-                    getString(R.string.url_subm_feedback),
+                    getString(R.string.url_feedback_subm),
                     SignInActivity.loginPrefs.getString(SignInActivity.username, null),
                     SignInActivity.loginPrefs.getString(SignInActivity.password, null)
             ) {
@@ -98,9 +95,7 @@ public class FeedbackActivity extends AppCompatActivity {
                         body.put("username", username);
                         body.put("password", password);
                         body.put("eventId", EventActivity.event.getEventId());
-                        body.put("realStressLevel", realStressLevel.getProgress());
                         body.put("stressIncrReason", stressIncrReason.getText().toString());
-                        body.put("done", eventDone.isChecked());
 
                         JSONObject res = new JSONObject(Tools.post(url, body));
                         switch (res.getInt("result")) {

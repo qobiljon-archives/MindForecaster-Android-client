@@ -101,8 +101,6 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("CutPasteId")
     public void updateCalendarView() {
-        Log.e("UPDATE", "CALLED");
-
         // Update the value of year and month according to the currently selected month
         monthName.setText(months[currentCal.get(Calendar.MONTH)]);
         year.setText(String.valueOf(currentCal.get(Calendar.YEAR)));
@@ -212,21 +210,8 @@ public class MainActivity extends AppCompatActivity {
 
                                 for (int n = 0; n < array.length(); n++) {
                                     JSONObject event = array.getJSONObject(n);
-                                    Calendar startTimeCal = Calendar.getInstance(), endTimeCal = Calendar.getInstance();
-                                    startTimeCal.setTimeInMillis(event.getLong("startTime"));
-                                    endTimeCal.setTimeInMillis(event.getLong("endTime"));
-
                                     events[n] = new Event(event.getLong("eventId"));
-                                    events[n].setTitle(event.getString("title"));
-                                    events[n].setStressLevel(event.getInt("stressLevel"));
-                                    events[n].setStartTime(startTimeCal);
-                                    events[n].setEndTime(endTimeCal);
-                                    events[n].setIntervention(event.getString("intervention"));
-                                    events[n].setInterventionReminder((short) event.getInt("interventionReminder"));
-                                    events[n].setStressType(event.getString("stressType"));
-                                    events[n].setStressCause(event.getString("stressCause"));
-                                    events[n].setRepeatMode(event.getInt("repeatMode"));
-                                    events[n].setEventReminder((short) event.getInt("eventReminder"));
+                                    events[n].fromJson(event);
                                 }
                                 Event.setCurrentEventBank(events);
                                 Event.updateReminders(MainActivity.this);

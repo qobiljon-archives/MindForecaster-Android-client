@@ -88,7 +88,7 @@ public class InterventionsActivity extends AppCompatActivity {
                     Tools.execute(new MyRunnable(
                             SignInActivity.loginPrefs.getString(SignInActivity.username, null),
                             SignInActivity.loginPrefs.getString(SignInActivity.password, null),
-                            getString(R.string.url_fetch_interv_system)
+                            getString(R.string.url_interv_system_fetch)
                     ) {
                         @Override
                         public void run() {
@@ -163,7 +163,7 @@ public class InterventionsActivity extends AppCompatActivity {
                     Tools.execute(new MyRunnable(
                             SignInActivity.loginPrefs.getString(SignInActivity.username, null),
                             SignInActivity.loginPrefs.getString(SignInActivity.password, null),
-                            getString(R.string.url_fetch_interv_peer)
+                            getString(R.string.url_interv_peer_fetch)
                     ) {
                         @Override
                         public void run() {
@@ -277,7 +277,7 @@ public class InterventionsActivity extends AppCompatActivity {
                         String url = (String) args[0];
                         String username = (String) args[1];
                         String password = (String) args[2];
-                        final String interv_name = (String) args[3];
+                        String interv_name = (String) args[3];
 
                         JSONObject body = new JSONObject();
                         try {
@@ -344,14 +344,10 @@ public class InterventionsActivity extends AppCompatActivity {
                     }
                 });
             else {
-                result = interv_text.getText().toString();
                 resultSchedule = Short.parseShort((String) intervScheduling.findViewById(intervScheduling.getCheckedRadioButtonId()).getTag());
                 setResult(Activity.RESULT_OK);
                 finish();
                 overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
-
-
-                // TODO: Save an action for later
             }
         } else {
             if (result == null) {
