@@ -12,7 +12,7 @@
     <item
         android:id="@+id/action_notifications_settings"
         android:icon="@drawable/img_notification"
-        android:onClick="logoutClick"
+        android:onClick="notifSettingsClick"
         android:title="@string/notifications_settings"
         app:showAsAction="ifRoom" />
 

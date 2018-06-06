@@ -289,6 +289,7 @@ public class Tools {
     }
 
     static void addDailyNotif(Context context, Calendar when, String text) {
+        Log.e("DAILY", when.getTime() + "");
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlaramReceiverEveryDay.class);
         intent.putExtra("Content", text);
@@ -300,6 +301,8 @@ public class Tools {
     }
 
     static void addSundayNotif(Context context, Calendar when, String text) {
+
+        Log.e("SUNDAY", when.getTime() + "");
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiverEverySunday.class);
         intent.putExtra("Content", text);
@@ -318,7 +321,6 @@ public class Tools {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int) event_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         if (alarmManager != null)
             alarmManager.set(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), pendingIntent);
-        Log.e("EVENT NOTIF ID", (int) event_id + "");
         eventNotifs.put((int) event_id, pendingIntent);
     }
 

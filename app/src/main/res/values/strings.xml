@@ -111,6 +111,9 @@
     <string name="event_notification">Event notification:</string>
     <string name="log_out">Log out</string>
     <string name="notifications_settings">Notifications settings</string>
+    <string name="sunday_time">Sunday time</string>
+    <string name="every_morning_time">Every morning time</string>
+    <string name="every_evening_time">Every evening time</string>
 
     <string-array name="months_array">
         <item>Jan</item>
