@@ -97,9 +97,9 @@ public class EventsListDialog extends DialogFragment {
 
             dateText.setText(String.format(Locale.US,
                     "%02d:%02d - %02d:%02d",
-                    event.getStartTime().get(Calendar.HOUR),
+                    event.getStartTime().get(Calendar.HOUR_OF_DAY),
                     event.getStartTime().get(Calendar.MINUTE),
-                    event.getEndTime().get(Calendar.HOUR),
+                    event.getEndTime().get(Calendar.HOUR_OF_DAY),
                     event.getEndTime().get(Calendar.MINUTE))
             );
         }

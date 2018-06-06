@@ -8,10 +8,18 @@
         android:onClick="todayClick"
         android:title="@string/today"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_notifications_settings"
+        android:icon="@drawable/img_notification"
+        android:onClick="logoutClick"
+        android:title="@string/notifications_settings"
+        app:showAsAction="ifRoom" />
+
     <item
         android:id="@+id/action_logout"
         android:icon="@drawable/img_logout"
         android:onClick="logoutClick"
-        android:title="@string/settings"
+        android:title="@string/log_out"
         app:showAsAction="ifRoom" />
 </menu>

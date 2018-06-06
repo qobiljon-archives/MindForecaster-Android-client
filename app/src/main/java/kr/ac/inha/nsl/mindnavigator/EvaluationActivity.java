@@ -62,7 +62,6 @@ public class EvaluationActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Toast.makeText(EvaluationActivity.this, String.valueOf(stressValue), Toast.LENGTH_SHORT).show();
             }
         });
 

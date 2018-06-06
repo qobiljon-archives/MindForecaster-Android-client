@@ -52,6 +52,7 @@ public class Tools {
     private static int cellWidth, cellHeight;
     private static ExecutorService executor = Executors.newCachedThreadPool();
     private static SparseArray<PendingIntent> eventNotifs = new SparseArray<>();
+    private static SparseArray<PendingIntent> intervNotifs = new SparseArray<>();
     private static SparseArray<PendingIntent> sundayNotifs = new SparseArray<>();
     private static SparseArray<PendingIntent> dailyNotifs = new SparseArray<>();
 
@@ -310,7 +311,6 @@ public class Tools {
     }
 
     static void addEventNotif(Context context, Calendar when, long event_id, String text) {
-        Log.e("EVENT REMINDER", when.getTime() + "");
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiverEvent.class);
         intent.putExtra("Content", text);
@@ -318,7 +318,23 @@ public class Tools {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int) event_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         if (alarmManager != null)
             alarmManager.set(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), pendingIntent);
+        Log.e("EVENT NOTIF ID", (int) event_id + "");
         eventNotifs.put((int) event_id, pendingIntent);
+    }
+
+    //TODO: Interv notification is not finished
+    static void addIntervNotif(Context context, Calendar when, long event_id, String intervText, String eventText) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, AlarmReceiverIntervention.class);
+        intent.putExtra("Content1", intervText);
+        intent.putExtra("Content2", eventText);
+        intent.putExtra("notification_id", event_id);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int) event_id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Log.e("INTERV NOTIF TIME", when.getTime()+"");
+        if (alarmManager != null)
+            alarmManager.set(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), pendingIntent);
+        Log.e("INTERV NOTIF ID", (int) event_id + "");
+        intervNotifs.put((int) event_id, pendingIntent);
     }
 
     static void cancelNotif(Context context, int notif_id) {
@@ -329,6 +345,8 @@ public class Tools {
             map = sundayNotifs;
         else if (eventNotifs.get(notif_id, null) != null)
             map = eventNotifs;
+        else if (intervNotifs.get(notif_id, null) != null)
+            map = intervNotifs;
         else
             return;
 
@@ -369,7 +387,7 @@ class Event {
             return res;
 
         Calendar comDay = (Calendar) day.clone();
-        comDay.set(Calendar.HOUR, 0);
+        comDay.set(Calendar.HOUR_OF_DAY, 0);
         comDay.set(Calendar.MINUTE, 0);
         comDay.set(Calendar.SECOND, 0);
         comDay.set(Calendar.MILLISECOND, 0);
@@ -566,15 +584,40 @@ class Event {
     public static void updateReminders(Context context) {
         Calendar today = Calendar.getInstance(), cal;
         for (Event event : currentEventBank) {
-            cal = event.getStartTime();
+            cal = (Calendar) event.getStartTime().clone();
             cal.add(Calendar.MINUTE, event.getEventReminder());
             if (cal.before(today))
                 Tools.cancelNotif(context, (int) event.getEventId());
-            else {
-                cal = (Calendar) event.getStartTime().clone();
-                cal.add(Calendar.MINUTE, event.getEventReminder());
+            else
                 Tools.addEventNotif(context, cal, event.getEventId(), String.format(Locale.US, "%s after %d mins", event.getTitle(), Math.abs(event.getEventReminder())));
+        }
+    }
+
+    public static void updateIntervReminder(Context context){
+        Calendar today = Calendar.getInstance(), calIntervBeforeEvent, calIntervAfterEvent;
+        for (Event event : currentEventBank) {
+            Calendar calIntervNotifId = Calendar.getInstance();
+            calIntervNotifId.setTimeInMillis(event.getEventId());
+            calIntervNotifId.add(Calendar.MILLISECOND, 1);
+
+            if (event.getInterventionReminder() < 0){
+                calIntervBeforeEvent = (Calendar) event.getStartTime().clone();
+                calIntervBeforeEvent.add(Calendar.MINUTE, event.getInterventionReminder());
+                if (calIntervBeforeEvent.before(today))
+                    Tools.cancelNotif(context, (int) calIntervNotifId.getTimeInMillis());
+                else
+                    Tools.addIntervNotif(context, calIntervBeforeEvent, (int) calIntervNotifId.getTimeInMillis(), String.format(Locale.US, "Intervention: %s", event.getIntervention()), String.format(Locale.US, "for upcoming event: %s", event.getTitle()));
             }
+            else{
+                calIntervAfterEvent = (Calendar) event.getEndTime().clone();
+                calIntervAfterEvent.add(Calendar.MINUTE, event.getInterventionReminder());
+                if (calIntervAfterEvent.before(today))
+                    Tools.cancelNotif(context, (int) calIntervNotifId.getTimeInMillis());
+                else
+                    Tools.addIntervNotif(context, calIntervAfterEvent, (int) calIntervNotifId.getTimeInMillis(), String.format(Locale.US, "Intervention: %s", event.getIntervention()), String.format(Locale.US, "for passed event: %s", event.getTitle()));
+            }
+
+
         }
     }
 }

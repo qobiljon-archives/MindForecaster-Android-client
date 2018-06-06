@@ -90,16 +90,19 @@ public class MainActivity extends AppCompatActivity {
 //        cal.set(Calendar.SECOND, 0);
 //
 //        Tools.addEventNotif(this, cal, 15, "I am here Bitch!!!");
-
         Calendar sundayNotifTime = Calendar.getInstance();
         sundayNotifTime.set(Calendar.DAY_OF_WEEK, 1);
         sundayNotifTime.set(Calendar.HOUR_OF_DAY, 20);
         sundayNotifTime.set(Calendar.MINUTE, 0);
         sundayNotifTime.set(Calendar.SECOND, 0);
-        Log.e("SUNDAY", sundayNotifTime.getTime() + "");
         Tools.addSundayNotif(this, sundayNotifTime, "Do you have a new schedule for the next week?");
 
         Calendar dailyNotifTime = Calendar.getInstance();
+        dailyNotifTime.set(Calendar.HOUR_OF_DAY, 8);
+        dailyNotifTime.set(Calendar.MINUTE, 0);
+        dailyNotifTime.set(Calendar.SECOND, 0);
+        Tools.addDailyNotif(this, dailyNotifTime, "Do you have a new schedule today?");
+
         dailyNotifTime.set(Calendar.HOUR_OF_DAY, 22);
         dailyNotifTime.set(Calendar.MINUTE, 0);
         dailyNotifTime.set(Calendar.SECOND, 0);
@@ -251,6 +254,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                                 Event.setCurrentEventBank(events);
                                 Event.updateReminders(MainActivity.this);
+                                Event.updateIntervReminder(MainActivity.this);
                                 Tools.cacheMonthlyEvents(MainActivity.this, events, month, year);
 
                                 runOnUiThread(new MyRunnable() {
@@ -305,6 +309,7 @@ public class MainActivity extends AppCompatActivity {
         else {
             Event.setCurrentEventBank(Tools.readOfflineMonthlyEvents(this, currentCal.get(Calendar.MONTH), currentCal.get(Calendar.YEAR)));
             Event.updateReminders(MainActivity.this);
+            Event.updateIntervReminder(MainActivity.this);
             for (row = 0; row < event_grid.getRowCount(); row++)
                 for (col = 0; col < event_grid.getColumnCount(); col++) {
                     Calendar day = Calendar.getInstance();

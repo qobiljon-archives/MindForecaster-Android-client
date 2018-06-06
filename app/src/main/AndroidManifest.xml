@@ -48,6 +48,8 @@
 
         <receiver android:name=".AlarmReceiverEvent" />
 
+        <receiver android:name=".AlarmReceiverIntervention" />
+
     </application>
 
 </manifest>
