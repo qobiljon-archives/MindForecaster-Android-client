@@ -108,7 +108,7 @@ public class SignInActivity extends AppCompatActivity {
                                             sundayNotifTime.set(Calendar.SECOND, 0);
                                             NotifSettingsDialog.sunday = (Calendar) sundayNotifTime.clone();
                                             editor.putLong("SundayReminderTime", sundayNotifTime.getTimeInMillis());
-                                            Tools.addSundayNotif(SignInActivity.this, sundayNotifTime, "Do you have a new schedule for the next week?");
+                                            Tools.addSundayNotif(SignInActivity.this, sundayNotifTime);
 
                                             Calendar dailyNotifTime = Calendar.getInstance();
                                             dailyNotifTime.set(Calendar.HOUR_OF_DAY, 8);

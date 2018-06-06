@@ -19,7 +19,7 @@ public class NotifSettingsDialog extends DialogFragment {
     //region Variables
     ViewGroup root;
     TextView sundayTxt, everyMorningTxt, everyEveningTxt;
-    static Calendar sunday = Calendar.getInstance(), everyMorning = Calendar.getInstance(), everyEvening= Calendar.getInstance();
+    static Calendar sunday = Calendar.getInstance(), everyMorning = Calendar.getInstance(), everyEvening = Calendar.getInstance();
     static Calendar sundayPrev = Calendar.getInstance(), everyMorningPrev = Calendar.getInstance(), everyEveningPrev = Calendar.getInstance();
     //endregion
 
@@ -90,7 +90,7 @@ public class NotifSettingsDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 deletePrevNotifications(sundayPrev, everyMorningPrev, everyEveningPrev);
-                Tools.addSundayNotif(getActivity(), sunday, "Do you have a new schedule for the next week?");
+                Tools.addSundayNotif(getActivity(), sunday);
                 Tools.addDailyNotif(getActivity(), everyMorning, "Do you have a new schedule today?");
                 Tools.addDailyNotif(getActivity(), everyEvening, "Please, evaluate today's events!");
                 SharedPreferences.Editor editor = SignInActivity.loginPrefs.edit();
@@ -159,7 +159,7 @@ public class NotifSettingsDialog extends DialogFragment {
 
     }
 
-    private void deletePrevNotifications(Calendar sunday, Calendar morning, Calendar evening){
+    private void deletePrevNotifications(Calendar sunday, Calendar morning, Calendar evening) {
         Tools.cancelNotif(getActivity(), (int) sunday.getTimeInMillis());
         Tools.cancelNotif(getActivity(), (int) morning.getTimeInMillis());
         Tools.cancelNotif(getActivity(), (int) evening.getTimeInMillis());
