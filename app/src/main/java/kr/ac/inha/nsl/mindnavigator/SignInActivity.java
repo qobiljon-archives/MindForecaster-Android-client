@@ -107,22 +107,26 @@ public class SignInActivity extends AppCompatActivity {
                                             sundayNotifTime.set(Calendar.MINUTE, 0);
                                             sundayNotifTime.set(Calendar.SECOND, 0);
                                             NotifSettingsDialog.sunday = (Calendar) sundayNotifTime.clone();
-                                            Tools.addSundayNotif(SignInActivity.this, sundayNotifTime);
+                                            editor.putLong("SundayReminderTime", sundayNotifTime.getTimeInMillis());
+                                            Tools.addSundayNotif(SignInActivity.this, sundayNotifTime, "Do you have a new schedule for the next week?");
 
                                             Calendar dailyNotifTime = Calendar.getInstance();
                                             dailyNotifTime.set(Calendar.HOUR_OF_DAY, 8);
                                             dailyNotifTime.set(Calendar.MINUTE, 0);
                                             dailyNotifTime.set(Calendar.SECOND, 0);
                                             NotifSettingsDialog.everyMorning = (Calendar) dailyNotifTime.clone();
+                                            editor.putLong("EveryMorningReminderTime", dailyNotifTime.getTimeInMillis());
                                             Tools.addDailyNotif(SignInActivity.this, dailyNotifTime, "Do you have a new schedule today?");
 
                                             dailyNotifTime.set(Calendar.HOUR_OF_DAY, 22);
                                             dailyNotifTime.set(Calendar.MINUTE, 0);
                                             dailyNotifTime.set(Calendar.SECOND, 0);
                                             NotifSettingsDialog.everyEvening = (Calendar) dailyNotifTime.clone();
+                                            editor.putLong("EveryEveningReminderTime", dailyNotifTime.getTimeInMillis());
                                             Tools.addDailyNotif(SignInActivity.this, dailyNotifTime, "Please, evaluate today's events!");
 
                                             editor.putBoolean("firstTime", false);
+                                            editor.apply();
                                         }
 
                                         Intent intent = new Intent(SignInActivity.this, MainActivity.class);

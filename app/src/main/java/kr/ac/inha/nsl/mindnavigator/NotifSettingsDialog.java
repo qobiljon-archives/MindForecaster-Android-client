@@ -2,7 +2,9 @@ package kr.ac.inha.nsl.mindnavigator;
 
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +19,8 @@ public class NotifSettingsDialog extends DialogFragment {
     //region Variables
     ViewGroup root;
     TextView sundayTxt, everyMorningTxt, everyEveningTxt;
-    static Calendar sunday, everyMorning, everyEvening;
+    static Calendar sunday = Calendar.getInstance(), everyMorning = Calendar.getInstance(), everyEvening= Calendar.getInstance();
+    static Calendar sundayPrev = Calendar.getInstance(), everyMorningPrev = Calendar.getInstance(), everyEveningPrev = Calendar.getInstance();
     //endregion
 
     @Override
@@ -35,9 +38,14 @@ public class NotifSettingsDialog extends DialogFragment {
         everyMorningTxt = root.findViewById(R.id.txt_everymorning_time);
         everyEveningTxt = root.findViewById(R.id.txt_everyevening_time);
 
-        sundayTxt.setTag(sunday.getTimeInMillis());
-        everyMorningTxt.setTag(everyMorning.getTimeInMillis());
-        everyEveningTxt.setTag(everyEvening.getTimeInMillis());
+        sundayPrev.setTimeInMillis(SignInActivity.loginPrefs.getLong("SundayReminderTime", 0));
+        everyMorningPrev.setTimeInMillis(SignInActivity.loginPrefs.getLong("EveryMorningReminderTime", 0));
+        everyEveningPrev.setTimeInMillis(SignInActivity.loginPrefs.getLong("EveryEveningReminderTime", 0));
+
+
+        sundayTxt.setTag(SignInActivity.loginPrefs.getLong("SundayReminderTime", 0));
+        everyMorningTxt.setTag(SignInActivity.loginPrefs.getLong("EveryMorningReminderTime", 0));
+        everyEveningTxt.setTag(SignInActivity.loginPrefs.getLong("EveryEveningReminderTime", 0));
 
         sundayTxt.setText(String.format(Locale.US,
                 "%02d:%02d",
@@ -81,10 +89,15 @@ public class NotifSettingsDialog extends DialogFragment {
         root.findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Tools.addSundayNotif(getActivity(), sunday);
+                deletePrevNotifications(sundayPrev, everyMorningPrev, everyEveningPrev);
+                Tools.addSundayNotif(getActivity(), sunday, "Do you have a new schedule for the next week?");
                 Tools.addDailyNotif(getActivity(), everyMorning, "Do you have a new schedule today?");
                 Tools.addDailyNotif(getActivity(), everyEvening, "Please, evaluate today's events!");
+                SharedPreferences.Editor editor = SignInActivity.loginPrefs.edit();
+                editor.putLong("SundayReminderTime", sunday.getTimeInMillis());
+                editor.putLong("EveryMorningReminderTime", everyMorning.getTimeInMillis());
+                editor.putLong("EveryEveningReminderTime", everyEvening.getTimeInMillis());
+                editor.apply();
                 dismiss();
             }
         });
@@ -110,23 +123,29 @@ public class NotifSettingsDialog extends DialogFragment {
                 view.setTag(cal.getTimeInMillis());
                 ((TextView) view).setText(String.format(Locale.US,
                         "%02d:%02d",
-                        cal.get(Calendar.HOUR_OF_DAY),
-                        cal.get(Calendar.MINUTE))
+                        hourOfDay,
+                        minute)
                 );
 
                 switch (view.getId()) {
                     case R.id.txt_sunday_time:
-                        sunday = (Calendar) cal.clone();
-                        sunday.set(Calendar.DAY_OF_WEEK, 1);
+                        sunday.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        sunday.set(Calendar.MINUTE, minute);
                         sunday.set(Calendar.SECOND, 0);
+                        sunday.set(Calendar.MILLISECOND, 0);
+                        sunday.set(Calendar.DAY_OF_WEEK, 1);
                         break;
                     case R.id.txt_everymorning_time:
-                        everyMorning = (Calendar) cal.clone();
+                        everyMorning.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        everyMorning.set(Calendar.MINUTE, minute);
                         everyMorning.set(Calendar.SECOND, 0);
+                        everyMorning.set(Calendar.MILLISECOND, 0);
                         break;
                     case R.id.txt_everyevening_time:
-                        everyEvening = (Calendar) cal.clone();
+                        everyEvening.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        everyEvening.set(Calendar.MINUTE, minute);
                         everyEvening.set(Calendar.SECOND, 0);
+                        everyEvening.set(Calendar.MILLISECOND, 0);
                         break;
                     default:
                         break;
@@ -138,6 +157,12 @@ public class NotifSettingsDialog extends DialogFragment {
         TimePickerDialog dialog = new TimePickerDialog(getActivity(), listener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true);
         dialog.show();
 
+    }
+
+    private void deletePrevNotifications(Calendar sunday, Calendar morning, Calendar evening){
+        Tools.cancelNotif(getActivity(), (int) sunday.getTimeInMillis());
+        Tools.cancelNotif(getActivity(), (int) morning.getTimeInMillis());
+        Tools.cancelNotif(getActivity(), (int) evening.getTimeInMillis());
     }
 
     private abstract class MyOnTimeSetListener implements TimePickerDialog.OnTimeSetListener {
