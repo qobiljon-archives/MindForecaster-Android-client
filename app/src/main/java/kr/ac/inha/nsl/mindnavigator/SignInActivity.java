@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Calendar;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -98,6 +99,31 @@ public class SignInActivity extends AppCompatActivity {
                                         editor.putString(SignInActivity.username, username);
                                         editor.putString(SignInActivity.password, password);
                                         editor.apply();
+
+                                        if (SignInActivity.loginPrefs.getBoolean("firstTime", true)) {
+                                            Calendar sundayNotifTime = Calendar.getInstance();
+                                            sundayNotifTime.set(Calendar.DAY_OF_WEEK, 1);
+                                            sundayNotifTime.set(Calendar.HOUR_OF_DAY, 20);
+                                            sundayNotifTime.set(Calendar.MINUTE, 0);
+                                            sundayNotifTime.set(Calendar.SECOND, 0);
+                                            NotifSettingsDialog.sunday = (Calendar) sundayNotifTime.clone();
+                                            Tools.addSundayNotif(SignInActivity.this, sundayNotifTime, "Do you have a new schedule for the next week?");
+
+                                            Calendar dailyNotifTime = Calendar.getInstance();
+                                            dailyNotifTime.set(Calendar.HOUR_OF_DAY, 8);
+                                            dailyNotifTime.set(Calendar.MINUTE, 0);
+                                            dailyNotifTime.set(Calendar.SECOND, 0);
+                                            NotifSettingsDialog.everyMorning = (Calendar) dailyNotifTime.clone();
+                                            Tools.addDailyNotif(SignInActivity.this, dailyNotifTime, "Do you have a new schedule today?");
+
+                                            dailyNotifTime.set(Calendar.HOUR_OF_DAY, 22);
+                                            dailyNotifTime.set(Calendar.MINUTE, 0);
+                                            dailyNotifTime.set(Calendar.SECOND, 0);
+                                            NotifSettingsDialog.everyEvening = (Calendar) dailyNotifTime.clone();
+                                            Tools.addDailyNotif(SignInActivity.this, dailyNotifTime, "Please, evaluate today's events!");
+
+                                            editor.putBoolean("firstTime", false);
+                                        }
 
                                         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                                         startActivity(intent);

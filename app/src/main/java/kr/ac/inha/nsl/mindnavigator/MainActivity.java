@@ -84,30 +84,6 @@ public class MainActivity extends AppCompatActivity {
     // endregion
 
     private void init() {
-
-//        Calendar cal = Calendar.getInstance();
-//        cal.add(Calendar.MINUTE, 10);
-//        cal.set(Calendar.SECOND, 0);
-//
-//        Tools.addEventNotif(this, cal, 15, "I am here Bitch!!!");
-        Calendar sundayNotifTime = Calendar.getInstance();
-        sundayNotifTime.set(Calendar.DAY_OF_WEEK, 1);
-        sundayNotifTime.set(Calendar.HOUR_OF_DAY, 20);
-        sundayNotifTime.set(Calendar.MINUTE, 0);
-        sundayNotifTime.set(Calendar.SECOND, 0);
-        Tools.addSundayNotif(this, sundayNotifTime, "Do you have a new schedule for the next week?");
-
-        Calendar dailyNotifTime = Calendar.getInstance();
-        dailyNotifTime.set(Calendar.HOUR_OF_DAY, 8);
-        dailyNotifTime.set(Calendar.MINUTE, 0);
-        dailyNotifTime.set(Calendar.SECOND, 0);
-        Tools.addDailyNotif(this, dailyNotifTime, "Do you have a new schedule today?");
-
-        dailyNotifTime.set(Calendar.HOUR_OF_DAY, 22);
-        dailyNotifTime.set(Calendar.MINUTE, 0);
-        dailyNotifTime.set(Calendar.SECOND, 0);
-        Tools.addDailyNotif(this, dailyNotifTime, "Please, evaluate today's events!");
-
         currentCal = Calendar.getInstance();
         event_grid = findViewById(R.id.event_grid);
         monthName = findViewById(R.id.header_month_name);
@@ -363,6 +339,17 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
         overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
+    }
+
+    public void notifSettingsClick(MenuItem item) {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialogSettings");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+        DialogFragment dialogFragment = new NotifSettingsDialog();
+        dialogFragment.show(ft, "dialog");
     }
 
     public void selectMonth(View view) {
