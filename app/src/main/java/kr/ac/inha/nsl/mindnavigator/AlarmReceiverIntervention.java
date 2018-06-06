@@ -20,7 +20,11 @@ public class AlarmReceiverIntervention extends BroadcastReceiver {
         stackBuilder.addNextIntent(notificationIntent);
 
         int notificaiton_id = (int) intent.getLongExtra("notification_id", 0);
-        PendingIntent pendingIntent = stackBuilder.getPendingIntent(notificaiton_id, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+        inboxStyle.setBigContentTitle("Intervention");
+            inboxStyle.addLine(intent.getStringExtra("Content1"));
+            inboxStyle.addLine(intent.getStringExtra("Content2"));
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel_for_intervention")
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
@@ -28,16 +32,9 @@ public class AlarmReceiverIntervention extends BroadcastReceiver {
                 .setTicker("New Message Alert!")
                 .setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
-                .setContentText("Intervention text");
+                .setContentText(intent.getStringExtra("Content1")).setStyle(inboxStyle);
 
-        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-        String[] content = {intent.getStringExtra("Content1"), intent.getStringExtra("Content2")};
-        inboxStyle.setBigContentTitle("This is Big Title");
-        for (int i = 0; i < content.length; i++) {
-            inboxStyle.addLine(content[i]);
-        }
-        builder.setStyle(inboxStyle);
-
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent(notificaiton_id, PendingIntent.FLAG_UPDATE_CURRENT);
         Notification notification = builder.setContentIntent(pendingIntent).build();
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
