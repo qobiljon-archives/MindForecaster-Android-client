@@ -40,6 +40,7 @@ public class FeedbackActivity extends AppCompatActivity {
         stressIncrDetails = findViewById(R.id.stress_incr_details_view);
         eventDone = findViewById(R.id.event_done_check);
         TextView eventTitle = findViewById(R.id.current_event_title);
+        stressIncrReason = findViewById(R.id.stress_incr_reason_edit);
 
         eventTitle.setText(getResources().getString(R.string.current_event_title, EventActivity.event.getTitle()));
 
