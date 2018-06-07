@@ -86,6 +86,7 @@ public class InterventionsActivity extends AppCompatActivity {
                 Tools.toggle_keyboard(this, interv_text, false);
                 if (Tools.isNetworkAvailable(this))
                     Tools.execute(new MyRunnable(
+                            this,
                             SignInActivity.loginPrefs.getString(SignInActivity.username, null),
                             SignInActivity.loginPrefs.getString(SignInActivity.password, null),
                             getString(R.string.url_interv_system_fetch, getString(R.string.server_ip))
@@ -105,6 +106,7 @@ public class InterventionsActivity extends AppCompatActivity {
                                 switch (res.getInt("result")) {
                                     case Tools.RES_OK:
                                         runOnUiThread(new MyRunnable(
+                                                activity,
                                                 res.getJSONArray("names")
                                         ) {
                                             @Override
@@ -138,6 +140,7 @@ public class InterventionsActivity extends AppCompatActivity {
                             } catch (JSONException | IOException e) {
                                 e.printStackTrace();
                             }
+                            enableTouch();
                         }
                     });
                 else {
@@ -161,6 +164,7 @@ public class InterventionsActivity extends AppCompatActivity {
                 Tools.toggle_keyboard(this, interv_text, false);
                 if (Tools.isNetworkAvailable(this))
                     Tools.execute(new MyRunnable(
+                            this,
                             SignInActivity.loginPrefs.getString(SignInActivity.username, null),
                             SignInActivity.loginPrefs.getString(SignInActivity.password, null),
                             getString(R.string.url_interv_peer_fetch, getString(R.string.server_ip))
@@ -180,6 +184,7 @@ public class InterventionsActivity extends AppCompatActivity {
                                 switch (res.getInt("result")) {
                                     case Tools.RES_OK:
                                         runOnUiThread(new MyRunnable(
+                                                activity,
                                                 res.getJSONArray("names")
                                         ) {
                                             @Override
@@ -214,6 +219,7 @@ public class InterventionsActivity extends AppCompatActivity {
                             } catch (JSONException | IOException e) {
                                 e.printStackTrace();
                             }
+                            enableTouch();
                         }
                     });
                 else {
@@ -267,6 +273,7 @@ public class InterventionsActivity extends AppCompatActivity {
             }
             if (Tools.isNetworkAvailable(this))
                 Tools.execute(new MyRunnable(
+                        this,
                         getString(R.string.url_interv_create, getString(R.string.server_ip)),
                         SignInActivity.loginPrefs.getString(SignInActivity.username, null),
                         SignInActivity.loginPrefs.getString(SignInActivity.password, null),
@@ -289,6 +296,7 @@ public class InterventionsActivity extends AppCompatActivity {
                             switch (res.getInt("result")) {
                                 case Tools.RES_OK:
                                     runOnUiThread(new MyRunnable(
+                                            activity,
                                             interv_name
                                     ) {
                                         @Override
@@ -305,6 +313,7 @@ public class InterventionsActivity extends AppCompatActivity {
                                     break;
                                 case Tools.RES_FAIL:
                                     runOnUiThread(new MyRunnable(
+                                            activity,
                                             interv_name
                                     ) {
                                         @Override
@@ -341,6 +350,7 @@ public class InterventionsActivity extends AppCompatActivity {
                                 }
                             });
                         }
+                        enableTouch();
                     }
                 });
             else {

@@ -70,6 +70,7 @@ public class SignInActivity extends AppCompatActivity {
 
         if (Tools.isNetworkAvailable(this))
             Tools.execute(new MyRunnable(
+                    this,
                     getString(R.string.url_user_login, getString(R.string.server_ip)),
                     username,
                     password
@@ -89,7 +90,7 @@ public class SignInActivity extends AppCompatActivity {
 
                         switch (json.getInt("result")) {
                             case Tools.RES_OK:
-                                runOnUiThread(new MyRunnable(args) {
+                                runOnUiThread(new MyRunnable(activity, args) {
                                     @Override
                                     public void run() {
                                         String username = (String) args[1];
@@ -170,6 +171,7 @@ public class SignInActivity extends AppCompatActivity {
                             }
                         });
                     }
+                    enableTouch();
                 }
             });
         else if (loginPrefs.getString(SignInActivity.username, null) != null && loginPrefs.getString(SignInActivity.password, null) != null) {

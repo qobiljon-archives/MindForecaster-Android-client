@@ -5,7 +5,6 @@ import android.graphics.PorterDuff;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -108,6 +107,7 @@ public class EvaluationActivity extends AppCompatActivity {
     public void saveClick(View view) {
         if (Tools.isNetworkAvailable(this))
             Tools.execute(new MyRunnable(
+                    this,
                     getString(R.string.url_eval_subm, getString(R.string.server_ip)),
                     SignInActivity.loginPrefs.getString(SignInActivity.username, null),
                     SignInActivity.loginPrefs.getString(SignInActivity.password, null)
@@ -136,7 +136,7 @@ public class EvaluationActivity extends AppCompatActivity {
                         JSONObject res = new JSONObject(Tools.post(url, body));
                         switch (res.getInt("result")) {
                             case Tools.RES_OK:
-                                runOnUiThread(new MyRunnable() {
+                                runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         Toast.makeText(EvaluationActivity.this, "Evaluation successfully submitted, thank you!", Toast.LENGTH_SHORT).show();
@@ -148,7 +148,7 @@ public class EvaluationActivity extends AppCompatActivity {
                                 });
                                 break;
                             case Tools.RES_FAIL:
-                                runOnUiThread(new MyRunnable() {
+                                runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         Toast.makeText(EvaluationActivity.this, "Failed to submit the evaluation.", Toast.LENGTH_SHORT).show();
@@ -175,6 +175,7 @@ public class EvaluationActivity extends AppCompatActivity {
                             }
                         });
                     }
+                    enableTouch();
                 }
             });
         else

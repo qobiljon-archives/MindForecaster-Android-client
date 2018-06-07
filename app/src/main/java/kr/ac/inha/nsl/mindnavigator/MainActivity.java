@@ -177,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
         // Download events from internet and display them
         if (Tools.isNetworkAvailable(this))
             Tools.execute(new MyRunnable(
+                    this,
                     getString(R.string.url_events_fetch, getString(R.string.server_ip)),
                     SignInActivity.loginPrefs.getString(SignInActivity.username, null),
                     SignInActivity.loginPrefs.getString(SignInActivity.password, null),
@@ -218,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
                                 Event.updateIntervReminder(MainActivity.this);
                                 Tools.cacheMonthlyEvents(MainActivity.this, events, month, year);
 
-                                runOnUiThread(new MyRunnable() {
+                                runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         for (int row = 0; row < event_grid.getRowCount(); row++)
@@ -237,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
                                 });
                                 break;
                             case Tools.RES_FAIL:
-                                runOnUiThread(new MyRunnable() {
+                                runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         Toast.makeText(MainActivity.this, "Failed to load the events for this month.", Toast.LENGTH_SHORT).show();
@@ -265,6 +266,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
                     }
+                    enableTouch();
                 }
             });
         else {
@@ -306,8 +308,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void todayClick(MenuItem item) {
-        Log.e("LONG", Calendar.getInstance().getTimeInMillis() + "");
-
         NotificationManager nMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (nMgr != null) {
             nMgr.cancelAll();

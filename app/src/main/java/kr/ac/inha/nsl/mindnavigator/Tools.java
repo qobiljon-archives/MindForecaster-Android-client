@@ -15,6 +15,7 @@ import android.util.Log;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -115,6 +116,7 @@ public class Tools {
     }
 
     static void execute(MyRunnable runnable) {
+        disable_touch(runnable.activity);
         executor.execute(runnable);
     }
 
@@ -180,7 +182,7 @@ public class Tools {
     }
 
     private static String readFromFile(Context context, String fileName) {
-        String ret = "";
+        String ret = "[]";
 
         try {
             InputStream inputStream = context.openFileInput(fileName);
@@ -360,14 +362,32 @@ public class Tools {
         map.remove(notif_id);
     }
 
+    private static void disable_touch(Activity activity) {
+        activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    static void enable_touch(Activity activity) {
+        activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
 }
 
 abstract class MyRunnable implements Runnable {
-    MyRunnable(Object... args) {
+    MyRunnable(Activity activity, Object... args) {
+        this.activity = activity;
         this.args = Arrays.copyOf(args, args.length);
     }
 
+    void enableTouch() {
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Tools.enable_touch(activity);
+            }
+        });
+    }
+
     Object[] args;
+    Activity activity;
 }
 
 class Event {
@@ -544,7 +564,7 @@ class Event {
         JSONObject eventJson = new JSONObject();
 
         try {
-            eventJson.put("id", getEventId());
+            eventJson.put("eventId", getEventId());
             eventJson.put("title", getTitle());
             eventJson.put("stressLevel", getStressLevel());
             eventJson.put("startTime", getStartTime().getTimeInMillis());
@@ -587,7 +607,7 @@ class Event {
         }
     }
 
-    public static void updateReminders(Context context) {
+    static void updateReminders(Context context) {
         Calendar today = Calendar.getInstance(), cal;
         for (Event event : currentEventBank) {
             cal = (Calendar) event.getStartTime().clone();

@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -89,6 +90,12 @@ public class EventActivity extends AppCompatActivity {
             }
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(Activity.RESULT_CANCELED);
+        super.onBackPressed();
     }
 
     //region Variables
@@ -529,6 +536,7 @@ public class EventActivity extends AppCompatActivity {
     public void feedbackClick(View view) {
         if (Tools.isNetworkAvailable(this))
             Tools.execute(new MyRunnable(
+                    this,
                     getString(R.string.url_eval_fetch, getString(R.string.server_ip)),
                     SignInActivity.loginPrefs.getString(SignInActivity.username, null)
             ) {
@@ -547,6 +555,7 @@ public class EventActivity extends AppCompatActivity {
                             case Tools.RES_OK:
                                 JSONObject eventEval = res.getJSONObject("evaluation");
                                 runOnUiThread(new MyRunnable(
+                                        activity,
                                         eventEval.get("eventDone"),
                                         eventEval.get("realStressLevel")
                                 ) {
@@ -564,7 +573,7 @@ public class EventActivity extends AppCompatActivity {
                                 });
                                 break;
                             case Tools.RES_FAIL:
-                                runOnUiThread(new MyRunnable() {
+                                runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         Toast.makeText(EventActivity.this, "Failed to fetch evaluation for this event.", Toast.LENGTH_SHORT).show();
@@ -592,6 +601,7 @@ public class EventActivity extends AppCompatActivity {
                             }
                         });
                     }
+                    enableTouch();
                 }
             });
         else {
@@ -613,6 +623,7 @@ public class EventActivity extends AppCompatActivity {
                     case DialogInterface.BUTTON_POSITIVE:
                         if (Tools.isNetworkAvailable(EventActivity.this))
                             Tools.execute(new MyRunnable(
+                                    EventActivity.this,
                                     getString(R.string.url_event_delete, getString(R.string.server_ip)),
                                     SignInActivity.loginPrefs.getString(SignInActivity.username, null),
                                     SignInActivity.loginPrefs.getString(SignInActivity.password, null),
@@ -634,7 +645,7 @@ public class EventActivity extends AppCompatActivity {
                                         JSONObject res = new JSONObject(Tools.post(url, body));
                                         switch (res.getInt("result")) {
                                             case Tools.RES_OK:
-                                                runOnUiThread(new MyRunnable(eventId) {
+                                                runOnUiThread(new MyRunnable(activity, eventId) {
                                                     @Override
                                                     public void run() {
                                                         long eventId = (long) args[0];
@@ -647,7 +658,7 @@ public class EventActivity extends AppCompatActivity {
                                                 });
                                                 break;
                                             case Tools.RES_FAIL:
-                                                runOnUiThread(new MyRunnable() {
+                                                runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
                                                         Toast.makeText(EventActivity.this, "Failed to create delete the event.", Toast.LENGTH_SHORT).show();
@@ -675,6 +686,7 @@ public class EventActivity extends AppCompatActivity {
                                             }
                                         });
                                     }
+                                    enableTouch();
                                 }
                             });
                         break;
@@ -715,7 +727,6 @@ public class EventActivity extends AppCompatActivity {
             eventNotificationGroup.setEnabled(true);
             for (int n = 0; n < eventNotificationGroup.getChildCount(); n++)
                 eventNotificationGroup.getChildAt(n).setEnabled(true);
-
 
             intervEditButton.setEnabled(true);
             return;
@@ -783,43 +794,127 @@ public class EventActivity extends AppCompatActivity {
                 break;
         }
 
-        if (Tools.isNetworkAvailable(this))
-            Tools.execute(new MyRunnable(
-                    EventActivity.event.isNewEvent() ? getString(R.string.url_event_create, getString(R.string.server_ip)) : getString(R.string.url_event_edit, getString(R.string.server_ip)),
-                    SignInActivity.loginPrefs.getString(SignInActivity.username, null),
-                    SignInActivity.loginPrefs.getString(SignInActivity.password, null)
-            ) {
-                @Override
-                public void run() {
-                    String url = (String) args[0];
-                    String username = (String) args[1];
-                    String password = (String) args[2];
+        if (Tools.isNetworkAvailable(this)) {
+            MyOnDateSetListener listener;
+            DatePickerDialog dialog;
+            Calendar cal;
 
-                    JSONObject body = new JSONObject();
-                    try {
-                        body.put("username", username);
-                        body.put("password", password);
-                        body.put("event_id", EventActivity.event.getEventId());
-                        body.put("title", EventActivity.event.getTitle());
-                        body.put("stressLevel", EventActivity.event.getStressLevel());
-                        body.put("startTime", EventActivity.event.getStartTime().getTimeInMillis());
-                        body.put("endTime", EventActivity.event.getEndTime().getTimeInMillis());
-                        if (EventActivity.event.getIntervention() == null) {
-                            body.put("intervention", "");
-                            body.put("interventionReminder", 0);
-                        } else {
-                            body.put("intervention", EventActivity.event.getIntervention());
-                            body.put("interventionReminder", EventActivity.event.getInterventionReminder());
+            switch (event.getRepeatMode()) {
+                case Event.REPEAT_EVERYDAY:
+                    listener = new MyOnDateSetListener(view) {
+                        @Override
+                        public void onDateSet(DatePicker picker, int year, int month, int dayOfMonth) {
+                            Calendar cal = Calendar.getInstance();
+                            cal.set(year, month, dayOfMonth, 0, 0, 0);
+                            cal.set(Calendar.MILLISECOND, 0);
+                            cal.add(Calendar.DAY_OF_MONTH, 1);
+                            long till = cal.getTimeInMillis();
+                            long sTime = event.getStartTime().getTimeInMillis();
+                            long eTime = event.getEndTime().getTimeInMillis();
+
+                            if (eTime - sTime > 86400000) {
+                                Toast.makeText(EventActivity.this, "Event length cannot be longer than 7 days in everyweek mode!", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+
+                            while (sTime + 86400000 < till) {
+                                createEvent(sTime, eTime, Calendar.getInstance().getTimeInMillis(), false);
+
+                                sTime += 86400000;
+                                eTime += 86400000;
+                            }
+                            createEvent(sTime, eTime, Calendar.getInstance().getTimeInMillis(), true);
                         }
-                        body.put("stressType", EventActivity.event.getStressType());
-                        body.put("stressCause", EventActivity.event.getStressCause());
-                        body.put("repeatMode", EventActivity.event.getRepeatMode());
-                        body.put("eventReminder", EventActivity.event.getEventReminder());
+                    };
+                    cal = Calendar.getInstance();
+                    cal.setTimeInMillis(event.getStartTime().getTimeInMillis());
+                    dialog = new DatePickerDialog(this, listener, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+                    dialog.setTitle("Repeat until");
+                    dialog.show();
+                    break;
+                case Event.REPEAT_WEEKLY:
+                    listener = new MyOnDateSetListener(view) {
+                        @Override
+                        public void onDateSet(DatePicker picker, int year, int month, int dayOfMonth) {
+                            Calendar cal = Calendar.getInstance();
+                            cal.set(year, month, dayOfMonth, 0, 0, 0);
+                            cal.set(Calendar.MILLISECOND, 0);
+                            cal.add(Calendar.DAY_OF_MONTH, 1);
+                            long till = cal.getTimeInMillis();
+                            long sTime = event.getStartTime().getTimeInMillis();
+                            long eTime = event.getEndTime().getTimeInMillis();
 
-                        JSONObject res = new JSONObject(Tools.post(url, body));
-                        switch (res.getInt("result")) {
-                            case Tools.RES_OK:
-                                runOnUiThread(new MyRunnable() {
+                            if (eTime - sTime > 604800000) {
+                                Toast.makeText(EventActivity.this, "Event length cannot be longer than 7 days in everyweek mode!", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+
+                            while (sTime + 604800000 < till) {
+                                createEvent(sTime, eTime, Calendar.getInstance().getTimeInMillis(), false);
+
+                                sTime += 604800000;
+                                eTime += 604800000;
+                            }
+                            createEvent(sTime, eTime, Calendar.getInstance().getTimeInMillis(), true);
+                        }
+                    };
+                    cal = Calendar.getInstance();
+                    cal.setTimeInMillis(event.getStartTime().getTimeInMillis());
+                    dialog = new DatePickerDialog(this, listener, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+                    dialog.setTitle("Repeat until");
+                    dialog.show();
+                    break;
+                case Event.NO_REPEAT:
+                    createEvent(EventActivity.event.getStartTime().getTimeInMillis(), EventActivity.event.getEndTime().getTimeInMillis(), EventActivity.event.getEventId(), true);
+            }
+        } else
+            Toast.makeText(this, "No network! Please connect to network first!", Toast.LENGTH_SHORT).show();
+    }
+
+    private void createEvent(final long startTime, final long endTime, long eventId, boolean finishActivity) {
+        Tools.execute(new MyRunnable(
+                this,
+                EventActivity.event.isNewEvent() ? getString(R.string.url_event_create, getString(R.string.server_ip)) : getString(R.string.url_event_edit, getString(R.string.server_ip)),
+                SignInActivity.loginPrefs.getString(SignInActivity.username, null),
+                SignInActivity.loginPrefs.getString(SignInActivity.password, null),
+                eventId,
+                finishActivity
+        ) {
+            @Override
+            public void run() {
+                String url = (String) args[0];
+                String username = (String) args[1];
+                String password = (String) args[2];
+                long eventId = (long) args[3];
+                boolean finishActivity = (boolean) args[4];
+
+                JSONObject body = new JSONObject();
+                try {
+                    body.put("username", username);
+                    body.put("password", password);
+                    body.put("event_id", eventId);
+                    body.put("title", EventActivity.event.getTitle());
+                    body.put("stressLevel", EventActivity.event.getStressLevel());
+                    body.put("startTime", startTime);
+                    Log.e("STARTTIME", event.getStartTime().toString());
+                    body.put("endTime", endTime);
+                    if (EventActivity.event.getIntervention() == null) {
+                        body.put("intervention", "");
+                        body.put("interventionReminder", 0);
+                    } else {
+                        body.put("intervention", EventActivity.event.getIntervention());
+                        body.put("interventionReminder", EventActivity.event.getInterventionReminder());
+                    }
+                    body.put("stressType", EventActivity.event.getStressType());
+                    body.put("stressCause", EventActivity.event.getStressCause());
+                    body.put("repeatMode", EventActivity.event.getRepeatMode());
+                    body.put("eventReminder", EventActivity.event.getEventReminder());
+
+                    JSONObject res = new JSONObject(Tools.post(url, body));
+                    switch (res.getInt("result")) {
+                        case Tools.RES_OK:
+                            if (finishActivity)
+                                runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         Toast.makeText(EventActivity.this, EventActivity.event.isNewEvent() ? "Event successfully created!" : "Event has been edited.", Toast.LENGTH_SHORT).show();
@@ -829,42 +924,40 @@ public class EventActivity extends AppCompatActivity {
                                         overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
                                     }
                                 });
-                                break;
-                            case Tools.RES_FAIL:
-                                runOnUiThread(new MyRunnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(EventActivity.this, EventActivity.event.isNewEvent() ? "Failed to create the event." : "Failed to edit the event.", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                                break;
-                            case Tools.RES_SRV_ERR:
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(EventActivity.this, "Failure occurred while processing the request. (SERVER SIDE)", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                                break;
-                            default:
-                                break;
-                        }
-                    } catch (JSONException | IOException e) {
-                        e.printStackTrace();
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(EventActivity.this, "Failed to proceed due to an error in connection with server.", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                            break;
+                        case Tools.RES_FAIL:
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(EventActivity.this, EventActivity.event.isNewEvent() ? "Failed to create the event." : "Failed to edit the event.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            break;
+                        case Tools.RES_SRV_ERR:
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(EventActivity.this, "Failure occurred while processing the request. (SERVER SIDE)", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            break;
+                        default:
+                            break;
                     }
+                } catch (JSONException | IOException e) {
+                    e.printStackTrace();
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(EventActivity.this, "Failed to proceed due to an error in connection with server.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
-            });
-        else {
-            // TODO: Save an action for later
-            Toast.makeText(this, "No network! Please connect to network first!", Toast.LENGTH_SHORT).show();
-        }
+                if (finishActivity)
+                    enableTouch();
+            }
+        });
     }
 
     public void pickDateClick(View view) {

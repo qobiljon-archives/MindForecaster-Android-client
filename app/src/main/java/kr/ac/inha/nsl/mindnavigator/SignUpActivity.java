@@ -49,6 +49,7 @@ public class SignUpActivity extends AppCompatActivity {
         loadingPanel.setVisibility(View.VISIBLE);
 
         Tools.execute(new MyRunnable(
+                this,
                 getString(R.string.url_user_register, getString(R.string.server_ip)),
                 name,
                 username,
@@ -71,7 +72,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                     switch (json.getInt("result")) {
                         case Tools.RES_OK:
-                            runOnUiThread(new MyRunnable(args) {
+                            runOnUiThread(new MyRunnable(activity, args) {
                                 @Override
                                 public void run() {
                                     Toast.makeText(SignUpActivity.this, "Successfully signed up. You can sign in now!", Toast.LENGTH_SHORT).show();
@@ -113,6 +114,7 @@ public class SignUpActivity extends AppCompatActivity {
                         }
                     });
                 }
+                enableTouch();
             }
         });
     }

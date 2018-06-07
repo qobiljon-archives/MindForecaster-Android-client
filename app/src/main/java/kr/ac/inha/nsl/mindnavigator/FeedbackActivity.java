@@ -80,6 +80,7 @@ public class FeedbackActivity extends AppCompatActivity {
     public void saveClick(View view) {
         if (Tools.isNetworkAvailable(this))
             Tools.execute(new MyRunnable(
+                    this,
                     getString(R.string.url_feedback_subm, getString(R.string.server_ip)),
                     SignInActivity.loginPrefs.getString(SignInActivity.username, null),
                     SignInActivity.loginPrefs.getString(SignInActivity.password, null)
@@ -100,7 +101,7 @@ public class FeedbackActivity extends AppCompatActivity {
                         JSONObject res = new JSONObject(Tools.post(url, body));
                         switch (res.getInt("result")) {
                             case Tools.RES_OK:
-                                runOnUiThread(new MyRunnable() {
+                                runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         Toast.makeText(FeedbackActivity.this, "Feedback successfully submitted, thank you!", Toast.LENGTH_SHORT).show();
@@ -112,7 +113,7 @@ public class FeedbackActivity extends AppCompatActivity {
                                 });
                                 break;
                             case Tools.RES_FAIL:
-                                runOnUiThread(new MyRunnable() {
+                                runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         Toast.makeText(FeedbackActivity.this, "Failed to submit the feedback.", Toast.LENGTH_SHORT).show();
@@ -139,6 +140,7 @@ public class FeedbackActivity extends AppCompatActivity {
                             }
                         });
                     }
+                    enableTouch();
                 }
             });
         else

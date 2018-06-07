@@ -23,15 +23,18 @@
         android:background="@color/white"
         android:gravity="center_vertical">
 
-        <ImageButton
+        <TextView
             android:id="@+id/button_left_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
             android:background="@color/white"
             android:contentDescription="@string/previous_month"
+            android:drawableEnd="@drawable/img_arrow_left"
             android:onClick="navPrevWeekClick"
-            android:src="@drawable/img_arrow_left" />
+            android:paddingBottom="10dp"
+            android:paddingStart="40dp"
+            android:paddingTop="10dp"
+            tools:ignore="RtlSymmetry" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -62,16 +65,18 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-
-        <ImageButton
+        <TextView
             android:id="@+id/button_right_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="40dp"
             android:background="@color/white"
             android:contentDescription="@string/next_month_arrow"
+            android:drawableStart="@drawable/img_arrow_right"
             android:onClick="navNextWeekClick"
-            android:src="@drawable/img_arrow_right" />
+            android:paddingBottom="10dp"
+            android:paddingEnd="40dp"
+            android:paddingTop="10dp"
+            tools:ignore="RtlSymmetry" />
 
     </LinearLayout>
 
