@@ -27,7 +27,7 @@ public class AlarmReceiverIntervention extends BroadcastReceiver {
             inboxStyle.addLine(intent.getStringExtra("Content2"));
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel_for_intervention")
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("Intervention")
                 .setTicker("New Message Alert!")
                 .setAutoCancel(true)

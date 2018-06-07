@@ -28,7 +28,7 @@ public class AlarmReceiverEvent extends BroadcastReceiver {
                 .setContentText(intent.getStringExtra("Content"))
                 .setTicker("New Message Alert!")
                 .setAutoCancel(true)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setContentIntent(pendingIntent).build();
 
