@@ -176,6 +176,10 @@ public class EventActivity extends AppCompatActivity {
             // recover existing values
             fillOutExistingValues();
 
+
+            expandDetails.setVisibility(View.GONE);
+            findViewById(R.id.more_options_layout).setVisibility(View.VISIBLE);
+
             if (event.getEndTime().before(Calendar.getInstance())) {
                 saveButton.setVisibility(View.GONE);
                 cancelButton.setVisibility(View.GONE);

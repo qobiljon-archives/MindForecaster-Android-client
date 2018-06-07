@@ -13,7 +13,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
         android:elevation="4dp"
-        app:title="MindNavigator"
+        app:title="@string/app_name"
         app:titleTextColor="@color/white" />
 
     <LinearLayout

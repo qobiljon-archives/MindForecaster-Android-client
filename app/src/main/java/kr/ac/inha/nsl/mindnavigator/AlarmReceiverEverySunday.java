@@ -24,7 +24,7 @@ public class AlarmReceiverEverySunday extends BroadcastReceiver {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel_for_days_evening");
 
-        Notification notification = builder.setContentTitle("MindNavigator")
+        Notification notification = builder.setContentTitle(context.getString(R.string.app_name))
                 .setContentText(intent.getStringExtra("Content"))
                 .setTicker("New Message Alert!")
                 .setAutoCancel(true)
