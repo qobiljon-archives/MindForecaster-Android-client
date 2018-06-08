@@ -39,8 +39,6 @@ public class InterventionsActivity extends AppCompatActivity {
     RadioGroup intervScheduling;
     Button[] tabButtons;
 
-    Button prevEditButton = null;
-    TextView prevTextView = null;
     //endregion
 
     private void init() {
@@ -65,9 +63,7 @@ public class InterventionsActivity extends AppCompatActivity {
         // Clear out visibility and previously set button color
         interv_text.setVisibility(View.GONE);
         interv_choice.setVisibility(View.GONE);
-        schedulingView.setVisibility(View.GONE);
-        prevEditButton = null;
-        prevTextView = null;
+        schedulingView.setVisibility(View.VISIBLE);
         for (Button button : tabButtons)
             button.setBackgroundResource(R.drawable.bg_interv_method_unchecked_view);
 
@@ -242,18 +238,7 @@ public class InterventionsActivity extends AppCompatActivity {
     }
 
     public void onIntervClick(View view) {
-        if (prevTextView != null) {
-            prevTextView.setTextColor(getColor(R.color.black));
-            prevEditButton.setVisibility(View.GONE);
-        }
-
-        ((TextView) view.findViewById(R.id.intervention_text)).setTextColor(getColor(R.color.dark_blue));
-        schedulingView.setVisibility(View.VISIBLE);
-        result = (prevTextView = view.findViewById(R.id.intervention_text)).getText().toString();
-        (prevEditButton = view.findViewById(R.id.btn_edit_interv)).setVisibility(View.VISIBLE);
-    }
-
-    public void editIntervClick(View view) {
+        result = ((TextView)view.findViewById(R.id.intervention_text)).getText().toString();
         interv_text.setText(result);
         interv_text.setSelection(interv_text.length());
         tabButtons[0].callOnClick();

@@ -49,6 +49,7 @@
     <string name="system">system</string>
     <string name="peer">peer</string>
     <string name="all_day">All-day</string>
+    <string name="selected_interv_hint">Create an intervention to mediate your stress</string>
     <string name="self_intervention_hint">Please describe here an intervention that can mediate your stress</string>
     <string name="interventions_list">Please choose one of the options below:</string>
     <string name="expand_button">Expand button</string>

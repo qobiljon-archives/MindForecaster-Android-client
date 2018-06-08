@@ -3,14 +3,14 @@
 
     <style name="InnerActivityTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="android:textColor">#000</item>
-        <item name="android:statusBarColor">#d60000</item>
+        <item name="android:statusBarColor">#26ae90</item>
     </style>
 
-    <color name="inner_activity_actionbar">#d60000</color>
+    <color name="inner_activity_actionbar">#26ae90</color>
     <color name="inner_activity_action_color">#fff</color>
 
-    <color name="colorPrimary">#D60000</color>
-    <color name="colorPrimaryDark">#000</color>
+    <color name="colorPrimary">#26ae90</color>
+    <color name="colorPrimaryDark">#1b443b</color>
     <color name="colorAccent">#b71c1c</color>
 
 

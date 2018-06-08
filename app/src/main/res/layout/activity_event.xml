@@ -239,6 +239,155 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
+                <!--Option: Repeat / Notification-->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/bright_grey" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/img_expand"
+                    android:onClick="expandRepeatNotificationClick"
+                    android:padding="20dp"
+                    android:text="@string/repeat_notification"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <LinearLayout
+                    android:id="@+id/repeat_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginStart="20dp"
+                    android:gravity=""
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="monospace"
+                        android:text="@string/event_repeat_mode"
+                        android:textAllCaps="true"
+                        android:textStyle="bold" />
+
+                    <RadioGroup
+                        android:id="@+id/repeat_mode_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_solid_wrap"
+                        android:checkedButton="@+id/no_repeat_radio"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@id/no_repeat_radio"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_radio_button"
+                            android:button="@android:color/transparent"
+                            android:padding="5dp"
+                            android:text="@string/only_once"
+                            android:textAllCaps="true" />
+
+                        <RadioButton
+                            android:id="@+id/everyday_repeat_radio"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_radio_button"
+                            android:button="@android:color/transparent"
+                            android:padding="5dp"
+                            android:text="@string/everyday"
+                            android:textAllCaps="true" />
+
+                        <RadioButton
+                            android:id="@+id/everyweek_repeat_radio"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_radio_button"
+                            android:button="@android:color/transparent"
+                            android:padding="5dp"
+                            android:text="@string/every_week"
+                            android:textAllCaps="true" />
+
+                    </RadioGroup>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/notification_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="6dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/event_notification"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:typeface="monospace" />
+
+                    <RadioGroup
+                        android:id="@+id/event_notification_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:checkedButton="@+id/option_10mins_before"
+                        android:orientation="vertical">
+
+                        <RadioButton
+                            android:id="@+id/option_day_before"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:tag="-1440"
+                            android:text="@string/_1_day_before"
+                            android:textSize="14sp" />
+
+                        <RadioButton
+                            android:id="@+id/option_hour_before"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:tag="-60"
+                            android:text="@string/_1_hour_before"
+                            android:textSize="14sp" />
+
+                        <RadioButton
+                            android:id="@+id/option_30mins_before"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:tag="-30"
+                            android:text="@string/_30_minutes_before"
+                            android:textSize="14sp" />
+
+                        <RadioButton
+                            android:id="@id/option_10mins_before"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:tag="-10"
+                            android:text="@string/_10_minutes_before"
+                            android:textSize="14sp" />
+
+                    </RadioGroup>
+
+                </LinearLayout>
+
                 <!--Option: Anticipated stress level-->
                 <View
                     android:layout_width="match_parent"
@@ -463,6 +612,7 @@
                             android:textColor="@color/black"
                             android:textSize="15sp"
                             android:textStyle="bold"
+                            android:hint="@string/selected_interv_hint"
                             android:typeface="monospace" />
 
                         <Button
@@ -486,155 +636,6 @@
                         android:layout_marginStart="15dp"
                         android:text="@string/intervention_reminder_text"
                         android:visibility="gone" />
-
-                </LinearLayout>
-
-                <!--Option: Repeat / Notification-->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@color/bright_grey" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/img_expand"
-                    android:onClick="expandRepeatNotificationClick"
-                    android:padding="20dp"
-                    android:text="@string/repeat_notification"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
-
-                <LinearLayout
-                    android:id="@+id/repeat_details"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginStart="20dp"
-                    android:gravity=""
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="monospace"
-                        android:text="@string/event_repeat_mode"
-                        android:textAllCaps="true"
-                        android:textStyle="bold" />
-
-                    <RadioGroup
-                        android:id="@+id/repeat_mode_group"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_solid_wrap"
-                        android:checkedButton="@+id/no_repeat_radio"
-                        android:orientation="horizontal">
-
-                        <RadioButton
-                            android:id="@id/no_repeat_radio"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/bg_radio_button"
-                            android:button="@android:color/transparent"
-                            android:padding="5dp"
-                            android:text="@string/only_once"
-                            android:textAllCaps="true" />
-
-                        <RadioButton
-                            android:id="@+id/everyday_repeat_radio"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/bg_radio_button"
-                            android:button="@android:color/transparent"
-                            android:padding="5dp"
-                            android:text="@string/everyday"
-                            android:textAllCaps="true" />
-
-                        <RadioButton
-                            android:id="@+id/everyweek_repeat_radio"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/bg_radio_button"
-                            android:button="@android:color/transparent"
-                            android:padding="5dp"
-                            android:text="@string/every_week"
-                            android:textAllCaps="true" />
-
-                    </RadioGroup>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/notification_details"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="6dp"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/event_notification"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:typeface="monospace" />
-
-                    <RadioGroup
-                        android:id="@+id/event_notification_group"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:checkedButton="@+id/option_10mins_before"
-                        android:orientation="vertical">
-
-                        <RadioButton
-                            android:id="@+id/option_day_before"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:tag="-1440"
-                            android:text="@string/_1_day_before"
-                            android:textSize="14sp" />
-
-                        <RadioButton
-                            android:id="@+id/option_hour_before"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:tag="-60"
-                            android:text="@string/_1_hour_before"
-                            android:textSize="14sp" />
-
-                        <RadioButton
-                            android:id="@+id/option_30mins_before"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:tag="-30"
-                            android:text="@string/_30_minutes_before"
-                            android:textSize="14sp" />
-
-                        <RadioButton
-                            android:id="@id/option_10mins_before"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:tag="-10"
-                            android:text="@string/_10_minutes_before"
-                            android:textSize="14sp" />
-
-                    </RadioGroup>
 
                 </LinearLayout>
 

@@ -185,8 +185,10 @@ public class EventActivity extends AppCompatActivity {
                 cancelButton.setVisibility(View.GONE);
                 postEventLayout.setVisibility(View.VISIBLE);
 
-                if (event.isEvaluated())
+                if (event.isEvaluated()){
                     findViewById(R.id.feedback_text).setVisibility(View.VISIBLE);
+                }
+
 
                 eventTitle.setFocusable(false);
                 eventTitle.clearFocus();
@@ -322,13 +324,9 @@ public class EventActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 stressLvl.getProgressDrawable().setColorFilter(Tools.stressLevelToColor(progress), PorterDuff.Mode.SRC_IN);
                 stressLvl.getThumb().setColorFilter(Tools.stressLevelToColor(progress), PorterDuff.Mode.SRC_IN);
-                if (progress >= 0 && progress < 50) {
-                    inactiveLayout.setVisibility(View.GONE);
-                } else if (progress > 50 && progress < 80) {
+                if (progress > 0) {
                     inactiveLayout.setVisibility(View.VISIBLE);
-                } else {
-                    inactiveLayout.setVisibility(View.VISIBLE);
-                }
+                } else inactiveLayout.setVisibility(View.GONE);
             }
 
             @Override

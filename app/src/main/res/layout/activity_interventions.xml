@@ -116,6 +116,7 @@
         android:inputType="textMultiLine"
         android:maxLength="128"
         android:maxLines="5"
+        android:lines="3"
         android:padding="10dp"
         android:paddingTop="5dp"
         android:visibility="gone" />
@@ -123,11 +124,10 @@
     <LinearLayout
         android:id="@+id/intervention_choice"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:layout_weight="1"
         android:orientation="vertical">
 
         <TextView
@@ -158,13 +158,12 @@
     <LinearLayout
         android:id="@+id/interv_scheduling_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="6dp"
-        android:layout_weight="1"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TextView
             android:layout_width="wrap_content"
