@@ -29,6 +29,7 @@ public class AlaramReceiverEveryDay extends BroadcastReceiver {
                 .setTicker("New Message Alert!")
                 .setAutoCancel(true)
                 .setSmallIcon(R.mipmap.ic_launcher)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setContentIntent(pendingIntent).build();
 

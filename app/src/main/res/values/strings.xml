@@ -124,6 +124,8 @@
     <string name="every_morning_time">Every-morning reminder</string>
     <string name="every_evening_time">Every-evening reminder</string>
     <string name="interv_before_event">Please check if intervention has been done before the event, or uncheck if it has been done after.</string>
+    <string name="create">CREATE</string>
+    <string name="none">none</string>
 
     <string-array name="months_array">
         <item>Jan</item>

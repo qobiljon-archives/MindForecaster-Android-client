@@ -39,14 +39,14 @@
             android:typeface="monospace" />
 
         <TextView
-            android:id="@+id/btn_save"
+            android:id="@+id/btn_create"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:fontFamily="monospace"
             android:onClick="saveClick"
             android:padding="10dp"
-            android:text="@string/save"
+            android:text="@string/create"
             android:textAllCaps="true"
             android:textColor="@color/inner_activity_action_color"
             android:textSize="16sp"
@@ -184,8 +184,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:checkedButton="@+id/option_10mins_before"
+                android:checkedButton="@+id/option_none"
                 android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/option_none"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:tag="0"
+                    android:text="@string/none"
+                    android:textSize="14sp" />
 
                 <RadioButton
                     android:id="@+id/option_day_before"

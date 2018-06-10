@@ -13,10 +13,10 @@ public class AlarmReceiverIntervention extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Intent notificationIntent = new Intent(context, MainActivity.class);
+        Intent notificationIntent = new Intent(context, SignInActivity.class);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addParentStack(SignInActivity.class);
         stackBuilder.addNextIntent(notificationIntent);
 
         int notificaiton_id = (int) intent.getLongExtra("notification_id", 0);
@@ -31,6 +31,7 @@ public class AlarmReceiverIntervention extends BroadcastReceiver {
                 .setContentTitle("Intervention")
                 .setTicker("New Message Alert!")
                 .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setContentText(intent.getStringExtra("Content1")).setStyle(inboxStyle);
 

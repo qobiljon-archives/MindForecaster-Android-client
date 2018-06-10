@@ -15,7 +15,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -49,7 +48,6 @@ public class EventActivity extends AppCompatActivity {
                 case INTERVENTION_ACTIVITY:
                     event.setIntervention(InterventionsActivity.result);
                     event.setInterventionReminder(InterventionsActivity.resultSchedule);
-
                     selectedInterv.setText(event.getIntervention());
                     switch (InterventionsActivity.resultSchedule) {
                         case -1440:
@@ -112,7 +110,6 @@ public class EventActivity extends AppCompatActivity {
     private TextView endTimeText;
     private TextView selectedInterv;
     private TextView intervReminderTxt;
-    private TextView expandDetails;
     private TextView saveButton;
     private TextView cancelButton;
     private TextView deleteButton;
@@ -120,7 +117,6 @@ public class EventActivity extends AppCompatActivity {
     private EditText eventTitle, stressCause;
     private Switch switchAllDay;
     private SeekBar stressLvl;
-    private Button intervEditButton;
 
     private Calendar startTime, endTime;
     //endregion
@@ -144,12 +140,10 @@ public class EventActivity extends AppCompatActivity {
         repeatModeGroup = findViewById(R.id.repeat_mode_group);
         eventNotificationGroup = findViewById(R.id.event_notification_group);
         intervReminderTxt = findViewById(R.id.txt_interv_reminder_time);
-        expandDetails = findViewById(R.id.text_more_event_options);
-        saveButton = findViewById(R.id.btn_save);
+        saveButton = findViewById(R.id.btn_create);
         cancelButton = findViewById(R.id.btn_cancel);
         deleteButton = findViewById(R.id.btn_delete);
         ViewGroup postEventLayout = findViewById(R.id.postEventLayout);
-        intervEditButton = findViewById(R.id.interv_edit_button);
 
         if (getIntent().hasExtra("eventId")) {
             // Editing an existing event
@@ -171,14 +165,10 @@ public class EventActivity extends AppCompatActivity {
             repeatModeGroup.setEnabled(false);
             for (int n = 0; n < repeatModeGroup.getChildCount(); n++)
                 repeatModeGroup.getChildAt(n).setEnabled(false);
-            intervEditButton.setEnabled(false);
+            selectedInterv.setEnabled(false);
 
             // recover existing values
             fillOutExistingValues();
-
-
-            expandDetails.setVisibility(View.GONE);
-            findViewById(R.id.more_options_layout).setVisibility(View.VISIBLE);
 
             if (event.getEndTime().before(Calendar.getInstance())) {
                 saveButton.setVisibility(View.GONE);
@@ -394,6 +384,9 @@ public class EventActivity extends AppCompatActivity {
         }
 
         switch (event.getEventReminder()) {
+            case 0:
+                eventNotificationGroup.check(R.id.option_none);
+                break;
             case -1440:
                 eventNotificationGroup.check(R.id.option_day_before);
                 break;
@@ -446,11 +439,6 @@ public class EventActivity extends AppCompatActivity {
         }
 
         eventTitle.setSelection(eventTitle.length());
-    }
-
-    public void moreOptionsClick(View view) {
-        expandDetails.setVisibility(View.GONE);
-        findViewById(R.id.more_options_layout).setVisibility(View.VISIBLE);
     }
 
     public void expandStressLevelClick(View view) {
@@ -729,8 +717,7 @@ public class EventActivity extends AppCompatActivity {
             eventNotificationGroup.setEnabled(true);
             for (int n = 0; n < eventNotificationGroup.getChildCount(); n++)
                 eventNotificationGroup.getChildAt(n).setEnabled(true);
-
-            intervEditButton.setEnabled(true);
+            selectedInterv.setEnabled(true);
             return;
         }
 
@@ -780,6 +767,9 @@ public class EventActivity extends AppCompatActivity {
         }
 
         switch (eventNotificationGroup.getCheckedRadioButtonId()) {
+            case R.id.option_none:
+                event.setEventReminder((short) 0);
+                break;
             case R.id.option_day_before:
                 event.setEventReminder((short) -1440);
                 break;

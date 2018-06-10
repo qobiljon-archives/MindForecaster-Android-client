@@ -13,10 +13,10 @@ public class AlarmReceiverEvent extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Intent notificationIntent = new Intent(context, MainActivity.class);
+        Intent notificationIntent = new Intent(context, SignInActivity.class);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addParentStack(SignInActivity.class);
         stackBuilder.addNextIntent(notificationIntent);
 
         int notificaiton_id = (int) intent.getLongExtra("EventId", 0);
@@ -29,6 +29,7 @@ public class AlarmReceiverEvent extends BroadcastReceiver {
                 .setTicker("New Message Alert!")
                 .setAutoCancel(true)
                 .setSmallIcon(R.mipmap.ic_launcher)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setContentIntent(pendingIntent).build();
 

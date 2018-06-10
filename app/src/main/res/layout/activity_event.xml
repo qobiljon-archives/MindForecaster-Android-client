@@ -52,7 +52,7 @@
             android:typeface="monospace" />
 
         <TextView
-            android:id="@+id/btn_save"
+            android:id="@+id/btn_create"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
@@ -216,28 +216,12 @@
                     android:textColor="@color/black" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/text_more_event_options"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="20dp"
-                android:drawablePadding="5dp"
-                android:drawableStart="@drawable/img_more_options"
-                android:gravity="center"
-                android:onClick="moreOptionsClick"
-                android:padding="10dp"
-                android:text="@string/more"
-                android:textSize="15sp" />
-
             <LinearLayout
                 android:id="@+id/more_options_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:orientation="vertical">
 
                 <!--Option: Repeat / Notification-->
                 <View
@@ -347,6 +331,15 @@
                         android:layout_margin="5dp"
                         android:checkedButton="@+id/option_10mins_before"
                         android:orientation="vertical">
+
+                        <RadioButton
+                            android:id="@+id/option_none"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:tag="0"
+                            android:text="@string/none"
+                            android:textSize="14sp" />
 
                         <RadioButton
                             android:id="@+id/option_day_before"
@@ -610,21 +603,11 @@
                             android:maxLines="2"
                             android:padding="10dp"
                             android:textColor="@color/black"
+                            android:onClick="editInterventionClick"
                             android:textSize="15sp"
                             android:textStyle="bold"
                             android:hint="@string/selected_interv_hint"
                             android:typeface="monospace" />
-
-                        <Button
-                            android:id="@+id/interv_edit_button"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="@android:color/transparent"
-                            android:gravity="end|center_vertical"
-                            android:onClick="editInterventionClick"
-                            android:text="@string/edit"
-                            android:textColor="@color/dark_blue" />
 
                     </LinearLayout>
 

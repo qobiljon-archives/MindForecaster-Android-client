@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
             int col = today.get(Calendar.DAY_OF_WEEK) - 1;
             int row = today.get(Calendar.DAY_OF_MONTH);
             today.set(Calendar.DAY_OF_MONTH, 1);
-            row = (row + today.get(Calendar.DAY_OF_WEEK) - 1) / 7;
+            row = (row + today.get(Calendar.DAY_OF_WEEK) - 2) / 7;
 
             todayText = cells[col][row].findViewById(R.id.date_text_view);
             todayText.setTextColor(Color.WHITE);

@@ -63,7 +63,7 @@ public class InterventionsActivity extends AppCompatActivity {
         // Clear out visibility and previously set button color
         interv_text.setVisibility(View.GONE);
         interv_choice.setVisibility(View.GONE);
-        schedulingView.setVisibility(View.VISIBLE);
+        schedulingView.setVisibility(View.GONE);
         for (Button button : tabButtons)
             button.setBackgroundResource(R.drawable.bg_interv_method_unchecked_view);
 
@@ -72,6 +72,7 @@ public class InterventionsActivity extends AppCompatActivity {
             case R.id.button_self_intervention:
                 tabButtons[0].setBackgroundResource(R.drawable.bg_interv_method_checked_view);
                 interv_text.setVisibility(View.VISIBLE);
+                schedulingView.setVisibility(View.VISIBLE);
                 Tools.toggle_keyboard(this, interv_text, true);
                 saveIntervention = true;
                 break;

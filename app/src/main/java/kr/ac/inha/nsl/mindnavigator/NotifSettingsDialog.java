@@ -4,6 +4,7 @@ import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,10 +38,13 @@ public class NotifSettingsDialog extends DialogFragment {
         everyMorningTxt = root.findViewById(R.id.txt_everymorning_time);
         everyEveningTxt = root.findViewById(R.id.txt_everyevening_time);
 
-        sundayPrev.setTimeInMillis(SignInActivity.loginPrefs.getLong("SundayReminderTime", 0));
-        everyMorningPrev.setTimeInMillis(SignInActivity.loginPrefs.getLong("EveryMorningReminderTime", 0));
-        everyEveningPrev.setTimeInMillis(SignInActivity.loginPrefs.getLong("EveryEveningReminderTime", 0));
+        sunday.setTimeInMillis(SignInActivity.loginPrefs.getLong("SundayReminderTime", 0));
+        everyMorning.setTimeInMillis(SignInActivity.loginPrefs.getLong("EveryMorningReminderTime", 0));
+        everyEvening.setTimeInMillis(SignInActivity.loginPrefs.getLong("EveryEveningReminderTime", 0));
 
+        sundayPrev = (Calendar) sunday.clone();
+        everyMorningPrev = (Calendar) everyMorningPrev.clone();
+        everyEveningPrev = (Calendar) everyEveningPrev.clone();
 
         sundayTxt.setTag(SignInActivity.loginPrefs.getLong("SundayReminderTime", 0));
         everyMorningTxt.setTag(SignInActivity.loginPrefs.getLong("EveryMorningReminderTime", 0));
@@ -155,7 +159,6 @@ public class NotifSettingsDialog extends DialogFragment {
         cal.setTimeInMillis((long) view.getTag());
         TimePickerDialog dialog = new TimePickerDialog(getActivity(), listener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true);
         dialog.show();
-
     }
 
     private void deletePrevNotifications(Calendar sunday, Calendar morning, Calendar evening) {
