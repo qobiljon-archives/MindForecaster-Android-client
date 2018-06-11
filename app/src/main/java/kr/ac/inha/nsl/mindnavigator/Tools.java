@@ -609,7 +609,7 @@ class Event {
         }
     }
 
-    static void updateReminders(Context context) {
+    static void updateEventReminders(Context context) {
         Calendar today = Calendar.getInstance(), cal;
         for (Event event : currentEventBank) {
             if (event.getEventReminder() != 0) {

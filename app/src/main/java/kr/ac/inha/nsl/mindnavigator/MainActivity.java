@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
                                     events[n].fromJson(event);
                                 }
                                 Event.setCurrentEventBank(events);
-                                Event.updateReminders(MainActivity.this);
+                                Event.updateEventReminders(MainActivity.this);
                                 Event.updateIntervReminder(MainActivity.this);
                                 Tools.cacheMonthlyEvents(MainActivity.this, events, month, year);
 
@@ -271,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
             });
         else {
             Event.setCurrentEventBank(Tools.readOfflineMonthlyEvents(this, currentCal.get(Calendar.MONTH), currentCal.get(Calendar.YEAR)));
-            Event.updateReminders(MainActivity.this);
+            Event.updateEventReminders(MainActivity.this);
             Event.updateIntervReminder(MainActivity.this);
             for (row = 0; row < event_grid.getRowCount(); row++)
                 for (col = 0; col < event_grid.getColumnCount(); col++) {

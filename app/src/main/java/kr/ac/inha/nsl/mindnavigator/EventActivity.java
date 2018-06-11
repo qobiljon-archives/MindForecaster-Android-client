@@ -175,7 +175,7 @@ public class EventActivity extends AppCompatActivity {
                 cancelButton.setVisibility(View.GONE);
                 postEventLayout.setVisibility(View.VISIBLE);
 
-                if (event.isEvaluated()){
+                if (event.isEvaluated()) {
                     findViewById(R.id.feedback_text).setVisibility(View.VISIBLE);
                 }
 
@@ -194,6 +194,8 @@ public class EventActivity extends AppCompatActivity {
 
             if (getIntent().hasExtra("selectedDayMillis")) {
                 startTime.setTimeInMillis(getIntent().getLongExtra("selectedDayMillis", 0));
+                startTime.set(Calendar.HOUR_OF_DAY, 9);
+                startTime.set(Calendar.MINUTE, 0);
                 endTime.setTimeInMillis(startTime.getTimeInMillis());
                 endTime.add(Calendar.HOUR_OF_DAY, 1);
             }
@@ -721,7 +723,12 @@ public class EventActivity extends AppCompatActivity {
             return;
         }
 
-        event.setTitle(eventTitle.getText().toString());
+        if (eventTitle.getText().length() > 0)
+            event.setTitle(eventTitle.getText().toString());
+        else {
+            Toast.makeText(this, "Please, type the event title", Toast.LENGTH_SHORT).show();
+            return;
+        }
         event.setStressLevel(stressLvl.getProgress());
 
         if (switchAllDay.isChecked()) {
@@ -857,7 +864,12 @@ public class EventActivity extends AppCompatActivity {
                     dialog.show();
                     break;
                 case Event.NO_REPEAT:
+                    Log.e("Event start time", event.getStartTime().getTime() + "");
+                    Log.e("Event end time", event.getEndTime().getTime() + "");
                     createEvent(EventActivity.event.getStartTime().getTimeInMillis(), EventActivity.event.getEndTime().getTimeInMillis(), EventActivity.event.getEventId(), true);
+                    break;
+                default:
+                    break;
             }
         } else
             Toast.makeText(this, "No network! Please connect to network first!", Toast.LENGTH_SHORT).show();
