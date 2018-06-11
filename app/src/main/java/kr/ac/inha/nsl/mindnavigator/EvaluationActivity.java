@@ -29,7 +29,7 @@ public class EvaluationActivity extends AppCompatActivity {
 
     //region Variables
     private Button[] tabButtons;
-    private CheckBox eventCompletionCheck, intervCompletionCheck, intervSharingCheck, intervBeforeEventCheck;
+    private CheckBox eventCompletionCheck, intervCompletionCheck, intervSharingCheck;
     private SeekBar realStressLevel, intervEffectiveness;
     private ViewGroup eventLayout, interventionLayout;
     //endregion
@@ -47,7 +47,6 @@ public class EvaluationActivity extends AppCompatActivity {
         eventLayout = findViewById(R.id.event_layout);
         interventionLayout = findViewById(R.id.intervention_layout);
         intervEffectiveness = findViewById(R.id.intervention_effectiveness);
-        intervBeforeEventCheck = findViewById(R.id.interv_before_event_check);
         TextView eventTitle = findViewById(R.id.event_title_text_view);
         eventTitle.setText(getString(R.string.current_event_title, EventActivity.event.getTitle()));
         TextView intervTitle = findViewById(R.id.intervention_title_text);
@@ -129,7 +128,7 @@ public class EvaluationActivity extends AppCompatActivity {
                         body.put("realStressLevel", realStressLevel.getProgress());
                         body.put("eventDone", eventCompletionCheck.isChecked());
                         body.put("interventionDone", intervCompletionCheck.isChecked());
-                        body.put("interventionDoneBefore", intervBeforeEventCheck.isChecked());
+                        body.put("interventionDoneBefore", true);//TODO: remove this from Server
                         body.put("sharedIntervention", intervSharingCheck.isChecked());
                         body.put("intervEffectiveness", intervEffectiveness.getProgress());
 

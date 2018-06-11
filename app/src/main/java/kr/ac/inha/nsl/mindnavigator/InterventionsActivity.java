@@ -33,6 +33,7 @@ public class InterventionsActivity extends AppCompatActivity {
     static String result = null;
     static short resultSchedule = 0;
 
+    static Event event;
     EditText interv_text;
     View interv_choice;
     ViewGroup interv_list, schedulingView;
@@ -52,6 +53,41 @@ public class InterventionsActivity extends AppCompatActivity {
                 findViewById(R.id.button_systems_intervention),
                 findViewById(R.id.button_peer_interventions)
         };
+
+        if(getIntent().hasExtra("eventId")){
+            //Editing and existing event
+            event = Event.getEventById(getIntent().getLongExtra("eventId", 0));
+            interv_text.setText(event.getIntervention());
+
+            switch (event.getInterventionReminder()) {
+                case 0:
+                    intervScheduling.check(R.id.option_none);
+                    break;
+                case -1440:
+                    intervScheduling.check(R.id.option_day_before);
+                case -60:
+                    intervScheduling.check(R.id.option_hour_before);
+                    break;
+                case -30:
+                    intervScheduling.check(R.id.option_30mins_before);
+                case -10:
+                    intervScheduling.check(R.id.option_10mins_before);
+                    break;
+                case 1440:
+                    intervScheduling.check(R.id.option_day_after);
+                case 60:
+                    intervScheduling.check(R.id.option_hour_after);
+                    break;
+                case 30:
+                    intervScheduling.check(R.id.option_30mins_after);
+                case 10:
+                    intervScheduling.check(R.id.option_10mins_after);
+                    break;
+                default:
+                    intervScheduling.setVisibility(View.GONE);
+                    break;
+            }
+        }
 
         interv_text.setVisibility(View.GONE);
         interv_choice.setVisibility(View.GONE);
@@ -239,7 +275,7 @@ public class InterventionsActivity extends AppCompatActivity {
     }
 
     public void onIntervClick(View view) {
-        result = ((TextView)view.findViewById(R.id.intervention_text)).getText().toString();
+        result = ((TextView) view.findViewById(R.id.intervention_text)).getText().toString();
         interv_text.setText(result);
         interv_text.setSelection(interv_text.length());
         tabButtons[0].callOnClick();

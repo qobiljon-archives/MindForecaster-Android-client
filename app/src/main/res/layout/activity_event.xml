@@ -329,7 +329,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        android:checkedButton="@+id/option_10mins_before"
+                        android:checkedButton="@+id/option_none"
                         android:orientation="vertical">
 
                         <RadioButton
@@ -369,7 +369,7 @@
                             android:textSize="14sp" />
 
                         <RadioButton
-                            android:id="@id/option_10mins_before"
+                            android:id="@+id/option_10mins_before"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"

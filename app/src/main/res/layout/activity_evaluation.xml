@@ -215,15 +215,6 @@
                     android:paddingTop="15dp"
                     android:text="@string/interv_done" />
 
-                <CheckBox
-                    android:id="@+id/interv_before_event_check"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingBottom="15dp"
-                    android:paddingTop="15dp"
-                    android:text="@string/interv_before_event" />
-
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"

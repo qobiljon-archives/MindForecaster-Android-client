@@ -515,6 +515,8 @@ public class EventActivity extends AppCompatActivity {
 
     public void editInterventionClick(View view) {
         Intent intent = new Intent(this, InterventionsActivity.class);
+        if (getIntent().hasExtra("eventId"))
+            intent.putExtra("eventId", event.getEventId());
         startActivityForResult(intent, INTERVENTION_ACTIVITY);
         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
     }
