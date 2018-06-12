@@ -291,7 +291,6 @@ public class Tools {
     }
 
     static void addDailyNotif(Context context, Calendar when, String text) {
-        Log.e("CREATE DAILY NOTIF", when.getTime() + "");
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlaramReceiverEveryDay.class);
         intent.putExtra("Content", text);
@@ -303,7 +302,6 @@ public class Tools {
     }
 
     static void addSundayNotif(Context context, Calendar when) {
-        Log.e("CREATE SUNDAY NOTIF", when.getTime() + "");
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiverEverySunday.class);
         intent.putExtra("Content", "Do you have a new schedule for the next week?");
@@ -315,7 +313,6 @@ public class Tools {
     }
 
     static void addEventNotif(Context context, Calendar when, long event_id, String text) {
-        Log.e("CREATE EVENT NOTIF: ", when.getTime() + "   " + text);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiverEvent.class);
         intent.putExtra("Content", text);
@@ -327,7 +324,6 @@ public class Tools {
     }
 
     static void addIntervNotif(Context context, Calendar when, long event_id, String intervText, String eventText) {
-        Log.e("CREATE INTERV NOTIF: ", (int) event_id + "   event: " + eventText + "    interv: " + intervText);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiverIntervention.class);
         intent.putExtra("Content1", intervText);
@@ -340,7 +336,6 @@ public class Tools {
     }
 
     static void cancelNotif(Context context, int notif_id) {
-        Log.e("CANCEL", notif_id + "");
         SparseArray<PendingIntent> map;
         if (dailyNotifs.get(notif_id, null) != null)
             map = dailyNotifs;
@@ -615,7 +610,6 @@ class Event {
                 cal = (Calendar) event.getStartTime().clone();
                 cal.add(Calendar.MINUTE, event.getEventReminder());
                 if (cal.before(today)) {
-                    Log.e("CANCEL EVENT NOTIF: ", event.getStartTime().getTime() + "      event: " + event.getTitle());
                     Tools.cancelNotif(context, (int) event.getEventId());
                 } else {
                     String text = " after 10 minutes";
@@ -653,7 +647,6 @@ class Event {
                 calIntervBeforeEvent = (Calendar) event.getStartTime().clone();
                 calIntervBeforeEvent.add(Calendar.MINUTE, event.getInterventionReminder());
                 if (calIntervBeforeEvent.before(today)) {
-                    Log.e("CANCEL INTERV NOTIF: ", (int) calIntervNotifId.getTimeInMillis() + "      event: " + event.getTitle() + "    interv: " + event.getIntervention());
                     Tools.cancelNotif(context, (int) calIntervNotifId.getTimeInMillis());
                 } else
                     Tools.addIntervNotif(context, calIntervBeforeEvent, (int) calIntervNotifId.getTimeInMillis(), String.format(Locale.US, "Intervention: %s", event.getIntervention()), String.format(Locale.US, "for upcoming event: %s", event.getTitle()));
@@ -661,7 +654,6 @@ class Event {
                 calIntervAfterEvent = (Calendar) event.getEndTime().clone();
                 calIntervAfterEvent.add(Calendar.MINUTE, event.getInterventionReminder());
                 if (calIntervAfterEvent.before(today)) {
-                    Log.e("CANCEL INTERV NOTIF: ", (int) calIntervNotifId.getTimeInMillis() + "      event: " + event.getTitle() + "    interv: " + event.getIntervention());
                     Tools.cancelNotif(context, (int) calIntervNotifId.getTimeInMillis());
                 } else
                     Tools.addIntervNotif(context, calIntervAfterEvent, (int) calIntervNotifId.getTimeInMillis(), String.format(Locale.US, "Intervention: %s", event.getIntervention()), String.format(Locale.US, "for passed event: %s", event.getTitle()));

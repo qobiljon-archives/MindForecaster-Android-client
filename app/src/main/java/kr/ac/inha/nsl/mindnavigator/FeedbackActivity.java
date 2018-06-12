@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.SeekBar;
@@ -67,8 +68,11 @@ public class FeedbackActivity extends AppCompatActivity {
         // compare and get expectation and reality discrepancy details if needed
         if (expectedStressLevelSeek.getProgress() < realStressLevelSeek.getProgress())
             stressIncrDetails.setVisibility(View.VISIBLE);
-        else
+        else{
             stressIncrDetails.setVisibility(View.GONE);
+            findViewById(R.id.btn_create).setVisibility(View.GONE);
+        }
+
     }
 
     public void cancelClick(View view) {

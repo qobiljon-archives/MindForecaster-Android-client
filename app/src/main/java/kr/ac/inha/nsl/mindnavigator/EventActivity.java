@@ -866,8 +866,6 @@ public class EventActivity extends AppCompatActivity {
                     dialog.show();
                     break;
                 case Event.NO_REPEAT:
-                    Log.e("Event start time", event.getStartTime().getTime() + "");
-                    Log.e("Event end time", event.getEndTime().getTime() + "");
                     createEvent(EventActivity.event.getStartTime().getTimeInMillis(), EventActivity.event.getEndTime().getTimeInMillis(), EventActivity.event.getEventId(), true);
                     break;
                 default:
@@ -902,7 +900,6 @@ public class EventActivity extends AppCompatActivity {
                     body.put("title", EventActivity.event.getTitle());
                     body.put("stressLevel", EventActivity.event.getStressLevel());
                     body.put("startTime", startTime);
-                    Log.e("STARTTIME", event.getStartTime().toString());
                     body.put("endTime", endTime);
                     if (EventActivity.event.getIntervention() == null) {
                         body.put("intervention", "");
