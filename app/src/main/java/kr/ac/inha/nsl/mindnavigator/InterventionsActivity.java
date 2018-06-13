@@ -54,11 +54,14 @@ public class InterventionsActivity extends AppCompatActivity {
                 findViewById(R.id.button_peer_interventions)
         };
 
+        TextView eventTitle = findViewById(R.id.event_title_text_view);
+        eventTitle.setText(getString(R.string.current_event_title, getIntent().getStringExtra("eventTitle")));
+
         if(getIntent().hasExtra("eventId")){
             //Editing and existing event
             event = Event.getEventById(getIntent().getLongExtra("eventId", 0));
             interv_text.setText(event.getIntervention());
-
+            eventTitle.setText(getString(R.string.current_event_title, event.getTitle()));
             switch (event.getInterventionReminder()) {
                 case 0:
                     intervScheduling.check(R.id.option_none);

@@ -16,7 +16,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:fontFamily="monospace"
             android:onClick="cancelClick"
             android:padding="10dp"
             android:text="@string/cancel"
@@ -34,15 +33,13 @@
             android:text="@string/evaluation"
             android:textAllCaps="true"
             android:textColor="@color/white"
-            android:textSize="15sp"
-            android:typeface="monospace" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/btn_create"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:fontFamily="monospace"
             android:onClick="saveClick"
             android:padding="10dp"
             android:text="@string/save"
@@ -51,31 +48,6 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/tab_event"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:onClick="tabClicked"
-            android:text="@string/event" />
-
-        <Button
-            android:id="@+id/tab_intervention"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/bright_grey"
-            android:onClick="tabClicked"
-            android:text="@string/intervention" />
     </LinearLayout>
 
     <ScrollView
@@ -137,8 +109,7 @@
                         android:text="@string/ask_stress_level"
                         android:textColor="@color/black"
                         android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:typeface="monospace" />
+                        android:textStyle="bold" />
 
                     <SeekBar
                         android:id="@+id/real_stress_level_seek"
@@ -155,8 +126,17 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/low"
+                            android:text="@string/not_at_all"
                             android:textColor="@color/slvl0_color"
+                            android:textAlignment="viewStart"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/low"
+                            android:textAlignment="center"
                             android:textSize="15sp" />
 
                         <TextView
@@ -173,6 +153,14 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/high"
+                            android:textAlignment="center"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/extreme"
                             android:textAlignment="viewEnd"
                             android:textColor="@color/slvl2_color"
                             android:textSize="15sp" />
@@ -187,8 +175,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="15dp"
-                android:visibility="gone">
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp">
 
                 <TextView
                     android:id="@+id/intervention_title_text"
@@ -233,8 +221,7 @@
                         android:text="@string/interv_effectiveness"
                         android:textColor="@color/black"
                         android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:typeface="monospace" />
+                        android:textStyle="bold" />
 
                     <SeekBar
                         android:id="@+id/intervention_effectiveness"
@@ -251,20 +238,46 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/bad"
+                            android:text="@string/poor"
+                            android:textColor="@color/black"
+                            android:textAlignment="viewStart"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/fair"
                             android:textColor="@color/black"
                             android:textSize="15sp"
-                            android:typeface="monospace" />
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/average"
+                            android:textColor="@color/black"
+                            android:textSize="15sp"
+                            android:textAlignment="center" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/good"
-                            android:textAlignment="viewEnd"
                             android:textColor="@color/black"
                             android:textSize="15sp"
-                            android:typeface="monospace" />
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/excellent"
+                            android:textAlignment="viewEnd"
+                            android:textColor="@color/black"
+                            android:textSize="15sp" />
 
                     </LinearLayout>
 
@@ -283,6 +296,40 @@
                     android:paddingBottom="15dp"
                     android:paddingTop="15dp"
                     android:text="@string/interv_recommendation" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginBottom="15dp">
+
+                <TextView
+                    android:labelFor="@+id/journal_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/journal"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+                <EditText
+                    android:id="@id/journal_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_solid_wrap"
+                    android:gravity="top"
+                    android:inputType="textMultiLine"
+                    android:maxLength="128"
+                    android:maxLines="5"
+                    android:lines="3"
+                    android:padding="10dp"
+                    android:paddingTop="5dp" />
 
             </LinearLayout>
 

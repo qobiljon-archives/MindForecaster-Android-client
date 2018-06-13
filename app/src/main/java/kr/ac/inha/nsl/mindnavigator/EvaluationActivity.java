@@ -2,12 +2,10 @@ package kr.ac.inha.nsl.mindnavigator;
 
 import android.app.Activity;
 import android.graphics.PorterDuff;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -28,32 +26,31 @@ public class EvaluationActivity extends AppCompatActivity {
     }
 
     //region Variables
-    private Button[] tabButtons;
     private CheckBox eventCompletionCheck, intervCompletionCheck, intervSharingCheck;
     private SeekBar realStressLevel, intervEffectiveness;
-    private ViewGroup eventLayout, interventionLayout;
     //endregion
 
     private void init() {
-        tabButtons = new Button[]{
-                findViewById(R.id.tab_event),
-                findViewById(R.id.tab_intervention)
-        };
-
         eventCompletionCheck = findViewById(R.id.event_cempletion_check);
         intervCompletionCheck = findViewById(R.id.intervention_completion);
         realStressLevel = findViewById(R.id.real_stress_level_seek);
         intervSharingCheck = findViewById(R.id.intervention_sharing_check);
-        eventLayout = findViewById(R.id.event_layout);
-        interventionLayout = findViewById(R.id.intervention_layout);
         intervEffectiveness = findViewById(R.id.intervention_effectiveness);
+
+
+        ViewGroup interventionLayout = findViewById(R.id.intervention_layout);
         TextView eventTitle = findViewById(R.id.event_title_text_view);
         eventTitle.setText(getString(R.string.current_event_title, EventActivity.event.getTitle()));
         TextView intervTitle = findViewById(R.id.intervention_title_text);
         intervTitle.setText(getString(R.string.current_interv_title, EventActivity.event.getIntervention()));
 
-        realStressLevel.getProgressDrawable().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.green, null), PorterDuff.Mode.SRC_IN);
-        realStressLevel.getThumb().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.green, null), PorterDuff.Mode.SRC_IN);
+        if (EventActivity.event.getIntervention().length() == 0) {
+            interventionLayout.setVisibility(View.GONE);
+        }
+
+        realStressLevel.setProgress(EventActivity.event.getStressLevel());
+        realStressLevel.getProgressDrawable().setColorFilter(Tools.stressLevelToColor(EventActivity.event.getStressLevel()), PorterDuff.Mode.SRC_IN);
+        realStressLevel.getThumb().setColorFilter(Tools.stressLevelToColor(EventActivity.event.getStressLevel()), PorterDuff.Mode.SRC_IN);
         realStressLevel.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -70,31 +67,8 @@ public class EvaluationActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
-    }
 
-    public void tabClicked(View view) {
-        if (EventActivity.event.getIntervention().length() == 0) {
-            Toast.makeText(this, "Intervention was not selected/created for this event.", Toast.LENGTH_LONG).show();
-            return;
-        }
 
-        eventLayout.setVisibility(View.GONE);
-        interventionLayout.setVisibility(View.GONE);
-        for (Button button : tabButtons)
-            button.setBackgroundResource(R.color.bright_grey);
-
-        switch (view.getId()) {
-            case R.id.tab_event:
-                tabButtons[0].setBackgroundResource(android.R.color.transparent);
-                eventLayout.setVisibility(View.VISIBLE);
-                break;
-            case R.id.tab_intervention:
-                tabButtons[1].setBackgroundResource(android.R.color.transparent);
-                interventionLayout.setVisibility(View.VISIBLE);
-                break;
-            default:
-                break;
-        }
     }
 
     public void cancelClick(View view) {

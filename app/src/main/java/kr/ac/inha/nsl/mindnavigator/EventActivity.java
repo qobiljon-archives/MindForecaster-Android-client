@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -202,11 +201,11 @@ public class EventActivity extends AppCompatActivity {
         }
 
         startDateText.setText(String.format(Locale.US,
-                "%s, %s %d, %d",
-                startTime.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
+                "%d, %s %d, %s",
+                startTime.get(Calendar.YEAR),
                 startTime.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
                 startTime.get(Calendar.DAY_OF_MONTH),
-                startTime.get(Calendar.YEAR)
+                startTime.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
         ));
         startDateText.setTag(startTime.getTimeInMillis());
         startTimeText.setText(String.format(Locale.US,
@@ -216,11 +215,11 @@ public class EventActivity extends AppCompatActivity {
         );
         startTimeText.setTag(startTime.getTimeInMillis());
         endDateText.setText(String.format(Locale.US,
-                "%s, %s %d, %d",
-                endTime.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
+                "%d, %s %d, %s",
+                endTime.get(Calendar.YEAR),
                 endTime.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
                 endTime.get(Calendar.DAY_OF_MONTH),
-                endTime.get(Calendar.YEAR)
+                endTime.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
         ));
         endDateText.setTag(endTime.getTimeInMillis());
         endTimeText.setText(String.format(Locale.US,
@@ -252,11 +251,11 @@ public class EventActivity extends AppCompatActivity {
                     endTime.add(Calendar.HOUR_OF_DAY, 1);
 
                     startDateText.setText(String.format(Locale.US,
-                            "%s, %s %d, %d",
-                            startTime.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
+                            "%d, %s %d, %s",
+                            startTime.get(Calendar.YEAR),
                             startTime.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
                             startTime.get(Calendar.DAY_OF_MONTH),
-                            startTime.get(Calendar.YEAR)
+                            startTime.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
                     ));
                     startDateText.setTag(startTime.getTimeInMillis());
                     startTimeText.setText(String.format(Locale.US,
@@ -266,11 +265,11 @@ public class EventActivity extends AppCompatActivity {
                     );
                     startTimeText.setTag(startTime.getTimeInMillis());
                     endDateText.setText(String.format(Locale.US,
-                            "%s, %s %d, %d",
-                            endTime.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
+                            "%d, %s %d, %s",
+                            endTime.get(Calendar.YEAR),
                             endTime.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
                             endTime.get(Calendar.DAY_OF_MONTH),
-                            endTime.get(Calendar.YEAR)
+                            endTime.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
                     ));
                     endDateText.setTag(endTime.getTimeInMillis());
                     endTimeText.setText(String.format(Locale.US,
@@ -286,11 +285,11 @@ public class EventActivity extends AppCompatActivity {
 
                     endTime.add(Calendar.HOUR_OF_DAY, 1);
                     endDateText.setText(String.format(Locale.US,
-                            "%s, %s %d, %d",
-                            endTime.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
+                            "%d, %s %d, %s",
+                            endTime.get(Calendar.YEAR),
                             endTime.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
                             endTime.get(Calendar.DAY_OF_MONTH),
-                            endTime.get(Calendar.YEAR)
+                            endTime.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
                     ));
                     endTimeText.setText(String.format(Locale.US,
                             "%02d:%02d",
@@ -517,6 +516,7 @@ public class EventActivity extends AppCompatActivity {
         Intent intent = new Intent(this, InterventionsActivity.class);
         if (getIntent().hasExtra("eventId"))
             intent.putExtra("eventId", event.getEventId());
+        else intent.putExtra("eventTitle", eventTitle.getText().toString());
         startActivityForResult(intent, INTERVENTION_ACTIVITY);
         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
     }
@@ -975,11 +975,11 @@ public class EventActivity extends AppCompatActivity {
 
                 view.setTag(cal.getTimeInMillis());
                 ((TextView) view).setText(String.format(Locale.US,
-                        "%s, %s %d, %d",
-                        cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
+                        "%d, %s %d, %s",
+                        cal.get(Calendar.YEAR),
                         cal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
                         cal.get(Calendar.DAY_OF_MONTH),
-                        cal.get(Calendar.YEAR)
+                        cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
                 ));
 
                 switch (view.getId()) {

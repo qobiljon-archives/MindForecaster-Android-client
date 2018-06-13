@@ -39,9 +39,9 @@
     <string name="delete">Delete</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
-    <string name="low">Not at all</string>
-    <string name="high">Extremely</string>
-    <string name="normal">Normally</string>
+    <string name="not_at_all">Not at all</string>
+    <string name="extreme">Extreme</string>
+    <string name="normal">Normal</string>
     <string name="btn_close">Close</string>
     <string name="more">More</string>
     <string name="intervention_method">Intervention method</string>
@@ -126,6 +126,13 @@
     <string name="interv_before_event">Please check if intervention has been done before the event, or uncheck if it has been done after.</string>
     <string name="create">CREATE</string>
     <string name="none">none</string>
+    <string name="low">Low</string>
+    <string name="high">High</string>
+    <string name="poor">Poor</string>
+    <string name="fair">Fair</string>
+    <string name="average">Average</string>
+    <string name="excellent">Excellent</string>
+    <string name="journal">Journal</string>
 
     <string-array name="months_array">
         <item>Jan</item>

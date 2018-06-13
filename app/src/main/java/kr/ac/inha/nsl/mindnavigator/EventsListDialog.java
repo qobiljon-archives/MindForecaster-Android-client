@@ -63,11 +63,11 @@ public class EventsListDialog extends DialogFragment {
         TextView dateTxt = root.findViewById(R.id.cell_date);
 
         dateTxt.setText(String.format(Locale.US,
-                "%s, %02d %s %02d",
-                selectedDay.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
-                selectedDay.get(Calendar.DAY_OF_MONTH),
+                "%02d, %s %02d, %s",
+                selectedDay.get(Calendar.YEAR),
                 selectedDay.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
-                selectedDay.get(Calendar.YEAR)
+                selectedDay.get(Calendar.DAY_OF_MONTH),
+                selectedDay.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
         ));
 
         ArrayList<Event> dayEvents = Event.getOneDayEvents(selectedDay);
