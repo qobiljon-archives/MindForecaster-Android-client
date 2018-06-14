@@ -2,6 +2,9 @@ package kr.ac.inha.nsl.mindnavigator;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -1039,6 +1042,21 @@ public class EventActivity extends AppCompatActivity {
         cal.setTimeInMillis((long) view.getTag());
         TimePickerDialog dialog = new TimePickerDialog(this, listener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true);
         dialog.show();
+    }
+
+    public void clickCustomNotification(View view) {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialogCustomNotif");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+        DialogFragment dialogFragment = new CustomNotificationDialog();
+        dialogFragment.show(ft, "dialogCustomNotif");
+    }
+
+    public void setNotifMinutes(int minutes) {
+        Toast.makeText(this, minutes+"", Toast.LENGTH_SHORT).show(); //TODO: complete the custom notification part
     }
 
     private abstract class MyOnDateSetListener implements DatePickerDialog.OnDateSetListener {

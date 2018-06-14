@@ -370,6 +370,25 @@
                             android:text="@string/_10_minutes_before"
                             android:textSize="14sp" />
 
+                        <RadioButton
+                            android:id="@+id/radio_btn_custom"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="@string/dummy"
+                            android:textSize="14sp"
+                            android:visibility="gone"/>
+
+                        <TextView
+                            android:id="@+id/txt_custom_notif"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:onClick="clickCustomNotification"
+                            android:layout_marginStart="32dp"
+                            android:textSize="15sp"
+                            android:text="@string/custom"/>
+
                     </RadioGroup>
 
                 </LinearLayout>
