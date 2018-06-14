@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,16 +28,18 @@ public class EvaluationActivity extends AppCompatActivity {
 
     //region Variables
     private CheckBox eventCompletionCheck, intervCompletionCheck, intervSharingCheck;
-    private SeekBar realStressLevel, intervEffectiveness;
+    private SeekBar realStressLevel;
+    private SeekBar intervEffectiveness;
     //endregion
 
     private void init() {
         eventCompletionCheck = findViewById(R.id.event_cempletion_check);
         intervCompletionCheck = findViewById(R.id.intervention_completion);
         realStressLevel = findViewById(R.id.real_stress_level_seek);
+        SeekBar expectedStressLevel = findViewById(R.id.expected_stresslvl_seekbar);
         intervSharingCheck = findViewById(R.id.intervention_sharing_check);
         intervEffectiveness = findViewById(R.id.intervention_effectiveness);
-
+        EditText journalText = findViewById(R.id.journal_text);
 
         ViewGroup interventionLayout = findViewById(R.id.intervention_layout);
         TextView eventTitle = findViewById(R.id.event_title_text_view);
@@ -47,6 +50,11 @@ public class EvaluationActivity extends AppCompatActivity {
         if (EventActivity.event.getIntervention().length() == 0) {
             interventionLayout.setVisibility(View.GONE);
         }
+
+        expectedStressLevel.setProgress(EventActivity.event.getStressLevel());
+        expectedStressLevel.getProgressDrawable().setColorFilter(Tools.stressLevelToColor(EventActivity.event.getStressLevel()), PorterDuff.Mode.SRC_IN);
+        expectedStressLevel.getThumb().setColorFilter(Tools.stressLevelToColor(EventActivity.event.getStressLevel()), PorterDuff.Mode.SRC_IN);
+        expectedStressLevel.setEnabled(false);
 
         realStressLevel.setProgress(EventActivity.event.getStressLevel());
         realStressLevel.getProgressDrawable().setColorFilter(Tools.stressLevelToColor(EventActivity.event.getStressLevel()), PorterDuff.Mode.SRC_IN);
@@ -68,7 +76,7 @@ public class EvaluationActivity extends AppCompatActivity {
             }
         });
 
-
+        Tools.toggle_keyboard(this, journalText, false);
     }
 
     public void cancelClick(View view) {

@@ -317,6 +317,7 @@ public class EventActivity extends AppCompatActivity {
                 stressLvl.getThumb().setColorFilter(Tools.stressLevelToColor(progress), PorterDuff.Mode.SRC_IN);
                 if (progress > 0) {
                     inactiveLayout.setVisibility(View.VISIBLE);
+                    findViewById(R.id.interventions_tab).getParent().requestChildFocus(findViewById(R.id.interventions_tab), findViewById(R.id.interventions_tab));
                 } else inactiveLayout.setVisibility(View.GONE);
             }
 
@@ -451,6 +452,7 @@ public class EventActivity extends AppCompatActivity {
         } else {
             stressLevelDetails.setVisibility(View.VISIBLE);
             optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
+            findViewById(R.id.interventions_tab).getParent().requestChildFocus(findViewById(R.id.interventions_tab), findViewById(R.id.interventions_tab));
         }
     }
 
@@ -465,6 +467,7 @@ public class EventActivity extends AppCompatActivity {
             repeatDetails.setVisibility(View.VISIBLE);
             notificationDetails.setVisibility(View.VISIBLE);
             optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
+            findViewById(R.id.anticipated_strs_lvl_tab).getParent().requestChildFocus(findViewById(R.id.anticipated_strs_lvl_tab), findViewById(R.id.anticipated_strs_lvl_tab));
         }
     }
 
@@ -477,6 +480,7 @@ public class EventActivity extends AppCompatActivity {
         } else {
             interventionDetails.setVisibility(View.VISIBLE);
             optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
+            interventionDetails.getParent().requestChildFocus(interventionDetails, interventionDetails);
 
             if (event.getIntervention() != null && event.getIntervention().length() > 0) {
                 switch (event.getInterventionReminder()) {

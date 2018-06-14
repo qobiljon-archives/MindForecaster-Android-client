@@ -93,7 +93,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:fontFamily="monospace"
             android:gravity="center"
             android:text="@string/sunday"
             android:textColor="@color/red"
@@ -103,7 +102,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:fontFamily="monospace"
             android:gravity="center"
             android:text="@string/monday"
             android:textStyle="bold" />
@@ -112,7 +110,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:fontFamily="monospace"
             android:gravity="center"
             android:text="@string/tuesday"
             android:textStyle="bold" />
@@ -121,7 +118,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:fontFamily="monospace"
             android:gravity="center"
             android:text="@string/wednesday"
             android:textStyle="bold" />
@@ -130,7 +126,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:fontFamily="monospace"
             android:gravity="center"
             android:text="@string/thursday"
             android:textStyle="bold" />
@@ -139,7 +134,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:fontFamily="monospace"
             android:gravity="center"
             android:text="@string/friday"
             android:textStyle="bold" />
@@ -148,7 +142,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:fontFamily="monospace"
             android:gravity="center"
             android:text="@string/saturday"
             android:textColor="@color/pink"

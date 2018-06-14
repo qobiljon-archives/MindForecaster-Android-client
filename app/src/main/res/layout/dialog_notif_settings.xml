@@ -22,8 +22,7 @@
             android:text="@string/sunday_time"
             android:textColor="@color/black"
             android:textSize="15sp"
-            android:textStyle="bold"
-            android:typeface="monospace" />
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@id/txt_sunday_time"
@@ -53,8 +52,7 @@
             android:text="@string/every_morning_time"
             android:textColor="@color/black"
             android:textSize="15sp"
-            android:textStyle="bold"
-            android:typeface="monospace" />
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@id/txt_everymorning_time"
@@ -84,8 +82,7 @@
             android:text="@string/every_evening_time"
             android:textColor="@color/black"
             android:textSize="15sp"
-            android:textStyle="bold"
-            android:typeface="monospace" />
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@id/txt_everyevening_time"

@@ -65,6 +65,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="30dp"
                 android:layout_marginStart="30dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:orientation="vertical">
 
                 <TextView
@@ -111,59 +113,152 @@
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
-                    <SeekBar
-                        android:id="@+id/real_stress_level_seek"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:max="100" />
+                        android:orientation="vertical"
+                        android:paddingBottom="15dp"
+                        android:paddingTop="15dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/expected_stress_level"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <SeekBar
+                            android:id="@+id/expected_stresslvl_seekbar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:enabled="false"
+                            android:max="100"
+                            android:progress="50" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/not_at_all"
+                                android:textAlignment="viewStart"
+                                android:textColor="@color/slvl0_color"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/low"
+                                android:textAlignment="center"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/normal"
+                                android:textAlignment="center"
+                                android:textColor="@color/slvl1_color"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/high"
+                                android:textAlignment="center"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/extreme"
+                                android:textAlignment="viewEnd"
+                                android:textColor="@color/slvl2_color"
+                                android:textSize="15sp" />
+                        </LinearLayout>
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingBottom="15dp">
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/not_at_all"
-                            android:textColor="@color/slvl0_color"
-                            android:textAlignment="viewStart"
-                            android:textSize="15sp" />
+                            android:gravity="center"
+                            android:text="@string/real_stress_level"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="0dp"
+                        <SeekBar
+                            android:id="@+id/real_stress_level_seek"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/low"
-                            android:textAlignment="center"
-                            android:textSize="15sp" />
+                            android:layout_marginTop="10dp"
+                            android:max="100"
+                            android:progress="50" />
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/normal"
-                            android:textAlignment="center"
-                            android:textColor="@color/slvl1_color"
-                            android:textSize="15sp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/high"
-                            android:textAlignment="center"
-                            android:textSize="15sp" />
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/not_at_all"
+                                android:textAlignment="viewStart"
+                                android:textColor="@color/slvl0_color"
+                                android:textSize="15sp" />
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/extreme"
-                            android:textAlignment="viewEnd"
-                            android:textColor="@color/slvl2_color"
-                            android:textSize="15sp" />
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/low"
+                                android:textAlignment="center"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/normal"
+                                android:textAlignment="center"
+                                android:textColor="@color/slvl1_color"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/high"
+                                android:textAlignment="center"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/extreme"
+                                android:textAlignment="viewEnd"
+                                android:textColor="@color/slvl2_color"
+                                android:textSize="15sp" />
+                        </LinearLayout>
+
                     </LinearLayout>
 
                 </LinearLayout>
@@ -174,9 +269,9 @@
                 android:id="@+id/intervention_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_marginEnd="30dp"
-                android:layout_marginStart="30dp">
+                android:layout_marginStart="30dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/intervention_title_text"
@@ -239,8 +334,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/poor"
-                            android:textColor="@color/black"
                             android:textAlignment="viewStart"
+                            android:textColor="@color/black"
                             android:textSize="15sp" />
 
                         <TextView
@@ -248,27 +343,27 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/fair"
+                            android:textAlignment="center"
                             android:textColor="@color/black"
-                            android:textSize="15sp"
-                            android:textAlignment="center" />
+                            android:textSize="15sp" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/average"
+                            android:textAlignment="center"
                             android:textColor="@color/black"
-                            android:textSize="15sp"
-                            android:textAlignment="center" />
+                            android:textSize="15sp" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/good"
+                            android:textAlignment="center"
                             android:textColor="@color/black"
-                            android:textSize="15sp"
-                            android:textAlignment="center" />
+                            android:textSize="15sp" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -302,20 +397,20 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="10dp"
+                android:layout_marginBottom="15dp"
                 android:layout_marginEnd="30dp"
                 android:layout_marginStart="30dp"
-                android:layout_marginBottom="15dp">
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
 
                 <TextView
-                    android:labelFor="@+id/journal_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:labelFor="@+id/journal_text"
                     android:text="@string/journal"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <EditText
                     android:id="@id/journal_text"
@@ -325,9 +420,9 @@
                     android:background="@drawable/bg_solid_wrap"
                     android:gravity="top"
                     android:inputType="textMultiLine"
+                    android:lines="3"
                     android:maxLength="128"
                     android:maxLines="5"
-                    android:lines="3"
                     android:padding="10dp"
                     android:paddingTop="5dp" />
 

@@ -1,12 +1,14 @@
 package kr.ac.inha.nsl.mindnavigator;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -56,6 +58,29 @@ public class InterventionsActivity extends AppCompatActivity {
 
         TextView eventTitle = findViewById(R.id.event_title_text_view);
         eventTitle.setText(getString(R.string.current_event_title, getIntent().getStringExtra("eventTitle")));
+
+        //region For hiding a soft keyboard
+        final InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(interv_text.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+        }
+
+        schedulingView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(interv_text.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+                }
+            }
+        });
+        eventTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                assert imm != null;
+                imm.hideSoftInputFromWindow(interv_text.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+            }
+        });
+        //endregion
 
         if(getIntent().hasExtra("eventId")){
             //Editing and existing event
@@ -110,9 +135,10 @@ public class InterventionsActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.button_self_intervention:
                 tabButtons[0].setBackgroundResource(R.drawable.bg_interv_method_checked_view);
+                interv_text.setText("");
+                intervScheduling.check(R.id.option_none);
                 interv_text.setVisibility(View.VISIBLE);
                 schedulingView.setVisibility(View.VISIBLE);
-                Tools.toggle_keyboard(this, interv_text, true);
                 saveIntervention = true;
                 break;
             case R.id.button_systems_intervention:
@@ -280,8 +306,11 @@ public class InterventionsActivity extends AppCompatActivity {
     public void onIntervClick(View view) {
         result = ((TextView) view.findViewById(R.id.intervention_text)).getText().toString();
         interv_text.setText(result);
-        interv_text.setSelection(interv_text.length());
-        tabButtons[0].callOnClick();
+
+        interv_choice.setVisibility(View.GONE);
+        interv_text.setVisibility(View.VISIBLE);
+        schedulingView.setVisibility(View.VISIBLE);
+        saveIntervention = true;
     }
 
     public void cancelClick(View view) {
