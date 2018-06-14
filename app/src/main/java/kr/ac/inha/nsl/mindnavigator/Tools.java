@@ -290,11 +290,12 @@ public class Tools {
         return readOfflineInterventions(context, "peer");
     }
 
-    static void addDailyNotif(Context context, Calendar when, String text) {
+    static void addDailyNotif(Context context, Calendar when, String text, boolean isEvaluate) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlaramReceiverEveryDay.class);
         intent.putExtra("Content", text);
         intent.putExtra("notification_id", when.getTimeInMillis());
+        intent.putExtra("isEvaluate", isEvaluate);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int) when.getTimeInMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         if (alarmManager != null)
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
@@ -661,7 +662,7 @@ class Event {
         }
     }
 
-    private void setEvaluated(boolean evaluated) {
+    void setEvaluated(boolean evaluated) {
         this.evaluated = evaluated;
     }
 

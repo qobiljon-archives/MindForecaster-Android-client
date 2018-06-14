@@ -117,20 +117,24 @@ public class SignInActivity extends AppCompatActivity {
                                             dailyNotifTime.set(Calendar.SECOND, 0);
                                             NotifSettingsDialog.everyMorning = (Calendar) dailyNotifTime.clone();
                                             editor.putLong("EveryMorningReminderTime", dailyNotifTime.getTimeInMillis());
-                                            Tools.addDailyNotif(SignInActivity.this, dailyNotifTime, "Do you have a new schedule today?");
+                                            Tools.addDailyNotif(SignInActivity.this, dailyNotifTime, "Do you have a new schedule today?", false);
 
                                             dailyNotifTime.set(Calendar.HOUR_OF_DAY, 22);
                                             dailyNotifTime.set(Calendar.MINUTE, 0);
                                             dailyNotifTime.set(Calendar.SECOND, 0);
                                             NotifSettingsDialog.everyEvening = (Calendar) dailyNotifTime.clone();
                                             editor.putLong("EveryEveningReminderTime", dailyNotifTime.getTimeInMillis());
-                                            Tools.addDailyNotif(SignInActivity.this, dailyNotifTime, "Please, evaluate today's events!");
+                                            Tools.addDailyNotif(SignInActivity.this, dailyNotifTime, "Please, evaluate today's events!", true);
 
                                             editor.putBoolean("firstTime", false);
                                             editor.apply();
                                         }
 
                                         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                                        if (getIntent().hasExtra("eventDate")){
+                                            intent.putExtra("eventDate", getIntent().getLongExtra("eventDate", 0));
+                                            intent.putExtra("isEvaluate", getIntent().getBooleanExtra("isEvaluate", false));
+                                        }
                                         startActivity(intent);
                                         finish();
                                         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
@@ -176,6 +180,10 @@ public class SignInActivity extends AppCompatActivity {
             });
         else if (loginPrefs.getString(SignInActivity.username, null) != null && loginPrefs.getString(SignInActivity.password, null) != null) {
             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+            if (getIntent().hasExtra("eventDate")){
+                intent.putExtra("eventDate", getIntent().getLongExtra("eventDate", 0));
+                intent.putExtra("isEvaluate", getIntent().getBooleanExtra("isEvaluate", false));
+            }
             startActivity(intent);
             finish();
             overridePendingTransition(R.anim.activity_in, R.anim.activity_out);

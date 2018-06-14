@@ -9,11 +9,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
+import java.util.Calendar;
+
 public class AlaramReceiverEveryDay extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Intent notificationIntent = new Intent(context, SignInActivity.class);
+        Calendar cal = Calendar.getInstance();
+        notificationIntent.putExtra("eventDate", cal.getTimeInMillis());
+        notificationIntent.putExtra("event", "hi");
+        notificationIntent.putExtra("isEvaluate", intent.getBooleanExtra("isEvaluate", false));
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(SignInActivity.class);

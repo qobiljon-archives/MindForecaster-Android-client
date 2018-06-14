@@ -4,7 +4,6 @@ import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,8 +93,8 @@ public class NotifSettingsDialog extends DialogFragment {
             public void onClick(View v) {
                 deletePrevNotifications(sundayPrev, everyMorningPrev, everyEveningPrev);
                 Tools.addSundayNotif(getActivity(), sunday);
-                Tools.addDailyNotif(getActivity(), everyMorning, "Do you have a new schedule today?");
-                Tools.addDailyNotif(getActivity(), everyEvening, "Please, evaluate today's events!");
+                Tools.addDailyNotif(getActivity(), everyMorning, "Do you have a new schedule today?", false);
+                Tools.addDailyNotif(getActivity(), everyEvening, "Please, evaluate today's events!", true);
                 SharedPreferences.Editor editor = SignInActivity.loginPrefs.edit();
                 editor.putLong("SundayReminderTime", sunday.getTimeInMillis());
                 editor.putLong("EveryMorningReminderTime", everyMorning.getTimeInMillis());

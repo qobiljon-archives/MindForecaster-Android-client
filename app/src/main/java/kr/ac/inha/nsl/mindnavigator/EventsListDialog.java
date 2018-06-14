@@ -78,7 +78,12 @@ public class EventsListDialog extends DialogFragment {
             view.setOnClickListener(onEventClickListener);
             TextView titleText = view.findViewById(R.id.event_title_text_view);
             TextView dateText = view.findViewById(R.id.event_date_text_view);
+            TextView isEvaluated = view.findViewById(R.id.is_evaluated);
             TextView stressLevel = view.findViewById(R.id.stress_lvl_box);
+
+            if (event.isEvaluated())
+                isEvaluated.setText("Evaluated");
+            else isEvaluated.setText("Not evaluated");
 
             stressLevel.setText(String.valueOf(event.getStressLevel()));
             stressLevel.setBackgroundColor(Tools.stressLevelToColor(event.getStressLevel()));

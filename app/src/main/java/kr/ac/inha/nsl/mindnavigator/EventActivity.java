@@ -799,6 +799,8 @@ public class EventActivity extends AppCompatActivity {
                 break;
         }
 
+        event.setEvaluated(false);
+
         if (Tools.isNetworkAvailable(this)) {
             MyOnDateSetListener listener;
             DatePickerDialog dialog;
@@ -916,6 +918,7 @@ public class EventActivity extends AppCompatActivity {
                     body.put("stressCause", EventActivity.event.getStressCause());
                     body.put("repeatMode", EventActivity.event.getRepeatMode());
                     body.put("eventReminder", EventActivity.event.getEventReminder());
+                    body.put("isEvaluated", EventActivity.event.isEvaluated());
 
                     JSONObject res = new JSONObject(Tools.post(url, body));
                     switch (res.getInt("result")) {

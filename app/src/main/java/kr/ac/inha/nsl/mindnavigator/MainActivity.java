@@ -12,7 +12,6 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -67,21 +66,25 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout.OnClickListener cellClick = new LinearLayout.OnClickListener() {
         @Override
         public void onClick(View view) {
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-            if (prev != null) {
-                ft.remove(prev);
-            }
-            ft.addToBackStack(null);
-            DialogFragment dialogFragment = new EventsListDialog();
-            Bundle args = new Bundle();
-            args.putLong("selectedDayMillis", (long) view.getTag());
-            dialogFragment.setArguments(args);
-            dialogFragment.show(ft, "dialog");
+            showTodayEvents((long) view.getTag());
         }
     };
     // endregion
     // endregion
+
+    private void showTodayEvents(long dateTimeMillis) {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+        DialogFragment dialogFragment = new EventsListDialog();
+        Bundle args = new Bundle();
+        args.putLong("selectedDayMillis", dateTimeMillis);
+        dialogFragment.setArguments(args);
+        dialogFragment.show(ft, "dialog");
+    }
 
     private void init() {
         currentCal = Calendar.getInstance();
@@ -234,6 +237,12 @@ public class MainActivity extends AppCompatActivity {
                                                     tv.setText(event.getTitle());
                                                 }
                                             }
+
+                                        if (getIntent().hasExtra("eventDate")) {
+                                            if (getIntent().getBooleanExtra("isEvaluate", false))
+                                                showTodayEvents(getIntent().getLongExtra("eventDate", 0));
+                                        }
+
                                     }
                                 });
                                 break;
@@ -285,7 +294,13 @@ public class MainActivity extends AppCompatActivity {
                         tv.setText(event.getTitle());
                     }
                 }
+
+            if (getIntent().hasExtra("eventDate")) {
+                if (getIntent().getBooleanExtra("isEvaluate", false))
+                    showTodayEvents(getIntent().getLongExtra("eventDate", 0));
+            }
         }
+
     }
 
     public int getFirstWeekdayIndex(int day, int month, int year) {

@@ -18,8 +18,9 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:orientation="vertical">
 
             <TextView
@@ -42,12 +43,21 @@
                 android:maxLines="1"
                 android:text="@string/dummy"
                 android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/is_evaluated"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/bright_grey"
+                android:text="@string/dummy"
+                android:textColor="@color/black" />
+
         </LinearLayout>
 
         <TextView
             android:id="@+id/stress_lvl_box"
             android:layout_width="35dp"
-            android:layout_height="20dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|end"
             android:background="@android:color/darker_gray"
             android:minWidth="40dp"

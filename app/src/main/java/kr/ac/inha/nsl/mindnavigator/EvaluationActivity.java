@@ -113,6 +113,7 @@ public class EvaluationActivity extends AppCompatActivity {
                         body.put("interventionDoneBefore", true);//TODO: remove this from Server
                         body.put("sharedIntervention", intervSharingCheck.isChecked());
                         body.put("intervEffectiveness", intervEffectiveness.getProgress());
+                        body.put("isEvaluated", true);
 
                         JSONObject res = new JSONObject(Tools.post(url, body));
                         switch (res.getInt("result")) {
@@ -121,7 +122,6 @@ public class EvaluationActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         Toast.makeText(EvaluationActivity.this, "Evaluation successfully submitted, thank you!", Toast.LENGTH_SHORT).show();
-
                                         setResult(Activity.RESULT_OK);
                                         finish();
                                         overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
