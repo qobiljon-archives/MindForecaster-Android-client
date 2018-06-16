@@ -12,11 +12,13 @@ import android.widget.Spinner;
 
 public class CustomNotificationDialog extends DialogFragment {
 
+    private String customNotifText;
+    private String customNotifTimeTxt;
     private ViewGroup root;
     private EditText numberTxt;
-    private Spinner spinner;
     private int minutes;
-    private boolean day = false, hour = false, minute = false;
+    private boolean day = false, hour = false;
+    private boolean before = true;
 
 
     @Override
@@ -28,19 +30,22 @@ public class CustomNotificationDialog extends DialogFragment {
 
     private void init() {
         numberTxt = root.findViewById(R.id.number);
-        spinner = root.findViewById(R.id.spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(root.getContext(), R.array.reminder_array_spinner, android.R.layout.simple_spinner_item);
+        Spinner spinnerFirst = root.findViewById(R.id.spinner_1st);
+        Spinner spinnerSecond = root.findViewById(R.id.spinner_2nd);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(root.getContext(), R.array.reminder_array_spinner_1st, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinnerFirst.setAdapter(adapter);
+        spinnerFirst.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (parent.getSelectedItemPosition() == 1)
+                if (parent.getSelectedItemPosition() == 1) {
+                    customNotifText = " hour(s)";
                     hour = true;
-                else if (parent.getSelectedItemPosition() == 2)
+                } else if (parent.getSelectedItemPosition() == 2) {
+                    customNotifText = " day(s)";
                     day = true;
-                else
-                    minute = true;
+                } else customNotifText = " minute(s)";
             }
 
             @Override
@@ -49,6 +54,29 @@ public class CustomNotificationDialog extends DialogFragment {
             }
         });
 
+        adapter = ArrayAdapter.createFromResource(root.getContext(), R.array.reminder_array_spinner_2nd, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSecond.setAdapter(adapter);
+        spinnerSecond.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (parent.getSelectedItemPosition() == 0)
+                    before = true;
+                else if (parent.getSelectedItemPosition() == 1)
+                    before = false;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        if (getArguments().getBoolean("isEventNotification")) {
+            spinnerSecond.setEnabled(false);
+        }
+
+
         root.findViewById(R.id.btn_ok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,9 +84,24 @@ public class CustomNotificationDialog extends DialogFragment {
                     minutes = Integer.parseInt(numberTxt.getText().toString()) * 24 * 60;
                 else if (hour)
                     minutes = Integer.parseInt(numberTxt.getText().toString()) * 60;
+                else minutes = Integer.parseInt(numberTxt.getText().toString());
 
-                if (getActivity() instanceof EventActivity)
-                    ((EventActivity) getActivity()).setNotifMinutes(minutes);
+                customNotifTimeTxt = numberTxt.getText().toString() + customNotifText; // setting reminder time-text for notification text
+                if (before) {
+                    minutes = -minutes; // setting negative time when before is selected
+                    customNotifText = customNotifText + " before";
+                } else customNotifText = customNotifText + " after";
+
+                customNotifText = numberTxt.getText().toString() + customNotifText; // setting customized reminder text
+
+
+                if (getActivity() instanceof EventActivity) {
+                    ((EventActivity) getActivity()).setCustomNotifParams(minutes, customNotifText, customNotifTimeTxt);
+                }
+                else if (getActivity() instanceof InterventionsActivity) {
+                    ((InterventionsActivity) getActivity()).setCustomNotifParams(minutes, customNotifText, customNotifTimeTxt);
+                }
+
                 dismiss();
             }
         });

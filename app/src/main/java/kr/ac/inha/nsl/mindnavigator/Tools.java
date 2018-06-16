@@ -604,7 +604,7 @@ class Event {
         }
     }
 
-    static void updateEventReminders(Context context) {
+    static void updateEventReminders(Context context, String txtTime) {
         Calendar today = Calendar.getInstance(), cal;
         for (Event event : currentEventBank) {
             if (event.getEventReminder() != 0) {
@@ -613,21 +613,22 @@ class Event {
                 if (cal.before(today)) {
                     Tools.cancelNotif(context, (int) event.getEventId());
                 } else {
-                    String text = " after 10 minutes";
+                    String text = " after ";
                     switch (event.getEventReminder()) {
                         case -1440:
-                            text = " after 1 day";
+                            text = text + "1 day";
                             break;
                         case -60:
-                            text = " after 1 hour";
+                            text = text + "1 hour";
                             break;
                         case -30:
-                            text = " after 30 minutes";
+                            text = text + "30 minutes";
                             break;
                         case -10:
-                            text = " after 10 minutes";
+                            text = text + "10 minutes";
                             break;
                         default:
+                            text = text + txtTime;
                             break;
                     }
                     Tools.addEventNotif(context, cal, event.getEventId(), event.getTitle() + text);

@@ -133,7 +133,7 @@
     <string name="average">Average</string>
     <string name="excellent">Excellent</string>
     <string name="journal">Journal</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="custom">Custom</string>
 
     <string-array name="months_array">
@@ -151,10 +151,15 @@
         <item>Dec</item>
     </string-array>
 
-    <string-array name="reminder_array_spinner">
-        <item>Minutes before</item>
-        <item>Hours before</item>
-        <item>Days before</item>
+    <string-array name="reminder_array_spinner_1st">
+        <item>mins</item>
+        <item>hrs</item>
+        <item>days</item>
+    </string-array>
+
+    <string-array name="reminder_array_spinner_2nd">
+        <item>before</item>
+        <item>after</item>
     </string-array>
 
 </resources>

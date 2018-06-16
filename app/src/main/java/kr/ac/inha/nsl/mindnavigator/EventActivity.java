@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Switch;
@@ -76,6 +77,9 @@ public class EventActivity extends AppCompatActivity {
                         case 10:
                             intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_after)));
                             break;
+                        default:
+                            intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, InterventionsActivity.customReminderText));
+                            break;
                     }
                     intervReminderTxt.setVisibility(View.VISIBLE);
                     break;
@@ -120,6 +124,12 @@ public class EventActivity extends AppCompatActivity {
     private Switch switchAllDay;
     private SeekBar stressLvl;
 
+    private RadioButton customNotifRadioButton;
+
+    private String customReminderText; // customized reminder text
+    private int customReminderMinutes; //customized reminder minutes
+    static String customNotifTimeTxt; //customized reminder time-text for notification text ( Ex.: 2 day(s) )
+
     private Calendar startTime, endTime;
     //endregion
 
@@ -145,6 +155,9 @@ public class EventActivity extends AppCompatActivity {
         saveButton = findViewById(R.id.btn_create);
         cancelButton = findViewById(R.id.btn_cancel);
         deleteButton = findViewById(R.id.btn_delete);
+        TextView customNotifTxt = findViewById(R.id.txt_custom_notif);
+        customNotifRadioButton = findViewById(R.id.radio_btn_custom);
+
         ViewGroup postEventLayout = findViewById(R.id.postEventLayout);
 
         if (getIntent().hasExtra("eventId")) {
@@ -159,6 +172,7 @@ public class EventActivity extends AppCompatActivity {
             startTimeText.setEnabled(false);
             endDateText.setEnabled(false);
             endTimeText.setEnabled(false);
+            customNotifTxt.setEnabled(false);
             stressLvl.setEnabled(false);
             stressCause.setEnabled(false);
             stressTypeGroup.setEnabled(false);
@@ -167,6 +181,9 @@ public class EventActivity extends AppCompatActivity {
             repeatModeGroup.setEnabled(false);
             for (int n = 0; n < repeatModeGroup.getChildCount(); n++)
                 repeatModeGroup.getChildAt(n).setEnabled(false);
+            eventNotificationGroup.setEnabled(false);
+            for (int n = 0; n < eventNotificationGroup.getChildCount(); n++)
+                eventNotificationGroup.getChildAt(n).setEnabled(false);
             selectedInterv.setEnabled(false);
 
             // recover existing values
@@ -405,6 +422,9 @@ public class EventActivity extends AppCompatActivity {
                 eventNotificationGroup.check(R.id.option_10mins_before);
                 break;
             default:
+                eventNotificationGroup.check(R.id.radio_btn_custom);
+                customNotifRadioButton.setText(customReminderText);
+                customNotifRadioButton.setVisibility(View.VISIBLE);
                 break;
         }
 
@@ -799,6 +819,7 @@ public class EventActivity extends AppCompatActivity {
                 event.setEventReminder((short) -10);
                 break;
             default:
+                event.setEventReminder((short) customReminderMinutes);
                 break;
         }
 
@@ -1052,11 +1073,22 @@ public class EventActivity extends AppCompatActivity {
         }
         ft.addToBackStack(null);
         DialogFragment dialogFragment = new CustomNotificationDialog();
+        Bundle args = new Bundle();
+        args.putBoolean("isEventNotification", true);
+        dialogFragment.setArguments(args);
         dialogFragment.show(ft, "dialogCustomNotif");
+
     }
 
-    public void setNotifMinutes(int minutes) {
-        Toast.makeText(this, minutes+"", Toast.LENGTH_SHORT).show(); //TODO: complete the custom notification part
+    public void setCustomNotifParams(int minutes, String txt, String timeTxt) {
+        customReminderMinutes = minutes;
+        customReminderText = txt;
+        customNotifTimeTxt = timeTxt;
+        eventNotificationGroup.check(R.id.radio_btn_custom);
+
+        customNotifRadioButton.setVisibility(View.VISIBLE);
+        customNotifRadioButton.setText(txt);
+        //TODO: complete the custom notification part
     }
 
     private abstract class MyOnDateSetListener implements DatePickerDialog.OnDateSetListener {

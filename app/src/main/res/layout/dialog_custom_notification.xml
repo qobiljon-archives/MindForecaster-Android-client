@@ -37,14 +37,23 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:inputType="number"
-            android:maxLength="5"
+            android:maxLength="4"
             android:textSize="16sp"
-            android:layout_weight="1"/>
+            android:layout_weight="2"/>
 
         <Spinner
-            android:id="@+id/spinner"
+            android:id="@+id/spinner_1st"
             android:layout_width="0dp"
-            android:layout_weight="3.5"
+            android:layout_weight="5"
+            android:textSize="16sp"
+            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+            android:layout_height="wrap_content"/>
+
+        <Spinner
+            android:id="@+id/spinner_2nd"
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
             android:textSize="16sp"
             android:layout_height="wrap_content"/>
 
@@ -59,6 +68,7 @@
 
         <Button
             android:id="@+id/btn_cancel"
+            style="@style/Base.Widget.AppCompat.Button.ButtonBar.AlertDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
@@ -68,6 +78,7 @@
             android:id="@+id/btn_ok"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/Base.Widget.AppCompat.Button.ButtonBar.AlertDialog"
             android:background="@android:color/transparent"
             android:text="@string/ok" />
     </LinearLayout>
