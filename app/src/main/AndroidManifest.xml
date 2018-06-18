@@ -6,6 +6,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <!-- Required to act as a custom watch face. -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- Required for complications to receive complication data and open the provider chooser. -->
+    <uses-permission android:name="com.google.android.wearable.permission.RECEIVE_COMPLICATION_DATA" />
+
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
@@ -43,13 +47,9 @@
             android:theme="@style/InnerActivityTheme" />
 
         <receiver android:name=".AlaramReceiverEveryDay" />
-
         <receiver android:name=".AlarmReceiverEverySunday" />
-
         <receiver android:name=".AlarmReceiverEvent" />
-
         <receiver android:name=".AlarmReceiverIntervention" />
-
     </application>
 
 </manifest>

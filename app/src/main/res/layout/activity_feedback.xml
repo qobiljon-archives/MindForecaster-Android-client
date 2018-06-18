@@ -101,8 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:enabled="false"
-                    android:max="100"
-                    android:progress="50" />
+                    android:max="4" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -158,8 +157,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:enabled="false"
-                    android:max="100"
-                    android:progress="50" />
+                    android:max="4" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -194,40 +192,6 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/stress_incr_details_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <TextView
-                    android:id="@+id/stress_incr_reason_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="center_horizontal"
-                    android:maxLength="128"
-                    android:text="@string/stress_incr_title"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/stress_incr_reason_edit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_solid_wrap"
-                    android:gravity="top"
-                    android:hint="@string/stress_incr_reason"
-                    android:inputType="textMultiLine"
-                    android:lines="3"
-                    android:maxLength="128"
-                    android:maxLines="5"
-                    android:padding="10dp" />
-
-            </LinearLayout>
 
         </LinearLayout>
 

@@ -328,13 +328,13 @@ public class EventActivity extends AppCompatActivity {
         endDateText.addTextChangedListener(timePickingCorrector);
         endTimeText.addTextChangedListener(timePickingCorrector);
 
-        stressLvl.getProgressDrawable().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.green, null), PorterDuff.Mode.SRC_IN);
-        stressLvl.getThumb().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.green, null), PorterDuff.Mode.SRC_IN);
+        stressLvl.getProgressDrawable().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.slvl0_color, null), PorterDuff.Mode.SRC_IN);
+        stressLvl.getThumb().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.slvl0_color, null), PorterDuff.Mode.SRC_IN);
         stressLvl.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                stressLvl.getProgressDrawable().setColorFilter(Tools.stressLevelToColor(progress), PorterDuff.Mode.SRC_IN);
-                stressLvl.getThumb().setColorFilter(Tools.stressLevelToColor(progress), PorterDuff.Mode.SRC_IN);
+                stressLvl.getProgressDrawable().setColorFilter(Tools.stressLevelToColor(getApplicationContext(), progress), PorterDuff.Mode.SRC_IN);
+                stressLvl.getThumb().setColorFilter(Tools.stressLevelToColor(getApplicationContext(), progress), PorterDuff.Mode.SRC_IN);
                 if (progress > 0) {
                     inactiveLayout.setVisibility(View.VISIBLE);
                     findViewById(R.id.interventions_tab).getParent().requestChildFocus(findViewById(R.id.interventions_tab), findViewById(R.id.interventions_tab));
@@ -479,16 +479,25 @@ public class EventActivity extends AppCompatActivity {
         }
     }
 
-    public void expandRepeatNotificationClick(View view) {
+    public void expandNotificationClick(View view) {
         TextView optionView = (TextView) view;
-
-        if (repeatDetails.getVisibility() == View.VISIBLE) {
-            repeatDetails.setVisibility(View.GONE);
+        if (notificationDetails.getVisibility() == View.VISIBLE) {
             notificationDetails.setVisibility(View.GONE);
             optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_expand), null);
         } else {
-            repeatDetails.setVisibility(View.VISIBLE);
             notificationDetails.setVisibility(View.VISIBLE);
+            optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
+            findViewById(R.id.anticipated_strs_lvl_tab).getParent().requestChildFocus(findViewById(R.id.anticipated_strs_lvl_tab), findViewById(R.id.anticipated_strs_lvl_tab));
+        }
+    }
+
+    public void expandRepeatClick(View view) {
+        TextView optionView = (TextView) view;
+        if (repeatDetails.getVisibility() == View.VISIBLE) {
+            repeatDetails.setVisibility(View.GONE);
+            optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_expand), null);
+        } else {
+            repeatDetails.setVisibility(View.VISIBLE);
             optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
             findViewById(R.id.anticipated_strs_lvl_tab).getParent().requestChildFocus(findViewById(R.id.anticipated_strs_lvl_tab), findViewById(R.id.anticipated_strs_lvl_tab));
         }

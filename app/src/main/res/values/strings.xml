@@ -135,6 +135,8 @@
     <string name="journal">Journal</string>
     <string name="ok">OK</string>
     <string name="custom">Custom</string>
+    <string name="repeat">Repeat</string>
+    <string name="notification">Notification</string>
 
     <string-array name="months_array">
         <item>Jan</item>

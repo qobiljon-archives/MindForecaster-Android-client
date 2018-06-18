@@ -40,7 +40,6 @@ public class FeedbackActivity extends AppCompatActivity {
 
         SeekBar expectedStressLevelSeek = findViewById(R.id.expected_stresslvl_seekbar);
         SeekBar realStressLevelSeek = findViewById(R.id.real_stresslvl_seekbar);
-        ViewGroup stressIncrDetails = findViewById(R.id.stress_incr_details_view);
         CheckBox eventDoneCheck = findViewById(R.id.event_done_check);
         TextView eventTitle = findViewById(R.id.current_event_title);
         stressIncrReason = findViewById(R.id.stress_incr_reason_edit);
@@ -54,23 +53,15 @@ public class FeedbackActivity extends AppCompatActivity {
         // set expected stress level from event variable
         expectedStressLevelSeek.setEnabled(false);
         expectedStressLevelSeek.setProgress(EventActivity.event.getStressLevel());
-        int expectedStressColor = Tools.stressLevelToColor(EventActivity.event.getStressLevel());
+        int expectedStressColor = Tools.stressLevelToColor(getApplicationContext(), EventActivity.event.getStressLevel());
         expectedStressLevelSeek.getProgressDrawable().setColorFilter(expectedStressColor, PorterDuff.Mode.SRC_IN);
         expectedStressLevelSeek.getThumb().setColorFilter(expectedStressColor, PorterDuff.Mode.SRC_IN);
 
         // set real stress level from evaluation
         realStressLevelSeek.setEnabled(false);
         realStressLevelSeek.setProgress(realStressLevel);
-        realStressLevelSeek.getProgressDrawable().setColorFilter(Tools.stressLevelToColor(realStressLevel), PorterDuff.Mode.SRC_IN);
-        realStressLevelSeek.getThumb().setColorFilter(Tools.stressLevelToColor(realStressLevel), PorterDuff.Mode.SRC_IN);
-
-        // compare and get expectation and reality discrepancy details if needed
-        if (expectedStressLevelSeek.getProgress() < realStressLevelSeek.getProgress())
-            stressIncrDetails.setVisibility(View.VISIBLE);
-        else{
-            stressIncrDetails.setVisibility(View.GONE);
-            findViewById(R.id.btn_create).setVisibility(View.GONE);
-        }
+        realStressLevelSeek.getProgressDrawable().setColorFilter(Tools.stressLevelToColor(getApplicationContext(), realStressLevel), PorterDuff.Mode.SRC_IN);
+        realStressLevelSeek.getThumb().setColorFilter(Tools.stressLevelToColor(getApplicationContext(), realStressLevel), PorterDuff.Mode.SRC_IN);
 
     }
 

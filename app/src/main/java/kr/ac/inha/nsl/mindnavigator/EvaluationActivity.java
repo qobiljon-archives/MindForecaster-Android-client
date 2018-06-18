@@ -36,12 +36,13 @@ public class EvaluationActivity extends AppCompatActivity {
         eventCompletionCheck = findViewById(R.id.event_cempletion_check);
         intervCompletionCheck = findViewById(R.id.intervention_completion);
         realStressLevel = findViewById(R.id.real_stress_level_seek);
-        SeekBar expectedStressLevel = findViewById(R.id.expected_stresslvl_seekbar);
+        final SeekBar expectedStressLevel = findViewById(R.id.expected_stresslvl_seekbar);
         intervSharingCheck = findViewById(R.id.intervention_sharing_check);
         intervEffectiveness = findViewById(R.id.intervention_effectiveness);
         EditText journalText = findViewById(R.id.journal_text);
 
         ViewGroup interventionLayout = findViewById(R.id.intervention_layout);
+        final ViewGroup stressIncrDetails = findViewById(R.id.stress_incr_details_view);
         TextView eventTitle = findViewById(R.id.event_title_text_view);
         eventTitle.setText(getString(R.string.current_event_title, EventActivity.event.getTitle()));
         TextView intervTitle = findViewById(R.id.intervention_title_text);
@@ -52,18 +53,25 @@ public class EvaluationActivity extends AppCompatActivity {
         }
 
         expectedStressLevel.setProgress(EventActivity.event.getStressLevel());
-        expectedStressLevel.getProgressDrawable().setColorFilter(Tools.stressLevelToColor(EventActivity.event.getStressLevel()), PorterDuff.Mode.SRC_IN);
-        expectedStressLevel.getThumb().setColorFilter(Tools.stressLevelToColor(EventActivity.event.getStressLevel()), PorterDuff.Mode.SRC_IN);
+        expectedStressLevel.getProgressDrawable().setColorFilter(Tools.stressLevelToColor(getApplicationContext(), EventActivity.event.getStressLevel()), PorterDuff.Mode.SRC_IN);
+        expectedStressLevel.getThumb().setColorFilter(Tools.stressLevelToColor(getApplicationContext(), EventActivity.event.getStressLevel()), PorterDuff.Mode.SRC_IN);
         expectedStressLevel.setEnabled(false);
 
         realStressLevel.setProgress(EventActivity.event.getStressLevel());
-        realStressLevel.getProgressDrawable().setColorFilter(Tools.stressLevelToColor(EventActivity.event.getStressLevel()), PorterDuff.Mode.SRC_IN);
-        realStressLevel.getThumb().setColorFilter(Tools.stressLevelToColor(EventActivity.event.getStressLevel()), PorterDuff.Mode.SRC_IN);
+        realStressLevel.getProgressDrawable().setColorFilter(Tools.stressLevelToColor(getApplicationContext(), EventActivity.event.getStressLevel()), PorterDuff.Mode.SRC_IN);
+        realStressLevel.getThumb().setColorFilter(Tools.stressLevelToColor(getApplicationContext(), EventActivity.event.getStressLevel()), PorterDuff.Mode.SRC_IN);
         realStressLevel.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                realStressLevel.getProgressDrawable().setColorFilter(Tools.stressLevelToColor(progress), PorterDuff.Mode.SRC_IN);
-                realStressLevel.getThumb().setColorFilter(Tools.stressLevelToColor(progress), PorterDuff.Mode.SRC_IN);
+                realStressLevel.getProgressDrawable().setColorFilter(Tools.stressLevelToColor(getApplicationContext(), progress), PorterDuff.Mode.SRC_IN);
+                realStressLevel.getThumb().setColorFilter(Tools.stressLevelToColor(getApplicationContext(), progress), PorterDuff.Mode.SRC_IN);
+
+                // compare and get expectation and reality discrepancy details if needed
+                if (expectedStressLevel.getProgress() < realStressLevel.getProgress())
+                    stressIncrDetails.setVisibility(View.VISIBLE);
+                else {
+                    stressIncrDetails.setVisibility(View.GONE);
+                }
             }
 
             @Override

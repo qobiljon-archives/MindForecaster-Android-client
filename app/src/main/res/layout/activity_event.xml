@@ -219,7 +219,7 @@
                 android:layout_marginTop="20dp"
                 android:orientation="vertical">
 
-                <!--Option: Repeat / Notification-->
+                <!--Option: Notification-->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
@@ -229,75 +229,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/img_expand"
-                    android:onClick="expandRepeatNotificationClick"
+                    android:onClick="expandNotificationClick"
                     android:padding="20dp"
-                    android:text="@string/repeat_notification"
+                    android:text="@string/notification"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
-
-                <LinearLayout
-                    android:id="@+id/repeat_details"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginStart="20dp"
-                    android:gravity=""
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/event_repeat_mode"
-                        android:textStyle="bold" />
-
-                    <RadioGroup
-                        android:id="@+id/repeat_mode_group"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_solid_wrap"
-                        android:checkedButton="@+id/no_repeat_radio"
-                        android:orientation="horizontal">
-
-                        <RadioButton
-                            android:id="@id/no_repeat_radio"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/bg_radio_button"
-                            android:button="@android:color/transparent"
-                            android:padding="5dp"
-                            android:text="@string/only_once"
-                            android:textAllCaps="true" />
-
-                        <RadioButton
-                            android:id="@+id/everyday_repeat_radio"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/bg_radio_button"
-                            android:button="@android:color/transparent"
-                            android:padding="5dp"
-                            android:text="@string/everyday"
-                            android:textAllCaps="true" />
-
-                        <RadioButton
-                            android:id="@+id/everyweek_repeat_radio"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/bg_radio_button"
-                            android:button="@android:color/transparent"
-                            android:padding="5dp"
-                            android:text="@string/every_week"
-                            android:textAllCaps="true" />
-
-                    </RadioGroup>
-
-                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/notification_details"
@@ -393,6 +329,86 @@
 
                 </LinearLayout>
 
+                <!--Option: Repeat-->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/bright_grey" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/img_expand"
+                    android:onClick="expandRepeatClick"
+                    android:padding="20dp"
+                    android:text="@string/repeat"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <LinearLayout
+                    android:id="@+id/repeat_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginStart="20dp"
+                    android:gravity=""
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/event_repeat_mode"
+                        android:textStyle="bold" />
+
+                    <RadioGroup
+                        android:id="@+id/repeat_mode_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_solid_wrap"
+                        android:checkedButton="@+id/no_repeat_radio"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@id/no_repeat_radio"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_radio_button"
+                            android:button="@android:color/transparent"
+                            android:padding="5dp"
+                            android:text="@string/only_once"
+                            android:textAllCaps="true" />
+
+                        <RadioButton
+                            android:id="@+id/everyday_repeat_radio"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_radio_button"
+                            android:button="@android:color/transparent"
+                            android:padding="5dp"
+                            android:text="@string/everyday"
+                            android:textAllCaps="true" />
+
+                        <RadioButton
+                            android:id="@+id/everyweek_repeat_radio"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_radio_button"
+                            android:button="@android:color/transparent"
+                            android:padding="5dp"
+                            android:text="@string/every_week"
+                            android:textAllCaps="true" />
+
+                    </RadioGroup>
+
+                </LinearLayout>
+
                 <!--Option: Anticipated stress level-->
                 <View
                     android:layout_width="match_parent"
@@ -445,7 +461,7 @@
                                 android:id="@+id/real_stress_level_seek"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:max="100" />
+                                android:max="4" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"

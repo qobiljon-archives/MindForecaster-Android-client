@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class CustomNotificationDialog extends DialogFragment {
 
@@ -80,29 +81,34 @@ public class CustomNotificationDialog extends DialogFragment {
         root.findViewById(R.id.btn_ok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (day)
-                    minutes = Integer.parseInt(numberTxt.getText().toString()) * 24 * 60;
-                else if (hour)
-                    minutes = Integer.parseInt(numberTxt.getText().toString()) * 60;
-                else minutes = Integer.parseInt(numberTxt.getText().toString());
+                if (!numberTxt.getText().toString().equals("")) {
 
-                customNotifTimeTxt = numberTxt.getText().toString() + customNotifText; // setting reminder time-text for notification text
-                if (before) {
-                    minutes = -minutes; // setting negative time when before is selected
-                    customNotifText = customNotifText + " before";
-                } else customNotifText = customNotifText + " after";
+                    if (day)
+                        minutes = Integer.parseInt(numberTxt.getText().toString()) * 24 * 60;
+                    else if (hour)
+                        minutes = Integer.parseInt(numberTxt.getText().toString()) * 60;
+                    else minutes = Integer.parseInt(numberTxt.getText().toString());
 
-                customNotifText = numberTxt.getText().toString() + customNotifText; // setting customized reminder text
+                    customNotifTimeTxt = numberTxt.getText().toString() + customNotifText; // setting reminder time-text for notification text
+                    if (before) {
+                        minutes = -minutes; // setting negative time when before is selected
+                        customNotifText = customNotifText + " before";
+                    } else customNotifText = customNotifText + " after";
+
+                    customNotifText = numberTxt.getText().toString() + customNotifText; // setting customized reminder text
 
 
-                if (getActivity() instanceof EventActivity) {
-                    ((EventActivity) getActivity()).setCustomNotifParams(minutes, customNotifText, customNotifTimeTxt);
+                    if (getActivity() instanceof EventActivity) {
+                        ((EventActivity) getActivity()).setCustomNotifParams(minutes, customNotifText, customNotifTimeTxt);
+                    } else if (getActivity() instanceof InterventionsActivity) {
+                        ((InterventionsActivity) getActivity()).setCustomNotifParams(minutes, customNotifText, customNotifTimeTxt);
+                    }
+
+                    dismiss();
                 }
-                else if (getActivity() instanceof InterventionsActivity) {
-                    ((InterventionsActivity) getActivity()).setCustomNotifParams(minutes, customNotifText, customNotifTimeTxt);
+                else{
+                    Toast.makeText(getActivity(), "Please, enter the number.", Toast.LENGTH_SHORT).show();
                 }
-
-                dismiss();
             }
         });
 

@@ -7,10 +7,12 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
@@ -149,15 +151,29 @@ public class Tools {
     }
 
     @ColorInt
-    static int stressLevelToColor(int level) {
-        float c = 5.11f;
+    static int stressLevelToColor(Context context, int level) {
+        switch (level) {
+            case 0:
+                return ResourcesCompat.getColor(context.getResources(), R.color.slvl0_color, null);
+            case 1:
+                return ResourcesCompat.getColor(context.getResources(), R.color.slvl1_color, null);
+            case 2:
+                return ResourcesCompat.getColor(context.getResources(), R.color.slvl2_color, null);
+            case 3:
+                return ResourcesCompat.getColor(context.getResources(), R.color.slvl3_color, null);
+            case 4:
+                return ResourcesCompat.getColor(context.getResources(), R.color.slvl4_color, null);
+            default:
+                return 0;
+        }
+       /* float c = 5.11f;
 
         if (level > 98)
             return Color.RED;
         else if (level < 50)
             return Color.argb(0xff, (int) (level * c), 0xff, 0);
         else
-            return Color.argb(0xff, 0xff, (int) (c * (100 - level)), 0);
+            return Color.argb(0xff, 0xff, (int) (c * (100 - level)), 0);*/
     }
 
     static boolean isNetworkAvailable(Context context) {

@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
                                                 for (Event event : dayEvents) {
                                                     getLayoutInflater().inflate(R.layout.event_small_element, cells[col][row]);
                                                     TextView tv = (TextView) cells[col][row].getChildAt(cells[col][row].getChildCount() - 1);
-                                                    tv.setBackgroundColor(Tools.stressLevelToColor(event.getStressLevel()));
+                                                    tv.setBackgroundColor(Tools.stressLevelToColor(getApplicationContext(), event.getStressLevel()));
                                                     tv.setText(event.getTitle());
                                                 }
                                             }
@@ -291,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
                     for (Event event : dayEvents) {
                         getLayoutInflater().inflate(R.layout.event_small_element, cells[col][row]);
                         TextView tv = (TextView) cells[col][row].getChildAt(cells[col][row].getChildCount() - 1);
-                        tv.setBackgroundColor(Tools.stressLevelToColor(event.getStressLevel()));
+                        tv.setBackgroundColor(Tools.stressLevelToColor(getApplicationContext(), event.getStressLevel()));
                         tv.setText(event.getTitle());
                     }
                 }

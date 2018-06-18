@@ -35,9 +35,12 @@
     <color name="interv_method_checked">#ED7D31</color>
 
     <!-- stress levels colors by levels -->
-    <color name="slvl0_color">#3AA65A</color>
-    <color name="slvl1_color">#FABB37</color>
-    <color name="slvl2_color">#E8473D</color>
+    <color name="slvl0_color">#38B549</color>
+    <color name="slvl1_color">#C8DB47</color>
+    <color name="slvl2_color">#F1E338</color>
+    <color name="slvl3_color">#F47827</color>
+    <color name="slvl4_color">#EE2229</color>
+
     <color name="textColor">#444</color>
     <color name="dark_blue">#44f</color>
 </resources>

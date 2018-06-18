@@ -76,14 +76,18 @@ public class InterventionsActivity extends AppCompatActivity {
             imm.hideSoftInputFromWindow(interv_text.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
         }
 
-        schedulingView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (imm != null) {
-                    imm.hideSoftInputFromWindow(interv_text.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+        for (int index = 0; index < (intervScheduling).getChildCount() - 1; ++index) {
+            View nextChild = (intervScheduling).getChildAt(index);
+            nextChild.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(interv_text.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+                    }
                 }
-            }
-        });
+            });
+        }
+
         eventTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -371,10 +375,10 @@ public class InterventionsActivity extends AppCompatActivity {
                                             String interv_name = (String) args[0];
                                             Toast.makeText(InterventionsActivity.this, "Intervention successfully created!", Toast.LENGTH_SHORT).show();
                                             result = interv_name;
-                                            short radioButtonTag = Short.parseShort((String) intervScheduling.findViewById(intervScheduling.getCheckedRadioButtonId()).getTag());
-                                            if (radioButtonTag == 1) { // check if the custom radio button with tag "1" is checked
+                                            if (customNotifRadioButton.isChecked()) { // check if the custom radio button is checked
                                                 resultSchedule = (short) customReminderMinutes; // set custom reminder minutes
-                                            } else resultSchedule = radioButtonTag; // else set from default radio buttons
+                                            } else
+                                                resultSchedule = Short.parseShort((String) intervScheduling.findViewById(intervScheduling.getCheckedRadioButtonId()).getTag()); // else set from default radio buttons
                                             setResult(Activity.RESULT_OK);
                                             finish();
                                             overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
@@ -391,10 +395,10 @@ public class InterventionsActivity extends AppCompatActivity {
                                             String interv_name = (String) args[0];
                                             Toast.makeText(InterventionsActivity.this, "Intervention already exists. Thus, it was picked for you.", Toast.LENGTH_SHORT).show();
                                             result = interv_name;
-                                            short radioButtonTag = Short.parseShort((String) intervScheduling.findViewById(intervScheduling.getCheckedRadioButtonId()).getTag());
-                                            if (radioButtonTag == 1) { // check if the custom radio button with tag "1" is checked
+                                            if (customNotifRadioButton.isChecked()) { // check if the custom radio button is checked
                                                 resultSchedule = (short) customReminderMinutes; // set custom reminder minutes
-                                            } else resultSchedule = radioButtonTag; // else set from default radio buttons
+                                            } else
+                                                resultSchedule = Short.parseShort((String) intervScheduling.findViewById(intervScheduling.getCheckedRadioButtonId()).getTag()); // else set from default radio buttons
 
                                             setResult(Activity.RESULT_OK);
                                             finish();
@@ -428,10 +432,10 @@ public class InterventionsActivity extends AppCompatActivity {
                     }
                 });
             else {
-                short radioButtonTag = Short.parseShort((String) intervScheduling.findViewById(intervScheduling.getCheckedRadioButtonId()).getTag());
-                if (radioButtonTag == 1) { // check if the custom radio button with tag "1" is checked
+                if (customNotifRadioButton.isChecked()) { // check if the custom radio button is checked
                     resultSchedule = (short) customReminderMinutes; // set custom reminder minutes
-                } else resultSchedule = radioButtonTag; // else set from default radio buttons
+                } else
+                    resultSchedule = Short.parseShort((String) intervScheduling.findViewById(intervScheduling.getCheckedRadioButtonId()).getTag()); // else set from default radio buttons
                 setResult(Activity.RESULT_OK);
                 finish();
                 overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
@@ -441,10 +445,10 @@ public class InterventionsActivity extends AppCompatActivity {
                 Toast.makeText(this, "Please pick an intervention first!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            short radioButtonTag = Short.parseShort((String) intervScheduling.findViewById(intervScheduling.getCheckedRadioButtonId()).getTag());
-            if (radioButtonTag == 1) { // check if the custom radio button with tag "1" is checked
+            if (customNotifRadioButton.isChecked()) { // check if the custom radio button is checked
                 resultSchedule = (short) customReminderMinutes; // set custom reminder minutes
-            } else resultSchedule = radioButtonTag; // else set from default radio buttons
+            } else
+                resultSchedule = Short.parseShort((String) intervScheduling.findViewById(intervScheduling.getCheckedRadioButtonId()).getTag()); // else set from default radio buttons
             setResult(Activity.RESULT_OK);
             finish();
             overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
