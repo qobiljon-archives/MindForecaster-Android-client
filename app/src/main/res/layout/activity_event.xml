@@ -91,8 +91,8 @@
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -226,6 +226,7 @@
                     android:background="@color/bright_grey" />
 
                 <TextView
+                    android:id="@+id/tab_notification"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/img_expand"
@@ -313,17 +314,17 @@
                             android:layout_marginTop="10dp"
                             android:text="@string/dummy"
                             android:textSize="14sp"
-                            android:visibility="gone"/>
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/txt_custom_notif"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="32dp"
                             android:layout_marginTop="10dp"
                             android:onClick="clickCustomNotification"
-                            android:layout_marginStart="32dp"
-                            android:textSize="15sp"
-                            android:text="@string/custom"/>
+                            android:text="@string/custom"
+                            android:textSize="15sp" />
 
                     </RadioGroup>
 
@@ -336,6 +337,7 @@
                     android:background="@color/bright_grey" />
 
                 <TextView
+                    android:id="@+id/tab_repeat"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/img_expand"
@@ -416,7 +418,7 @@
                     android:background="@color/bright_grey" />
 
                 <TextView
-                    android:id="@+id/anticipated_strs_lvl_tab"
+                    android:id="@+id/tab_anticipated_strs_lvl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/img_expand"
@@ -482,6 +484,7 @@
                                     android:layout_weight="1"
                                     android:text="@string/low"
                                     android:textAlignment="center"
+                                    android:textColor="@color/slvl1_color"
                                     android:textSize="15sp" />
 
                                 <TextView
@@ -490,7 +493,7 @@
                                     android:layout_weight="1"
                                     android:text="@string/normal"
                                     android:textAlignment="center"
-                                    android:textColor="@color/slvl1_color"
+                                    android:textColor="@color/slvl2_color"
                                     android:textSize="15sp" />
 
                                 <TextView
@@ -499,6 +502,7 @@
                                     android:layout_weight="1"
                                     android:text="@string/high"
                                     android:textAlignment="center"
+                                    android:textColor="@color/slvl3_color"
                                     android:textSize="15sp" />
 
                                 <TextView
@@ -507,7 +511,7 @@
                                     android:layout_weight="1"
                                     android:text="@string/extreme"
                                     android:textAlignment="viewEnd"
-                                    android:textColor="@color/slvl2_color"
+                                    android:textColor="@color/slvl4_color"
                                     android:textSize="15sp" />
 
                             </LinearLayout>
@@ -615,7 +619,7 @@
                     android:background="@color/bright_grey" />
 
                 <TextView
-                    android:id="@+id/interventions_tab"
+                    android:id="@+id/tab_interventions"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/img_expand"
@@ -651,7 +655,7 @@
                             android:onClick="editInterventionClick"
                             android:padding="10dp"
                             android:textColor="@color/black"
-                            android:textSize="15sp"/>
+                            android:textSize="15sp" />
 
                     </LinearLayout>
 
@@ -675,6 +679,355 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
+                <!--Option: Feedback-->
+                <!--  <View
+                      android:layout_width="match_parent"
+                      android:layout_height="0.5dp"
+                      android:background="@color/bright_grey" />
+
+                  <TextView
+                      android:id="@+id/feedback_text"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:onClick="feedbackClick"
+                      android:padding="20dp"
+                      android:text="@string/feedback"
+                      android:textColor="@color/black"
+                      android:textSize="18sp"
+                      android:visibility="gone" />-->
+                <LinearLayout
+                    android:id="@+id/feedback_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginStart="20dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:id="@+id/feedback_details_expect_strs"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingBottom="15dp"
+                        android:paddingTop="35dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/expected_stress_level"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <SeekBar
+                            android:id="@+id/expected_stresslvl_seekbar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:enabled="false"
+                            android:max="4" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/not_at_all"
+                                android:textAlignment="viewStart"
+                                android:textColor="@color/slvl0_color"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/low"
+                                android:textAlignment="center"
+                                android:textColor="@color/slvl1_color"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/normal"
+                                android:textAlignment="center"
+                                android:textColor="@color/slvl2_color"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/high"
+                                android:textAlignment="center"
+                                android:textColor="@color/slvl3_color"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/extreme"
+                                android:textAlignment="viewEnd"
+                                android:textColor="@color/slvl4_color"
+                                android:textSize="15sp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/feedback_details_real_strs"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingBottom="15dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/real_stress_level"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <SeekBar
+                            android:id="@+id/real_stresslvl_seekbar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:enabled="false"
+                            android:max="4" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/not_at_all"
+                                android:textAlignment="viewStart"
+                                android:textColor="@color/slvl0_color"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/low"
+                                android:textAlignment="center"
+                                android:textColor="@color/slvl1_color"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/normal"
+                                android:textAlignment="center"
+                                android:textColor="@color/slvl2_color"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/high"
+                                android:textAlignment="center"
+                                android:textColor="@color/slvl3_color"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/extreme"
+                                android:textAlignment="viewEnd"
+                                android:textColor="@color/slvl4_color"
+                                android:textSize="15sp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/feedback_details_interv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/intervention_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxLines="2"
+                            android:padding="15dp"
+                            android:text="@string/dummy"
+                            android:textColor="@color/black"
+                            android:textSize="20sp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingBottom="15dp"
+                            android:paddingTop="15dp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/interv_effectiveness"
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <SeekBar
+                                android:id="@+id/intervention_effectiveness"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:max="4" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="@string/poor"
+                                    android:textAlignment="viewStart"
+                                    android:textColor="@color/black"
+                                    android:textSize="15sp" />
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="@string/fair"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/black"
+                                    android:textSize="15sp" />
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="@string/average"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/black"
+                                    android:textSize="15sp" />
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="@string/good"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/black"
+                                    android:textSize="15sp" />
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="@string/excellent"
+                                    android:textAlignment="viewEnd"
+                                    android:textColor="@color/black"
+                                    android:textSize="15sp" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/feedback_details_strs_reason"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginTop="10dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:labelFor="@+id/strs_reason_text"
+                            android:text="@string/stress_incr_title"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@id/strs_reason_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/bg_solid_wrap"
+                            android:gravity="top"
+                            android:lines="3"
+                            android:maxLength="128"
+                            android:maxLines="5"
+                            android:padding="10dp"
+                            android:paddingTop="5dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/feedback_details_journal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginTop="10dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:labelFor="@+id/journal_text"
+                            android:text="@string/journal"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@id/journal_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/bg_solid_wrap"
+                            android:gravity="top"
+                            android:lines="3"
+                            android:maxLength="128"
+                            android:maxLines="5"
+                            android:padding="10dp"
+                            android:paddingTop="5dp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
                 <!--Option: Evaluation-->
                 <View
                     android:layout_width="match_parent"
@@ -682,6 +1035,7 @@
                     android:background="@color/bright_grey" />
 
                 <TextView
+                    android:id="@+id/tab_evaluation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:onClick="evaluationClick"
@@ -689,23 +1043,6 @@
                     android:text="@string/evaluation"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
-
-                <!--Option: Feedback-->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@color/bright_grey" />
-
-                <TextView
-                    android:id="@+id/feedback_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:onClick="feedbackClick"
-                    android:padding="20dp"
-                    android:text="@string/feedback"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:visibility="gone" />
 
             </LinearLayout>
 

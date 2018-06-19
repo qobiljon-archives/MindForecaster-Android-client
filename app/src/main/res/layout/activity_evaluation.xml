@@ -156,6 +156,7 @@
                                 android:layout_weight="1"
                                 android:text="@string/low"
                                 android:textAlignment="center"
+                                android:textColor="@color/slvl1_color"
                                 android:textSize="15sp" />
 
                             <TextView
@@ -164,7 +165,7 @@
                                 android:layout_weight="1"
                                 android:text="@string/normal"
                                 android:textAlignment="center"
-                                android:textColor="@color/slvl1_color"
+                                android:textColor="@color/slvl2_color"
                                 android:textSize="15sp" />
 
                             <TextView
@@ -173,6 +174,7 @@
                                 android:layout_weight="1"
                                 android:text="@string/high"
                                 android:textAlignment="center"
+                                android:textColor="@color/slvl3_color"
                                 android:textSize="15sp" />
 
                             <TextView
@@ -181,8 +183,9 @@
                                 android:layout_weight="1"
                                 android:text="@string/extreme"
                                 android:textAlignment="viewEnd"
-                                android:textColor="@color/slvl2_color"
+                                android:textColor="@color/slvl4_color"
                                 android:textSize="15sp" />
+
                         </LinearLayout>
 
                     </LinearLayout>
@@ -207,7 +210,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:max="4"/>
+                            android:max="4" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -228,6 +231,7 @@
                                 android:layout_weight="1"
                                 android:text="@string/low"
                                 android:textAlignment="center"
+                                android:textColor="@color/slvl1_color"
                                 android:textSize="15sp" />
 
                             <TextView
@@ -236,7 +240,7 @@
                                 android:layout_weight="1"
                                 android:text="@string/normal"
                                 android:textAlignment="center"
-                                android:textColor="@color/slvl1_color"
+                                android:textColor="@color/slvl2_color"
                                 android:textSize="15sp" />
 
                             <TextView
@@ -245,6 +249,7 @@
                                 android:layout_weight="1"
                                 android:text="@string/high"
                                 android:textAlignment="center"
+                                android:textColor="@color/slvl3_color"
                                 android:textSize="15sp" />
 
                             <TextView
@@ -253,8 +258,9 @@
                                 android:layout_weight="1"
                                 android:text="@string/extreme"
                                 android:textAlignment="viewEnd"
-                                android:textColor="@color/slvl2_color"
+                                android:textColor="@color/slvl4_color"
                                 android:textSize="15sp" />
+
                         </LinearLayout>
 
                     </LinearLayout>
