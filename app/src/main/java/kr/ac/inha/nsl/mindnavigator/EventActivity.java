@@ -87,8 +87,6 @@ public class EventActivity extends AppCompatActivity {
                     finish();
                     overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
                     break;
-                case FEEDBACK_ACTIVITY:
-                    break;
                 default:
                     break;
             }
@@ -103,7 +101,7 @@ public class EventActivity extends AppCompatActivity {
     }
 
     //region Variables
-    private final int EVALUATION_ACTIVITY = 0, INTERVENTION_ACTIVITY = 1, FEEDBACK_ACTIVITY = 2;
+    private final int EVALUATION_ACTIVITY = 0, INTERVENTION_ACTIVITY = 1;
     static Event event;
 
     private ViewGroup inactiveLayout;
@@ -607,11 +605,11 @@ public class EventActivity extends AppCompatActivity {
                                         boolean eventDone = (boolean) args[0];
                                         int realStressLevel = (int) args[1];
 
-                                        Intent intent = new Intent(EventActivity.this, FeedbackActivity.class);
+                                        /*Intent intent = new Intent(EventActivity.this, FeedbackActivity.class);
                                         intent.putExtra("eventDone", eventDone);
                                         intent.putExtra("realStressLevel", realStressLevel);
                                         startActivityForResult(intent, FEEDBACK_ACTIVITY);
-                                        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+                                        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);*/
                                     }
                                 });
                                 break;

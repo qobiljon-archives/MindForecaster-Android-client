@@ -42,9 +42,6 @@
         <activity
             android:name=".EvaluationActivity"
             android:theme="@style/InnerActivityTheme" />
-        <activity
-            android:name=".FeedbackActivity"
-            android:theme="@style/InnerActivityTheme" />
 
         <receiver android:name=".AlaramReceiverEveryDay" />
         <receiver android:name=".AlarmReceiverEverySunday" />

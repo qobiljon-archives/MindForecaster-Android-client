@@ -680,21 +680,6 @@
                 android:visibility="gone">
 
                 <!--Option: Feedback-->
-                <!--  <View
-                      android:layout_width="match_parent"
-                      android:layout_height="0.5dp"
-                      android:background="@color/bright_grey" />
-
-                  <TextView
-                      android:id="@+id/feedback_text"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:onClick="feedbackClick"
-                      android:padding="20dp"
-                      android:text="@string/feedback"
-                      android:textColor="@color/black"
-                      android:textSize="18sp"
-                      android:visibility="gone" />-->
                 <LinearLayout
                     android:id="@+id/feedback_details"
                     android:layout_width="match_parent"
