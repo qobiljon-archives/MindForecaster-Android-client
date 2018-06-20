@@ -225,16 +225,31 @@
                     android:layout_height="0.5dp"
                     android:background="@color/bright_grey" />
 
-                <TextView
+                <LinearLayout
                     android:id="@+id/tab_notification"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/img_expand"
-                    android:onClick="expandNotificationClick"
-                    android:padding="20dp"
-                    android:text="@string/notification"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="20dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/icon_notification" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/img_expand"
+                        android:onClick="expandNotificationClick"
+                        android:text="@string/notification"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
 
                 <LinearLayout
                     android:id="@+id/notification_details"
@@ -336,16 +351,32 @@
                     android:layout_height="0.5dp"
                     android:background="@color/bright_grey" />
 
-                <TextView
+                <LinearLayout
                     android:id="@+id/tab_repeat"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/img_expand"
-                    android:onClick="expandRepeatClick"
-                    android:padding="20dp"
-                    android:text="@string/repeat"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="20dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/icon_repeat" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/img_expand"
+                        android:onClick="expandRepeatClick"
+                        android:text="@string/repeat"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/repeat_details"
@@ -417,16 +448,32 @@
                     android:layout_height="0.5dp"
                     android:background="@color/bright_grey" />
 
-                <TextView
+                <LinearLayout
                     android:id="@+id/tab_anticipated_strs_lvl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/img_expand"
-                    android:onClick="expandStressLevelClick"
-                    android:padding="20dp"
-                    android:text="@string/anticipated_stress_level"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="20dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/icon_stress_level" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/img_expand"
+                        android:onClick="expandStressLevelClick"
+                        android:text="@string/anticipated_stress_level"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/stress_level_details"
@@ -618,16 +665,30 @@
                     android:layout_height="0.5dp"
                     android:background="@color/bright_grey" />
 
-                <TextView
+                <LinearLayout
                     android:id="@+id/tab_interventions"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/img_expand"
-                    android:onClick="expandInterventionsClick"
-                    android:padding="20dp"
-                    android:text="@string/interventions"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="20dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/icon_intervention" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/img_expand"
+                        android:onClick="expandInterventionsClick"
+                        android:text="@string/interventions"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/intervention_details"
@@ -1019,15 +1080,30 @@
                     android:layout_height="0.5dp"
                     android:background="@color/bright_grey" />
 
-                <TextView
+                <LinearLayout
                     android:id="@+id/tab_evaluation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="evaluationClick"
-                    android:padding="20dp"
-                    android:text="@string/evaluation"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="20dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/icon_evaluation" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="evaluationClick"
+                        android:text="@string/evaluation"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
 
             </LinearLayout>
 

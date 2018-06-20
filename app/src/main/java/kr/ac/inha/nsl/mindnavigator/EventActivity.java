@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
@@ -143,11 +144,11 @@ public class EventActivity extends AppCompatActivity {
         inactiveLayout = findViewById(R.id.layout_to_be_inactive);
         stressTypeGroup = findViewById(R.id.stress_type_group);
         stressCause = findViewById(R.id.txt_stress_cause);
-        TextView tabNotif = findViewById(R.id.tab_notification);
-        TextView tabRepeat = findViewById(R.id.tab_repeat);
-        TextView tabStressLvl = findViewById(R.id.tab_anticipated_strs_lvl);
-        TextView tabInterv = findViewById(R.id.tab_interventions);
-        TextView tabEvaluation = findViewById(R.id.tab_evaluation);
+        ViewGroup tabNotif = findViewById(R.id.tab_notification);
+        ViewGroup tabRepeat = findViewById(R.id.tab_repeat);
+        ViewGroup tabStressLvl = findViewById(R.id.tab_anticipated_strs_lvl);
+        ViewGroup tabInterv = findViewById(R.id.tab_interventions);
+        ViewGroup tabEvaluation = findViewById(R.id.tab_evaluation);
         stressLevelDetails = findViewById(R.id.stress_level_details);
         interventionDetails = findViewById(R.id.intervention_details);
         repeatDetails = findViewById(R.id.repeat_details);
@@ -864,7 +865,7 @@ public class EventActivity extends AppCompatActivity {
                             long eTime = event.getEndTime().getTimeInMillis();
 
                             if (eTime - sTime > 86400000) {
-                                Toast.makeText(EventActivity.this, "Event length cannot be longer than 7 days in everyweek mode!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(EventActivity.this, "Event length cannot be longer than 24 hours in everyday mode!", Toast.LENGTH_SHORT).show();
                                 return;
                             }
 
