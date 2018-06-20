@@ -234,20 +234,29 @@
                     android:padding="20dp">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/icon_notification" />
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawableEnd="@drawable/img_expand"
                         android:onClick="expandNotificationClick"
                         android:text="@string/notification"
                         android:textColor="@color/black"
                         android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/info_txt_notification"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/img_expand"
+                        android:textAlignment="viewEnd"
+                        android:onClick="expandNotificationClick"
+                        android:textSize="16sp"
+                        android:textColor="@color/dark_blue"/>
                 </LinearLayout>
 
 
@@ -360,20 +369,29 @@
                     android:padding="20dp">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/icon_repeat" />
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawableEnd="@drawable/img_expand"
                         android:onClick="expandRepeatClick"
                         android:text="@string/repeat"
                         android:textColor="@color/black"
                         android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/info_txt_repeat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/img_expand"
+                        android:textAlignment="viewEnd"
+                        android:onClick="expandRepeatClick"
+                        android:textSize="16sp"
+                        android:textColor="@color/dark_blue"/>
 
 
                 </LinearLayout>
@@ -464,13 +482,22 @@
                         android:background="@drawable/icon_stress_level" />
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawableEnd="@drawable/img_expand"
                         android:onClick="expandStressLevelClick"
                         android:text="@string/anticipated_stress_level"
                         android:textColor="@color/black"
                         android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/info_txt_stress_level"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/img_expand"
+                        android:textAlignment="viewEnd"
+                        android:onClick="expandStressLevelClick"
+                        android:textSize="16sp"
+                        android:textColor="@color/dark_blue"/>
 
 
                 </LinearLayout>
@@ -674,8 +701,8 @@
                     android:padding="20dp">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/icon_intervention" />
@@ -1089,8 +1116,8 @@
                     android:padding="20dp">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/icon_evaluation" />

@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
@@ -200,13 +199,14 @@ public class EventActivity extends AppCompatActivity {
                 cancelButton.setVisibility(View.GONE);
                 postEventLayout.setVisibility(View.VISIBLE);
 
+                tabNotif.setVisibility(View.GONE);
+                tabRepeat.setVisibility(View.GONE);
+                tabStressLvl.setVisibility(View.GONE);
+                tabInterv.setVisibility(View.GONE);
+
                 if (event.isEvaluated()) {
                     initFeedbackView(event);
                     feedBackDetails.setVisibility(View.VISIBLE);
-                    tabNotif.setVisibility(View.GONE);
-                    tabRepeat.setVisibility(View.GONE);
-                    tabStressLvl.setVisibility(View.GONE);
-                    tabInterv.setVisibility(View.GONE);
                     //findViewById(R.id.feedback_text).setVisibility(View.VISIBLE);
                 }
 
@@ -342,26 +342,6 @@ public class EventActivity extends AppCompatActivity {
 
         stressLvl.getProgressDrawable().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.slvl0_color, null), PorterDuff.Mode.SRC_IN);
         stressLvl.getThumb().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.slvl0_color, null), PorterDuff.Mode.SRC_IN);
-        stressLvl.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                stressLvl.getProgressDrawable().setColorFilter(Tools.stressLevelToColor(getApplicationContext(), progress), PorterDuff.Mode.SRC_IN);
-                stressLvl.getThumb().setColorFilter(Tools.stressLevelToColor(getApplicationContext(), progress), PorterDuff.Mode.SRC_IN);
-                if (progress > 0) {
-                    inactiveLayout.setVisibility(View.VISIBLE);
-                    findViewById(R.id.tab_interventions).getParent().requestChildFocus(findViewById(R.id.tab_interventions), findViewById(R.id.tab_interventions));
-                } else inactiveLayout.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
 
         switchAllDay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -479,51 +459,100 @@ public class EventActivity extends AppCompatActivity {
     }
 
     public void expandStressLevelClick(View view) {
-        TextView optionView = (TextView) view;
+        final TextView info = findViewById(R.id.info_txt_stress_level);
 
         if (stressLevelDetails.getVisibility() == View.VISIBLE) {
             stressLevelDetails.setVisibility(View.GONE);
-            optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_expand), null);
+            info.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_expand), null);
         } else {
             stressLevelDetails.setVisibility(View.VISIBLE);
-            optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
+            info.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
             findViewById(R.id.tab_interventions).getParent().requestChildFocus(findViewById(R.id.tab_interventions), findViewById(R.id.tab_interventions));
         }
+
+        stressLvl.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                stressLvl.getProgressDrawable().setColorFilter(Tools.stressLevelToColor(getApplicationContext(), progress), PorterDuff.Mode.SRC_IN);
+                stressLvl.getThumb().setColorFilter(Tools.stressLevelToColor(getApplicationContext(), progress), PorterDuff.Mode.SRC_IN);
+                if (progress > 0) {
+                    inactiveLayout.setVisibility(View.VISIBLE);
+                    findViewById(R.id.tab_interventions).getParent().requestChildFocus(findViewById(R.id.tab_interventions), findViewById(R.id.tab_interventions));
+                } else inactiveLayout.setVisibility(View.GONE);
+
+                switch (progress) {
+                    case 0:
+                        info.setText(getResources().getString(R.string.not_at_all));
+                        break;
+                    case 1:
+                        info.setText(getResources().getString(R.string.low));
+                        break;
+                    case 2:
+                        info.setText(getResources().getString(R.string.normal));
+                        break;
+                    case 3:
+                        info.setText(getResources().getString(R.string.high));
+                        break;
+                    case 4:
+                        info.setText(getResources().getString(R.string.extreme));
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
     }
 
     public void expandNotificationClick(View view) {
-        TextView optionView = (TextView) view;
+        final TextView info = findViewById(R.id.info_txt_notification);
         if (notificationDetails.getVisibility() == View.VISIBLE) {
             notificationDetails.setVisibility(View.GONE);
-            optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_expand), null);
+            info.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_expand), null);
         } else {
             notificationDetails.setVisibility(View.VISIBLE);
-            optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
+            info.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
             findViewById(R.id.tab_anticipated_strs_lvl).getParent().requestChildFocus(findViewById(R.id.tab_anticipated_strs_lvl), findViewById(R.id.tab_anticipated_strs_lvl));
         }
+
+        eventNotificationGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                info.setText(((RadioButton) group.findViewById(checkedId)).getText().toString());
+            }
+        });
     }
 
     public void expandRepeatClick(View view) {
-        TextView optionView = (TextView) view;
+        TextView info = findViewById(R.id.info_txt_repeat);
         if (repeatDetails.getVisibility() == View.VISIBLE) {
             repeatDetails.setVisibility(View.GONE);
-            optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_expand), null);
+            info.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_expand), null);
         } else {
             repeatDetails.setVisibility(View.VISIBLE);
-            optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
+            info.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
             findViewById(R.id.tab_anticipated_strs_lvl).getParent().requestChildFocus(findViewById(R.id.tab_anticipated_strs_lvl), findViewById(R.id.tab_anticipated_strs_lvl));
         }
     }
 
     public void expandInterventionsClick(View view) {
-        TextView optionView = (TextView) view;
+        TextView info = (TextView) view;
 
         if (interventionDetails.getVisibility() == View.VISIBLE) {
             interventionDetails.setVisibility(View.GONE);
-            optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_expand), null);
+            info.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_expand), null);
         } else {
             interventionDetails.setVisibility(View.VISIBLE);
-            optionView.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
+            info.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
             interventionDetails.getParent().requestChildFocus(interventionDetails, interventionDetails);
 
             if (event.getIntervention() != null && event.getIntervention().length() > 0) {
@@ -1140,7 +1169,7 @@ public class EventActivity extends AppCompatActivity {
             intervView.setVisibility(View.VISIBLE);
             intervName.setText(getResources().getString(R.string.current_interv_title, event.getIntervention()));
             //intervEffectiveness.setProgress(event.getIntervEffectiveness());
-        }else {
+        } else {
             intervView.setVisibility(View.GONE);
         }
 
