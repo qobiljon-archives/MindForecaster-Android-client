@@ -941,6 +941,14 @@ public class EventActivity extends AppCompatActivity {
                     body.put("eventReminder", event.getEventReminder());
                     body.put("isEvaluated", event.isEvaluated());
 
+                    body.put("sun", repeatWeeklDayChecks[0].isChecked());
+                    body.put("mon", repeatWeeklDayChecks[1].isChecked());
+                    body.put("tue", repeatWeeklDayChecks[2].isChecked());
+                    body.put("wed", repeatWeeklDayChecks[3].isChecked());
+                    body.put("thu", repeatWeeklDayChecks[4].isChecked());
+                    body.put("fri", repeatWeeklDayChecks[5].isChecked());
+                    body.put("sat", repeatWeeklDayChecks[6].isChecked());
+
                     JSONObject res = new JSONObject(Tools.post(url, body));
                     Thread.sleep(100);
                     switch (res.getInt("result")) {
