@@ -152,7 +152,7 @@
                     android:layout_weight="2"
                     android:background="@drawable/bg_datetime_view"
                     android:gravity="center"
-                    android:onClick="pickDateClick"
+                    android:onClick="pickStartDateClick"
                     android:padding="5dp"
                     android:textColor="@color/black" />
 
@@ -164,7 +164,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/bg_datetime_view"
                     android:gravity="center"
-                    android:onClick="pickTimeClick"
+                    android:onClick="pickStartTimeClick"
                     android:padding="5dp"
                     android:textColor="@color/black" />
             </LinearLayout>
@@ -195,7 +195,7 @@
                     android:layout_weight="2"
                     android:background="@drawable/bg_datetime_view"
                     android:gravity="center"
-                    android:onClick="pickDateClick"
+                    android:onClick="pickEndDateClick"
                     android:padding="5dp"
                     android:textColor="@color/black" />
 
@@ -207,7 +207,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/bg_datetime_view"
                     android:gravity="center"
-                    android:onClick="pickTimeClick"
+                    android:onClick="pickEndTimeClick"
                     android:padding="5dp"
                     android:textColor="@color/black" />
             </LinearLayout>
@@ -233,16 +233,11 @@
                     android:orientation="horizontal"
                     android:padding="20dp">
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center"
-                        android:layout_marginEnd="10dp"
-                        android:background="@drawable/icon_notification" />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:drawablePadding="5dp"
+                        android:drawableStart="@drawable/icon_notification"
                         android:onClick="expandNotificationClick"
                         android:text="@string/notification"
                         android:textColor="@color/black"
@@ -368,16 +363,11 @@
                     android:orientation="horizontal"
                     android:padding="20dp">
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center"
-                        android:layout_marginEnd="10dp"
-                        android:background="@drawable/icon_repeat" />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:drawablePadding="5dp"
+                        android:drawableStart="@drawable/icon_repeat"
                         android:onClick="expandRepeatClick"
                         android:text="@string/repeat"
                         android:textColor="@color/black"
@@ -563,16 +553,11 @@
                     android:orientation="horizontal"
                     android:padding="20dp">
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center"
-                        android:layout_marginEnd="10dp"
-                        android:background="@drawable/icon_stress_level" />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:drawablePadding="5dp"
+                        android:drawableStart="@drawable/icon_stress_level"
                         android:onClick="expandStressLevelClick"
                         android:text="@string/anticipated_stress_level"
                         android:textColor="@color/black"
@@ -781,30 +766,19 @@
                     android:layout_height="0.5dp"
                     android:background="@color/bright_grey" />
 
-                <LinearLayout
+                <TextView
                     android:id="@+id/tab_interventions"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:padding="20dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center"
-                        android:layout_marginEnd="10dp"
-                        android:background="@drawable/icon_intervention" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableEnd="@drawable/img_expand"
-                        android:onClick="expandInterventionsClick"
-                        android:text="@string/interventions"
-                        android:textColor="@color/black"
-                        android:textSize="18sp" />
-                </LinearLayout>
+                    android:drawableEnd="@drawable/img_expand"
+                    android:drawablePadding="5dp"
+                    android:drawableStart="@drawable/icon_intervention"
+                    android:gravity="center_vertical"
+                    android:onClick="expandInterventionsClick"
+                    android:padding="20dp"
+                    android:text="@string/interventions"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
 
                 <LinearLayout
                     android:id="@+id/intervention_details"
@@ -1196,29 +1170,18 @@
                     android:layout_height="0.5dp"
                     android:background="@color/bright_grey" />
 
-                <LinearLayout
+                <TextView
                     android:id="@+id/tab_evaluation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:padding="20dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center"
-                        android:layout_marginEnd="10dp"
-                        android:background="@drawable/icon_evaluation" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:onClick="evaluationClick"
-                        android:text="@string/evaluation"
-                        android:textColor="@color/black"
-                        android:textSize="18sp" />
-                </LinearLayout>
+                    android:drawablePadding="5dp"
+                    android:drawableStart="@drawable/icon_evaluation"
+                    android:gravity="center_vertical"
+                    android:onClick="evaluationClick"
+                    android:padding="20dp"
+                    android:text="@string/evaluation"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
 
 
             </LinearLayout>

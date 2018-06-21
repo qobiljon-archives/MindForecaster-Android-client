@@ -13,7 +13,6 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -148,7 +147,7 @@ public class EventActivity extends AppCompatActivity {
         ViewGroup tabNotif = findViewById(R.id.tab_notification);
         ViewGroup tabRepeat = findViewById(R.id.tab_repeat);
         ViewGroup tabStressLvl = findViewById(R.id.tab_anticipated_strs_lvl);
-        ViewGroup tabInterv = findViewById(R.id.tab_interventions);
+        TextView tabInterv = findViewById(R.id.tab_interventions);
         stressLevelDetails = findViewById(R.id.stress_level_details);
         interventionDetails = findViewById(R.id.intervention_details);
         repeatDetails = findViewById(R.id.repeat_details);
@@ -839,15 +838,12 @@ public class EventActivity extends AppCompatActivity {
             startTime.set(Calendar.SECOND, 0);
             startTime.set(Calendar.MILLISECOND, 0);
 
+            endTime.setTimeInMillis(startTime.getTimeInMillis());
             endTime.add(Calendar.DAY_OF_MONTH, 1);
-            endTime.set(Calendar.HOUR_OF_DAY, 0);
-            endTime.set(Calendar.MINUTE, 0);
-            endTime.set(Calendar.SECOND, 0);
-            endTime.set(Calendar.MILLISECOND, 0);
-        }
 
-        event.setStartTime(startTime);
-        event.setEndTime(endTime);
+            event.setStartTime(startTime);
+            event.setEndTime(endTime);
+        }
 
         switch (stressTypeGroup.getCheckedRadioButtonId()) {
             case R.id.stressor_positive:
@@ -901,32 +897,44 @@ public class EventActivity extends AppCompatActivity {
         event.setEvaluated(false);
 
         if (Tools.isNetworkAvailable(this)) {
-            final int DAY_MILLIS = 86400000, WEEK_MILLIS = 604800000;
             switch (event.getRepeatMode()) {
                 case Event.NO_REPEAT:
                     createEvent(EventActivity.event.getStartTime().getTimeInMillis(), EventActivity.event.getEndTime().getTimeInMillis(), EventActivity.event.getEventId(), 0, true);
                     break;
                 case Event.REPEAT_EVERYDAY:
-                    createRepeatingEvents(event.getStartTime().getTimeInMillis(), event.getEndTime().getTimeInMillis(), repeatTillTime, Calendar.getInstance(Locale.US).getTimeInMillis(), DAY_MILLIS);
+                    createEvent(EventActivity.event.getStartTime().getTimeInMillis(), EventActivity.event.getEndTime().getTimeInMillis(), EventActivity.event.getEventId(), Calendar.getInstance(Locale.US).getTimeInMillis(), true);
                     break;
                 case Event.REPEAT_WEEKLY:
-                    Calendar[] sCals = new Calendar[7];
-                    Calendar[] eCals = new Calendar[7];
+                    createEvent(EventActivity.event.getStartTime().getTimeInMillis(), EventActivity.event.getEndTime().getTimeInMillis(), EventActivity.event.getEventId(), Calendar.getInstance(Locale.US).getTimeInMillis(), true);
                     long repeatId = Calendar.getInstance(Locale.US).getTimeInMillis();
+
+                    // a dynamically updaing row
+                    Calendar[] startTimeCals = new Calendar[7];
+                    Calendar[] endTimeCals = new Calendar[7];
+
+                    // for building up the first row
+                    final Calendar evStartTime = event.getStartTime();
+                    final Calendar evEndTime = event.getEndTime();
 
                     for (int n = 0; n < repeatWeeklDayChecks.length; n++) {
                         if (!repeatWeeklDayChecks[n].isChecked())
                             continue;
-                        if (sCals[n] == null) {
-                            sCals[n] = event.getStartTime();
-                            eCals[n] = event.getEndTime();
-                            sCals[n].set(Calendar.DAY_OF_WEEK, n + 1);
-                            if (sCals[n].before(event.getStartTime()))
-                                sCals[n].add(Calendar.DAY_OF_MONTH, 7);
-                            eCals[n].add(Calendar.MILLISECOND, (int) (sCals[n].getTimeInMillis() - event.getStartTime().getTimeInMillis()));
+                        if (startTimeCals[n] == null) {
+                            // building up the first row calendars
+                            startTimeCals[n] = (Calendar) evStartTime.clone();
+                            endTimeCals[n] = (Calendar) evEndTime.clone();
+
+                            // shifting the start-time to the needed day of the week
+                            startTimeCals[n].set(Calendar.DAY_OF_WEEK, n + 1);
+                            if (startTimeCals[n].before(evStartTime))
+                                startTimeCals[n].add(Calendar.DAY_OF_MONTH, 7);
+
+                            // adjusting the end-time in a synchronized way, using the start-time delta
+                            endTimeCals[n].add(Calendar.MILLISECOND, (int) (startTimeCals[n].getTimeInMillis() - evStartTime.getTimeInMillis()));
                         }
 
-                        createRepeatingEvents(sCals[n].getTimeInMillis(), eCals[n].getTimeInMillis(), repeatTillTime, repeatId, WEEK_MILLIS);
+                        // rock it buddy
+                        createRepeatingEvents(startTimeCals[n].getTimeInMillis(), endTimeCals[n].getTimeInMillis(), repeatTillTime, repeatId, WEEK_MILLIS);
                     }
                     break;
                 default:
@@ -981,7 +989,6 @@ public class EventActivity extends AppCompatActivity {
                     body.put("username", username);
                     body.put("password", password);
                     body.put("eventId", eventId);
-                    body.put("repeatId", EventActivity.event.getRepeatId());
                     body.put("title", EventActivity.event.getTitle());
                     body.put("stressLevel", EventActivity.event.getStressLevel());
                     body.put("startTime", EventActivity.event.getStartTime().getTimeInMillis());
@@ -996,10 +1003,13 @@ public class EventActivity extends AppCompatActivity {
                     body.put("stressType", EventActivity.event.getStressType());
                     body.put("stressCause", EventActivity.event.getStressCause());
                     body.put("repeatMode", EventActivity.event.getRepeatMode());
+                    body.put("repeatId", EventActivity.event.getRepeatId());
+                    body.put("repeatTill", repeatTillTime);
                     body.put("eventReminder", EventActivity.event.getEventReminder());
                     body.put("isEvaluated", EventActivity.event.isEvaluated());
 
                     JSONObject res = new JSONObject(Tools.post(url, body));
+                    Thread.sleep(100);
                     switch (res.getInt("result")) {
                         case Tools.RES_OK:
                             if (finishActivity)
@@ -1033,7 +1043,7 @@ public class EventActivity extends AppCompatActivity {
                         default:
                             break;
                     }
-                } catch (JSONException | IOException e) {
+                } catch (JSONException | IOException | InterruptedException e) {
                     e.printStackTrace();
 
                     runOnUiThread(new Runnable() {
@@ -1050,149 +1060,87 @@ public class EventActivity extends AppCompatActivity {
     }
 
     public void pickStartDateClick(View view) {
-        MyOnDateSetListener listener = new MyOnDateSetListener((TextView) view) {
+        DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker picker, int year, int month, int dayOfMonth) {
-                Calendar calendar = Calendar.getInstance(Locale.US);
-                calendar.set(year, month, dayOfMonth);
+                Calendar startDate = event.getStartTime();
+                startDate.set(year, month, dayOfMonth);
+                event.setStartTime(startDate);
 
-                switch (view.getId()) {
-                    case R.id.txt_event_start_date:
-                        Calendar startDate = event.getStartTime();
-                        Tools.copy_date(calendar.getTimeInMillis(), startDate);
-                        event.setStartTime(startDate);
-                        break;
-                    case R.id.txt_event_end_date:
-                        Calendar startDate = event.getEndTime();
-                        Tools.copy_date(calendar.getTimeInMillis(), startDate);
-                        event.setStartTime(startDate);
-                        break;
-                    default:
-                        break;
-                }
-
-                if (view.getId() == R.id.txt_event_start_date)
-                    event.setStartTime(calendar);
-                else event.setEndTime(calendar);
-
-                view.setText(String.format(Locale.US,
+                startDateText.setText(String.format(Locale.US,
                         "%d, %s %d, %s",
-                        calendar.get(Calendar.YEAR),
-                        calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
-                        calendar.get(Calendar.DAY_OF_MONTH),
-                        calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
+                        startDate.get(Calendar.YEAR),
+                        startDate.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
+                        startDate.get(Calendar.DAY_OF_MONTH),
+                        startDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
                 ));
             }
         };
-        Calendar cal = null;
-        if (view.getId() == R.id.txt_event_start_date)
-            cal = event.getStartTime();
-        else if (view.getId() == R.id.txt_event_end_date)
-            cal = event.getEndTime();
-        if (cal == null)
-            return;
-
+        Calendar cal = event.getStartTime();
         DatePickerDialog dialog = new DatePickerDialog(this, listener, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
         dialog.show();
     }
 
     public void pickEndDateClick(View view) {
-        MyOnDateSetListener listener = new MyOnDateSetListener((TextView) view) {
+        DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker picker, int year, int month, int dayOfMonth) {
-                Calendar calendar = Calendar.getInstance(Locale.US);
-                calendar.set(year, month, dayOfMonth);
+                Calendar endDate = event.getEndTime();
+                endDate.set(year, month, dayOfMonth);
+                event.setEndTime(endDate);
 
-                switch (view.getId()) {
-                    case R.id.txt_event_start_date:
-                        Calendar startDate = event.getStartTime();
-                        Tools.copy_date(calendar.getTimeInMillis(), startDate);
-                        event.setStartTime(startDate);
-                        break;
-                    case R.id.txt_event_end_date:
-                        Calendar startDate = event.getEndTime();
-                        Tools.copy_date(calendar.getTimeInMillis(), startDate);
-                        event.setStartTime(startDate);
-                        break;
-                    default:
-                        break;
-                }
-
-                if (view.getId() == R.id.txt_event_start_date)
-                    event.setStartTime(calendar);
-                else event.setEndTime(calendar);
-
-                view.setText(String.format(Locale.US,
+                endDateText.setText(String.format(Locale.US,
                         "%d, %s %d, %s",
-                        calendar.get(Calendar.YEAR),
-                        calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
-                        calendar.get(Calendar.DAY_OF_MONTH),
-                        calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
+                        endDate.get(Calendar.YEAR),
+                        endDate.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
+                        endDate.get(Calendar.DAY_OF_MONTH),
+                        endDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
                 ));
             }
         };
-        Calendar cal = null;
-        if (view.getId() == R.id.txt_event_start_date)
-            cal = event.getStartTime();
-        else if (view.getId() == R.id.txt_event_end_date)
-            cal = event.getEndTime();
-        if (cal == null)
-            return;
-
+        Calendar cal = event.getEndTime();
         DatePickerDialog dialog = new DatePickerDialog(this, listener, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
         dialog.show();
     }
 
     public void pickStartTimeClick(View view) {
-        Calendar cal;
-        if (view.getId() == R.id.txt_event_start_time)
-            cal = event.getStartTime();
-        else cal = event.getEndTime();
-
-        MyOnTimeSetListener listener = new MyOnTimeSetListener((TextView) view, cal) {
+        TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker picker, int hourOfDay, int minute) {
-                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                calendar.set(Calendar.MINUTE, minute);
+                Calendar startTime = event.getStartTime();
+                startTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                startTime.set(Calendar.MINUTE, minute);
+                event.setStartTime(startTime);
 
-                if (view.getId() == R.id.txt_event_start_time)
-                    event.setStartTime(calendar);
-                else event.setEndTime(calendar);
-
-                view.setText(String.format(Locale.US,
+                startTimeText.setText(String.format(Locale.US,
                         "%02d:%02d",
-                        calendar.get(Calendar.HOUR_OF_DAY),
-                        calendar.get(Calendar.MINUTE))
+                        startTime.get(Calendar.HOUR_OF_DAY),
+                        startTime.get(Calendar.MINUTE))
                 );
             }
         };
+        Calendar cal = event.getStartTime();
         TimePickerDialog dialog = new TimePickerDialog(this, listener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true);
         dialog.show();
     }
 
     public void pickEndTimeClick(View view) {
-        Calendar cal;
-        if (view.getId() == R.id.txt_event_start_time)
-            cal = event.getStartTime();
-        else cal = event.getEndTime();
-
-        MyOnTimeSetListener listener = new MyOnTimeSetListener((TextView) view, cal) {
+        TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker picker, int hourOfDay, int minute) {
-                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                calendar.set(Calendar.MINUTE, minute);
+                Calendar endTime = event.getEndTime();
+                endTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                endTime.set(Calendar.MINUTE, minute);
+                event.setEndTime(endTime);
 
-                if (view.getId() == R.id.txt_event_start_time)
-                    event.setStartTime(calendar);
-                else event.setEndTime(calendar);
-
-                view.setText(String.format(Locale.US,
+                endTimeText.setText(String.format(Locale.US,
                         "%02d:%02d",
-                        calendar.get(Calendar.HOUR_OF_DAY),
-                        calendar.get(Calendar.MINUTE))
+                        endTime.get(Calendar.HOUR_OF_DAY),
+                        endTime.get(Calendar.MINUTE))
                 );
             }
         };
+        Calendar cal = event.getEndTime();
         TimePickerDialog dialog = new TimePickerDialog(this, listener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true);
         dialog.show();
     }
@@ -1334,21 +1282,5 @@ public class EventActivity extends AppCompatActivity {
         }
 
 
-    }
-
-    private abstract class MyOnDateSetListener implements DatePickerDialog.OnDateSetListener {
-        MyOnDateSetListener(TextView view) {
-            this.view = view;
-        }
-
-        TextView view;
-    }
-
-    private abstract class MyOnTimeSetListener implements TimePickerDialog.OnTimeSetListener {
-        MyOnTimeSetListener(TextView view) {
-            this.view = view;
-        }
-
-        TextView view;
     }
 }
