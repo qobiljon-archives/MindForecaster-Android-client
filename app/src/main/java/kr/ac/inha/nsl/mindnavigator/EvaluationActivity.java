@@ -118,7 +118,6 @@ public class EvaluationActivity extends AppCompatActivity {
                         body.put("realStressLevel", realStressLevel.getProgress());
                         body.put("eventDone", eventCompletionCheck.isChecked());
                         body.put("interventionDone", intervCompletionCheck.isChecked());
-                        body.put("interventionDoneBefore", true);//TODO: remove this from Server
                         body.put("sharedIntervention", intervSharingCheck.isChecked());
                         body.put("intervEffectiveness", intervEffectiveness.getProgress());
                         body.put("isEvaluated", true);

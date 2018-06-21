@@ -711,7 +711,7 @@ public class EventActivity extends AppCompatActivity {
                                     try {
                                         body.put("username", username);
                                         body.put("password", password);
-                                        body.put("event_id", eventId);
+                                        body.put("eventId", eventId);
 
                                         JSONObject res = new JSONObject(Tools.post(url, body));
                                         switch (res.getInt("result")) {
@@ -976,7 +976,8 @@ public class EventActivity extends AppCompatActivity {
                 try {
                     body.put("username", username);
                     body.put("password", password);
-                    body.put("event_id", eventId);
+                    body.put("eventId", eventId);
+                    body.put("repeatId", 0);
                     body.put("title", EventActivity.event.getTitle());
                     body.put("stressLevel", EventActivity.event.getStressLevel());
                     body.put("startTime", startTime);
@@ -1127,6 +1128,21 @@ public class EventActivity extends AppCompatActivity {
         args.putBoolean("isEventNotification", true);
         dialogFragment.setArguments(args);
         dialogFragment.show(ft, "dialogCustomNotif");
+
+    }
+
+    public void clickCustomRepeat(View view) {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialogCustomRepeat");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+        DialogFragment dialogFragment = new CustomRepeatDialog();
+        Bundle args = new Bundle();
+        args.putLong("selectedDayMillis", getIntent().getLongExtra("selectedDayMillis", 0));
+        dialogFragment.setArguments(args);
+        dialogFragment.show(ft, "dialogCustomRepeat");
 
     }
 

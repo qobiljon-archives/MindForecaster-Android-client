@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 public class CustomNotificationDialog extends DialogFragment {
 
+    //region Variables
     private String customNotifText;
     private String customNotifTimeTxt;
     private ViewGroup root;
@@ -20,7 +21,7 @@ public class CustomNotificationDialog extends DialogFragment {
     private int minutes;
     private boolean day = false, hour = false;
     private boolean before = true;
-
+    //endregion
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

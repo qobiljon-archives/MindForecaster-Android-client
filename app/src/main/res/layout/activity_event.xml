@@ -234,8 +234,8 @@
                     android:padding="20dp">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/icon_notification" />
@@ -369,8 +369,8 @@
                     android:padding="20dp">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/icon_repeat" />
@@ -402,7 +402,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
                     android:layout_marginStart="20dp"
-                    android:gravity=""
                     android:orientation="vertical"
                     android:visibility="gone">
 
@@ -416,45 +415,52 @@
                         android:id="@+id/repeat_mode_group"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/bg_solid_wrap"
+                        android:layout_margin="5dp"
                         android:checkedButton="@+id/no_repeat_radio"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
                         <RadioButton
-                            android:id="@id/no_repeat_radio"
-                            android:layout_width="0dp"
+                            android:id="@+id/no_repeat_radio"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/bg_radio_button"
-                            android:button="@android:color/transparent"
-                            android:padding="5dp"
+                            android:layout_marginTop="10dp"
                             android:text="@string/only_once"
-                            android:textAllCaps="true" />
+                            android:textSize="14sp" />
 
                         <RadioButton
                             android:id="@+id/everyday_repeat_radio"
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/bg_radio_button"
-                            android:button="@android:color/transparent"
-                            android:padding="5dp"
+                            android:layout_marginTop="10dp"
                             android:text="@string/everyday"
-                            android:textAllCaps="true" />
+                            android:textSize="14sp" />
 
                         <RadioButton
                             android:id="@+id/everyweek_repeat_radio"
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/bg_radio_button"
-                            android:button="@android:color/transparent"
-                            android:padding="5dp"
+                            android:layout_marginTop="10dp"
                             android:text="@string/every_week"
-                            android:textAllCaps="true" />
+                            android:textSize="14sp" />
+
+                        <RadioButton
+                            android:id="@+id/repeat_radio_btn_custom"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="@string/dummy"
+                            android:textSize="14sp"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/txt_custom_repeat"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="32dp"
+                            android:layout_marginTop="10dp"
+                            android:onClick="clickCustomRepeat"
+                            android:text="@string/custom"
+                            android:textSize="15sp" />
 
                     </RadioGroup>
 
@@ -701,8 +707,8 @@
                     android:padding="20dp">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/icon_intervention" />
@@ -1116,8 +1122,8 @@
                     android:padding="20dp">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/icon_evaluation" />
