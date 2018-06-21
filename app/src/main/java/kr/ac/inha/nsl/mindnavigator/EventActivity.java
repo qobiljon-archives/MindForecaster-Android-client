@@ -32,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -103,6 +104,7 @@ public class EventActivity extends AppCompatActivity {
     //region Variables
     private final int EVALUATION_ACTIVITY = 0, INTERVENTION_ACTIVITY = 1;
     static Event event;
+    static ArrayList<Long> eventIds = new ArrayList<>();
 
     private ViewGroup inactiveLayout;
     private ViewGroup stressLevelDetails;
@@ -168,6 +170,7 @@ public class EventActivity extends AppCompatActivity {
         if (getIntent().hasExtra("eventId")) {
             // Editing an existing event
             event = Event.getEventById(getIntent().getLongExtra("eventId", 0));
+            eventIds.clear();
             startTime = (Calendar) event.getStartTime().clone();
             endTime = (Calendar) event.getEndTime().clone();
 
@@ -219,6 +222,7 @@ public class EventActivity extends AppCompatActivity {
             }
         } else {
             event = new Event(0);
+            eventIds.clear();
             startTime = Calendar.getInstance();
             endTime = Calendar.getInstance();
             deleteButton.setVisibility(View.GONE);
@@ -357,6 +361,20 @@ public class EventActivity extends AppCompatActivity {
                 } else {
                     startTimeText.setVisibility(View.VISIBLE);
                     endTimeText.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        repeatModeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId){
+                    case R.id.no_repeat_radio:
+                        break;
+                    case R.id.everyday_repeat_radio:
+                        break;
+                    case R.id.everyweek_repeat_radio:
+                        break;
                 }
             }
         });
@@ -602,82 +620,6 @@ public class EventActivity extends AppCompatActivity {
         Intent intent = new Intent(this, EvaluationActivity.class);
         startActivityForResult(intent, EVALUATION_ACTIVITY);
         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-    }
-
-    public void feedbackClick(View view) {
-        if (Tools.isNetworkAvailable(this))
-            Tools.execute(new MyRunnable(
-                    this,
-                    getString(R.string.url_eval_fetch, getString(R.string.server_ip)),
-                    SignInActivity.loginPrefs.getString(SignInActivity.username, null)
-            ) {
-                @Override
-                public void run() {
-                    String url = (String) args[0];
-                    String username = (String) args[1];
-
-                    JSONObject body = new JSONObject();
-                    try {
-                        body.put("username", username);
-                        body.put("eventId", event.getEventId());
-
-                        JSONObject res = new JSONObject(Tools.post(url, body));
-                        switch (res.getInt("result")) {
-                            case Tools.RES_OK:
-                                JSONObject eventEval = res.getJSONObject("evaluation");
-                                runOnUiThread(new MyRunnable(
-                                        activity,
-                                        eventEval.get("eventDone"),
-                                        eventEval.get("realStressLevel")
-                                ) {
-                                    @Override
-                                    public void run() {
-                                        boolean eventDone = (boolean) args[0];
-                                        int realStressLevel = (int) args[1];
-
-                                        /*Intent intent = new Intent(EventActivity.this, FeedbackActivity.class);
-                                        intent.putExtra("eventDone", eventDone);
-                                        intent.putExtra("realStressLevel", realStressLevel);
-                                        startActivityForResult(intent, FEEDBACK_ACTIVITY);
-                                        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);*/
-                                    }
-                                });
-                                break;
-                            case Tools.RES_FAIL:
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(EventActivity.this, "Failed to fetch evaluation for this event.", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                                break;
-                            case Tools.RES_SRV_ERR:
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(EventActivity.this, "Failure occurred while processing the request. (SERVER SIDE)", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                                break;
-                            default:
-                                break;
-                        }
-                    } catch (JSONException | IOException e) {
-                        e.printStackTrace();
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(EventActivity.this, "Failed to proceed due to an error in connection with server.", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                    enableTouch();
-                }
-            });
-        else {
-            Toast.makeText(this, "Please connect to a network first!", Toast.LENGTH_SHORT).show();
-        }
     }
 
     public void cancelClick(View view) {
