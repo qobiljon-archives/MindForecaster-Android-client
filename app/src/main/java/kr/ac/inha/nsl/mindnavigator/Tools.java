@@ -118,15 +118,15 @@ public class Tools {
         executor.execute(runnable);
     }
 
-    /*static void toggle_keyboard(@NonNull Activity activity, EditText editText, boolean show) {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null)
-            if (show)
-                imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
-            else
-                imm.hideSoftInputFromWindow(editText.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
-    }*/
-
+    //    static void toggle_keyboard(@NonNull Activity activity, EditText editText, boolean show) {
+//        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+//        if (imm != null)
+//            if (show)
+//                imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+//            else
+//                imm.hideSoftInputFromWindow(editText.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+//    }
+//
     static void copy_date(long fromMillis, Calendar toCal) {
         Calendar fromCal = Calendar.getInstance(Locale.US);
         fromCal.setTimeInMillis(fromMillis);
@@ -460,6 +460,7 @@ class Event {
     private short interventionReminder;
     private String stressType;
     private String stressCause;
+    private long repeatId;
     private int repeatMode;
     private short eventReminder;
     private boolean evaluated;
@@ -486,9 +487,9 @@ class Event {
     }
 
     void setStartTime(Calendar startTime) {
-        startTime.set(Calendar.SECOND, 0);
-        startTime.set(Calendar.MILLISECOND, 0);
         this.startTime = (Calendar) startTime.clone();
+        this.startTime.set(Calendar.SECOND, 0);
+        this.startTime.set(Calendar.MILLISECOND, 0);
     }
 
     Calendar getStartTime() {
@@ -496,9 +497,9 @@ class Event {
     }
 
     void setEndTime(Calendar endTime) {
-        endTime.set(Calendar.SECOND, 0);
-        endTime.set(Calendar.MILLISECOND, 0);
         this.endTime = (Calendar) endTime.clone();
+        this.endTime.set(Calendar.SECOND, 0);
+        this.endTime.set(Calendar.MILLISECOND, 0);
     }
 
     Calendar getEndTime() {
@@ -553,6 +554,14 @@ class Event {
         return repeatMode;
     }
 
+    void setRepeatId(long repeatId) {
+        this.repeatId = repeatId;
+    }
+
+    long getRepeatId() {
+        return repeatId;
+    }
+
     void setInterventionReminder(short interventionReminder) {
         this.interventionReminder = interventionReminder;
     }
@@ -583,6 +592,7 @@ class Event {
             eventJson.put("stressType", getStressType());
             eventJson.put("stressCause", getStressCause());
             eventJson.put("repeatMode", getRepeatMode());
+            eventJson.put("repeatId", getRepeatId());
             eventJson.put("eventReminder", getEventReminder());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -608,6 +618,7 @@ class Event {
             setStressType(eventJson.getString("stressType"));
             setStressCause(eventJson.getString("stressCause"));
             setRepeatMode(eventJson.getInt("repeatMode"));
+            setRepeatId(eventJson.getLong("repeatId"));
             setEventReminder((short) eventJson.getInt("eventReminder"));
             setEventReminder((short) eventJson.getInt("eventReminder"));
             setEvaluated(eventJson.getBoolean("isEvaluated"));

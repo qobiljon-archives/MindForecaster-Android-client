@@ -9,13 +9,11 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
-import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -30,6 +28,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -258,13 +257,11 @@ public class EventActivity extends AppCompatActivity {
                 startTime.get(Calendar.DAY_OF_MONTH),
                 startTime.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
         ));
-        startDateText.setTag(startTime.getTimeInMillis());
         startTimeText.setText(String.format(Locale.US,
                 "%02d:%02d",
                 startTime.get(Calendar.HOUR_OF_DAY),
                 startTime.get(Calendar.MINUTE))
         );
-        startTimeText.setTag(startTime.getTimeInMillis());
         endDateText.setText(String.format(Locale.US,
                 "%d, %s %d, %s",
                 endTime.get(Calendar.YEAR),
@@ -272,92 +269,11 @@ public class EventActivity extends AppCompatActivity {
                 endTime.get(Calendar.DAY_OF_MONTH),
                 endTime.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
         ));
-        endDateText.setTag(endTime.getTimeInMillis());
         endTimeText.setText(String.format(Locale.US,
                 "%02d:%02d",
                 endTime.get(Calendar.HOUR_OF_DAY),
                 endTime.get(Calendar.MINUTE))
         );
-        endTimeText.setTag(endTime.getTimeInMillis());
-
-        MyTextWatcher timePickingCorrector = new MyTextWatcher(startDateText, startTimeText, endDateText, endTimeText) {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                Tools.copy_date((long) startDateText.getTag(), startTime);
-                Tools.copy_time((long) startTimeText.getTag(), startTime);
-                Tools.copy_date((long) endDateText.getTag(), endTime);
-                Tools.copy_time((long) endTimeText.getTag(), endTime);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (startTime.before(Calendar.getInstance(Locale.US))) {
-                    removeListeners();
-                    startTime = Calendar.getInstance(Locale.US);
-                    startTime.set(Calendar.MINUTE, 0);
-                    startTime.set(Calendar.SECOND, 0);
-                    startTime.set(Calendar.MILLISECOND, 0);
-                    startTime.add(Calendar.HOUR_OF_DAY, 1);
-                    endTime.setTimeInMillis(startTime.getTimeInMillis());
-                    endTime.add(Calendar.HOUR_OF_DAY, 1);
-
-                    startDateText.setText(String.format(Locale.US,
-                            "%d, %s %d, %s",
-                            startTime.get(Calendar.YEAR),
-                            startTime.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
-                            startTime.get(Calendar.DAY_OF_MONTH),
-                            startTime.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
-                    ));
-                    startDateText.setTag(startTime.getTimeInMillis());
-                    startTimeText.setText(String.format(Locale.US,
-                            "%02d:%02d",
-                            startTime.get(Calendar.HOUR_OF_DAY),
-                            startTime.get(Calendar.MINUTE))
-                    );
-                    startTimeText.setTag(startTime.getTimeInMillis());
-                    endDateText.setText(String.format(Locale.US,
-                            "%d, %s %d, %s",
-                            endTime.get(Calendar.YEAR),
-                            endTime.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
-                            endTime.get(Calendar.DAY_OF_MONTH),
-                            endTime.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
-                    ));
-                    endDateText.setTag(endTime.getTimeInMillis());
-                    endTimeText.setText(String.format(Locale.US,
-                            "%02d:%02d",
-                            endTime.get(Calendar.HOUR_OF_DAY),
-                            endTime.get(Calendar.MINUTE))
-                    );
-                    endTimeText.setTag(endTime.getTimeInMillis());
-                    addListeners();
-                } else if (endTime.before(startTime)) {
-                    removeListeners();
-                    endTime.setTimeInMillis(startTime.getTimeInMillis());
-
-                    endTime.add(Calendar.HOUR_OF_DAY, 1);
-                    endDateText.setText(String.format(Locale.US,
-                            "%d, %s %d, %s",
-                            endTime.get(Calendar.YEAR),
-                            endTime.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
-                            endTime.get(Calendar.DAY_OF_MONTH),
-                            endTime.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
-                    ));
-                    endTimeText.setText(String.format(Locale.US,
-                            "%02d:%02d",
-                            endTime.get(Calendar.HOUR_OF_DAY),
-                            endTime.get(Calendar.MINUTE))
-                    );
-                    addListeners();
-                }
-
-                endDateText.setTag(endTime.getTimeInMillis());
-                endTimeText.setTag(endTime.getTimeInMillis());
-            }
-        };
-        startDateText.addTextChangedListener(timePickingCorrector);
-        startTimeText.addTextChangedListener(timePickingCorrector);
-        endDateText.addTextChangedListener(timePickingCorrector);
-        endTimeText.addTextChangedListener(timePickingCorrector);
 
         stressLvl.getProgressDrawable().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.slvl0_color, null), PorterDuff.Mode.SRC_IN);
         stressLvl.getThumb().setColorFilter(ResourcesCompat.getColor(getResources(), R.color.slvl0_color, null), PorterDuff.Mode.SRC_IN);
@@ -388,7 +304,7 @@ public class EventActivity extends AppCompatActivity {
 
         repeatModeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
+            public void onCheckedChanged(RadioGroup group, final int checkedId) {
                 for (CheckBox cb : repeatWeeklDayChecks)
                     cb.setChecked(false);
                 weekdaysGroup.setVisibility(View.GONE);
@@ -402,11 +318,9 @@ public class EventActivity extends AppCompatActivity {
                 Calendar cal = Calendar.getInstance(Locale.US);
                 cal.setTimeInMillis(event.getStartTime().getTimeInMillis());
 
-                DatePickerDialog.OnDateSetListener listener = new MyOnDateSetListener(null, checkedId) {
+                DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker picker, int year, int month, int dayOfMonth) {
-                        int checkedId = (int) args[0];
-
                         Calendar cal = Calendar.getInstance(Locale.US);
                         cal.set(year, month, dayOfMonth, 0, 0, 0);
                         cal.set(Calendar.MILLISECOND, 0);
@@ -732,7 +646,6 @@ public class EventActivity extends AppCompatActivity {
                                                     @Override
                                                     public void run() {
                                                         long eventId = (long) args[0];
-                                                        Toast.makeText(EventActivity.this, "Event has been deleted!", Toast.LENGTH_SHORT).show();
                                                         Tools.cancelNotif(EventActivity.this, (int) eventId);
                                                         setResult(Activity.RESULT_OK);
                                                         finish();
@@ -772,6 +685,89 @@ public class EventActivity extends AppCompatActivity {
                                     enableTouch();
                                 }
                             });
+                        else
+                            Toast.makeText(EventActivity.this, "Please connect to a network first!", Toast.LENGTH_SHORT).show();
+                        break;
+                    case DialogInterface.BUTTON_NEUTRAL:
+                        if (Tools.isNetworkAvailable(EventActivity.this))
+                            Tools.execute(new MyRunnable(
+                                    EventActivity.this,
+                                    getString(R.string.url_event_delete, getString(R.string.server_ip)),
+                                    SignInActivity.loginPrefs.getString(SignInActivity.username, null),
+                                    SignInActivity.loginPrefs.getString(SignInActivity.password, null),
+                                    event.getRepeatId()
+                            ) {
+                                @Override
+                                public void run() {
+                                    String url = (String) args[0];
+                                    String username = (String) args[1];
+                                    String password = (String) args[2];
+                                    long repeatId = (long) args[3];
+
+                                    JSONObject body = new JSONObject();
+                                    try {
+                                        body.put("username", username);
+                                        body.put("password", password);
+                                        body.put("repeatId", repeatId);
+
+                                        JSONObject res = new JSONObject(Tools.post(url, body));
+                                        long[] deletedIds = null;
+                                        if (res.has("deletedIds")) {
+                                            JSONArray array = res.getJSONArray("deletedIds");
+                                            deletedIds = new long[array.length()];
+                                            for (int n = 0; n < deletedIds.length; n++)
+                                                deletedIds[n] = array.getLong(n);
+                                        }
+                                        switch (res.getInt("result")) {
+                                            case Tools.RES_OK:
+                                                runOnUiThread(new MyRunnable(activity, (Object) deletedIds) {
+                                                    @Override
+                                                    public void run() {
+                                                        long[] deletedIds = (long[]) args[0];
+
+                                                        Toast.makeText(EventActivity.this, "Events have been deleted!", Toast.LENGTH_SHORT).show();
+                                                        for (long deletedId : deletedIds)
+                                                            Tools.cancelNotif(EventActivity.this, (int) deletedId);
+                                                        setResult(Activity.RESULT_OK);
+                                                        finish();
+                                                        overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
+                                                    }
+                                                });
+                                                break;
+                                            case Tools.RES_FAIL:
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Toast.makeText(EventActivity.this, "Failed to delete the recurring events.", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                                break;
+                                            case Tools.RES_SRV_ERR:
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Toast.makeText(EventActivity.this, "Failure occurred while processing the request. (SERVER SIDE)", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    } catch (JSONException | IOException e) {
+                                        e.printStackTrace();
+
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Toast.makeText(EventActivity.this, "Failed to proceed due to an error in connection with server.", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                    enableTouch();
+                                }
+                            });
+                        else
+                            Toast.makeText(EventActivity.this, "Please connect to a network first!", Toast.LENGTH_SHORT).show();
                         break;
                     case DialogInterface.BUTTON_NEGATIVE:
                         break;
@@ -782,7 +778,14 @@ public class EventActivity extends AppCompatActivity {
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to delete this event?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+        if (event.getRepeatId() == 0)
+            builder.setMessage("Are you sure you want to delete this event?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+        else {
+            builder.setMessage("Delete recurring event")
+                    .setPositiveButton("This event only", dialogClickListener)
+                    .setNeutralButton("All recurring events", dialogClickListener)
+                    .setNegativeButton("Cancel", dialogClickListener).show();
+        }
     }
 
     public void saveClick(View view) {
@@ -814,16 +817,21 @@ public class EventActivity extends AppCompatActivity {
             return;
         }
 
-        if (eventTitle.getText().length() > 0)
+        // check the input values
+        if (eventTitle.length() > 0)
             event.setTitle(eventTitle.getText().toString());
         else {
             Toast.makeText(this, "Please, type the event title", Toast.LENGTH_SHORT).show();
             return;
         }
-        event.setStressLevel(stressLvl.getProgress());
-
         Calendar startTime = event.getStartTime();
         Calendar endTime = event.getEndTime();
+        if (!(startTime.after(Calendar.getInstance(Locale.US)) && startTime.before(endTime))) {
+            Toast.makeText(this, "Event start time must be between it's end and present time. Please try again!", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        event.setStressLevel(stressLvl.getProgress());
 
         if (switchAllDay.isChecked()) {
             startTime.set(Calendar.HOUR_OF_DAY, 0);
@@ -899,16 +907,17 @@ public class EventActivity extends AppCompatActivity {
                     createEvent(EventActivity.event.getStartTime().getTimeInMillis(), EventActivity.event.getEndTime().getTimeInMillis(), EventActivity.event.getEventId(), 0, true);
                     break;
                 case Event.REPEAT_EVERYDAY:
-                    createRepeatingEvents(event.getStartTime().getTimeInMillis(), event.getEndTime().getTimeInMillis(), repeatTillTime, DAY_MILLIS);
+                    createRepeatingEvents(event.getStartTime().getTimeInMillis(), event.getEndTime().getTimeInMillis(), repeatTillTime, Calendar.getInstance(Locale.US).getTimeInMillis(), DAY_MILLIS);
                     break;
                 case Event.REPEAT_WEEKLY:
                     Calendar[] sCals = new Calendar[7];
                     Calendar[] eCals = new Calendar[7];
+                    long repeatId = Calendar.getInstance(Locale.US).getTimeInMillis();
 
                     for (int n = 0; n < repeatWeeklDayChecks.length; n++) {
                         if (!repeatWeeklDayChecks[n].isChecked())
                             continue;
-                        else if (sCals[n] == null) {
+                        if (sCals[n] == null) {
                             sCals[n] = event.getStartTime();
                             eCals[n] = event.getEndTime();
                             sCals[n].set(Calendar.DAY_OF_WEEK, n + 1);
@@ -917,7 +926,7 @@ public class EventActivity extends AppCompatActivity {
                             eCals[n].add(Calendar.MILLISECOND, (int) (sCals[n].getTimeInMillis() - event.getStartTime().getTimeInMillis()));
                         }
 
-                        createRepeatingEvents(sCals[n].getTimeInMillis(), eCals[n].getTimeInMillis(), repeatTillTime, WEEK_MILLIS);
+                        createRepeatingEvents(sCals[n].getTimeInMillis(), eCals[n].getTimeInMillis(), repeatTillTime, repeatId, WEEK_MILLIS);
                     }
                     break;
                 default:
@@ -927,9 +936,7 @@ public class EventActivity extends AppCompatActivity {
             Toast.makeText(this, "No network! Please connect to network first!", Toast.LENGTH_SHORT).show();
     }
 
-    private void createRepeatingEvents(long origStartTime, long origEndTime, long repeatUntil, int jump) {
-        long repeatId = Calendar.getInstance(Locale.US).getTimeInMillis();
-
+    private void createRepeatingEvents(long origStartTime, long origEndTime, long repeatUntil, long repeatId, int jump) {
         if (origEndTime - origStartTime > jump) {
             Toast.makeText(EventActivity.this, "Event length is too long for this repeat mode, please recheck!", Toast.LENGTH_SHORT).show();
             return;
@@ -945,15 +952,20 @@ public class EventActivity extends AppCompatActivity {
     }
 
     private void createEvent(long startTime, long endTime, long eventId, long repeatId, boolean finishActivity) {
+        event.setRepeatId(repeatId);
+        Calendar sCal = Calendar.getInstance(Locale.US);
+        sCal.setTimeInMillis(startTime);
+        event.setStartTime(sCal);
+        Calendar eCal = Calendar.getInstance(Locale.US);
+        eCal.setTimeInMillis(endTime);
+        event.setEndTime(eCal);
+
         Tools.execute(new MyRunnable(
                 this,
                 EventActivity.event.isNewEvent() ? getString(R.string.url_event_create, getString(R.string.server_ip)) : getString(R.string.url_event_edit, getString(R.string.server_ip)),
                 SignInActivity.loginPrefs.getString(SignInActivity.username, null),
                 SignInActivity.loginPrefs.getString(SignInActivity.password, null),
                 eventId,
-                repeatId,
-                startTime,
-                endTime,
                 finishActivity
         ) {
             @Override
@@ -962,21 +974,18 @@ public class EventActivity extends AppCompatActivity {
                 String username = (String) args[1];
                 String password = (String) args[2];
                 long eventId = (long) args[3];
-                long repeatId = (long) args[4];
-                long startTime = (long) args[5];
-                long endTime = (long) args[6];
-                boolean finishActivity = (boolean) args[7];
+                boolean finishActivity = (boolean) args[4];
 
                 JSONObject body = new JSONObject();
                 try {
                     body.put("username", username);
                     body.put("password", password);
                     body.put("eventId", eventId);
-                    body.put("repeatId", repeatId);
+                    body.put("repeatId", EventActivity.event.getRepeatId());
                     body.put("title", EventActivity.event.getTitle());
                     body.put("stressLevel", EventActivity.event.getStressLevel());
-                    body.put("startTime", startTime);
-                    body.put("endTime", endTime);
+                    body.put("startTime", EventActivity.event.getStartTime().getTimeInMillis());
+                    body.put("endTime", EventActivity.event.getEndTime().getTimeInMillis());
                     if (EventActivity.event.getIntervention() == null) {
                         body.put("intervention", "");
                         body.put("interventionReminder", 0);
@@ -1040,81 +1049,150 @@ public class EventActivity extends AppCompatActivity {
         });
     }
 
-    public void pickDateClick(View view) {
-        MyOnDateSetListener listener = new MyOnDateSetListener(view) {
+    public void pickStartDateClick(View view) {
+        MyOnDateSetListener listener = new MyOnDateSetListener((TextView) view) {
             @Override
             public void onDateSet(DatePicker picker, int year, int month, int dayOfMonth) {
-                Calendar cal = Calendar.getInstance(Locale.US);
-                cal.setTimeInMillis((long) view.getTag());
-                cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                cal.set(Calendar.MONTH, month);
-                cal.set(Calendar.YEAR, year);
+                Calendar calendar = Calendar.getInstance(Locale.US);
+                calendar.set(year, month, dayOfMonth);
 
-                view.setTag(cal.getTimeInMillis());
-                ((TextView) view).setText(String.format(Locale.US,
-                        "%d, %s %d, %s",
-                        cal.get(Calendar.YEAR),
-                        cal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
-                        cal.get(Calendar.DAY_OF_MONTH),
-                        cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
-                ));
-
-                Calendar startTime = event.getStartTime();
-                Calendar endTime = event.getEndTime();
                 switch (view.getId()) {
                     case R.id.txt_event_start_date:
-                        Tools.copy_date(cal.getTimeInMillis(), startTime);
+                        Calendar startDate = event.getStartTime();
+                        Tools.copy_date(calendar.getTimeInMillis(), startDate);
+                        event.setStartTime(startDate);
                         break;
                     case R.id.txt_event_end_date:
-                        Tools.copy_date(cal.getTimeInMillis(), endTime);
+                        Calendar startDate = event.getEndTime();
+                        Tools.copy_date(calendar.getTimeInMillis(), startDate);
+                        event.setStartTime(startDate);
                         break;
                     default:
                         break;
                 }
-                event.setStartTime(startTime);
-                event.setEndTime(endTime);
+
+                if (view.getId() == R.id.txt_event_start_date)
+                    event.setStartTime(calendar);
+                else event.setEndTime(calendar);
+
+                view.setText(String.format(Locale.US,
+                        "%d, %s %d, %s",
+                        calendar.get(Calendar.YEAR),
+                        calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
+                        calendar.get(Calendar.DAY_OF_MONTH),
+                        calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
+                ));
             }
         };
-        Calendar cal = Calendar.getInstance(Locale.US);
-        cal.setTimeInMillis((long) view.getTag());
+        Calendar cal = null;
+        if (view.getId() == R.id.txt_event_start_date)
+            cal = event.getStartTime();
+        else if (view.getId() == R.id.txt_event_end_date)
+            cal = event.getEndTime();
+        if (cal == null)
+            return;
+
         DatePickerDialog dialog = new DatePickerDialog(this, listener, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
         dialog.show();
     }
 
-    public void pickTimeClick(View view) {
-        MyOnTimeSetListener listener = new MyOnTimeSetListener(view) {
+    public void pickEndDateClick(View view) {
+        MyOnDateSetListener listener = new MyOnDateSetListener((TextView) view) {
             @Override
-            public void onTimeSet(TimePicker picker, int hourOfDay, int minute) {
-                Calendar cal = Calendar.getInstance(Locale.US);
-                cal.setTimeInMillis((long) view.getTag());
-                cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                cal.set(Calendar.MINUTE, minute);
+            public void onDateSet(DatePicker picker, int year, int month, int dayOfMonth) {
+                Calendar calendar = Calendar.getInstance(Locale.US);
+                calendar.set(year, month, dayOfMonth);
 
-                view.setTag(cal.getTimeInMillis());
-                ((TextView) view).setText(String.format(Locale.US,
-                        "%02d:%02d",
-                        cal.get(Calendar.HOUR_OF_DAY),
-                        cal.get(Calendar.MINUTE))
-                );
-
-                Calendar startTime = event.getStartTime();
-                Calendar endTime = event.getEndTime();
                 switch (view.getId()) {
-                    case R.id.txt_event_start_time:
-                        Tools.copy_time(cal.getTimeInMillis(), startTime);
+                    case R.id.txt_event_start_date:
+                        Calendar startDate = event.getStartTime();
+                        Tools.copy_date(calendar.getTimeInMillis(), startDate);
+                        event.setStartTime(startDate);
                         break;
-                    case R.id.txt_event_end_time:
-                        Tools.copy_time(cal.getTimeInMillis(), endTime);
+                    case R.id.txt_event_end_date:
+                        Calendar startDate = event.getEndTime();
+                        Tools.copy_date(calendar.getTimeInMillis(), startDate);
+                        event.setStartTime(startDate);
                         break;
                     default:
                         break;
                 }
-                event.setStartTime(startTime);
-                event.setEndTime(endTime);
+
+                if (view.getId() == R.id.txt_event_start_date)
+                    event.setStartTime(calendar);
+                else event.setEndTime(calendar);
+
+                view.setText(String.format(Locale.US,
+                        "%d, %s %d, %s",
+                        calendar.get(Calendar.YEAR),
+                        calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
+                        calendar.get(Calendar.DAY_OF_MONTH),
+                        calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
+                ));
             }
         };
-        Calendar cal = Calendar.getInstance(Locale.US);
-        cal.setTimeInMillis((long) view.getTag());
+        Calendar cal = null;
+        if (view.getId() == R.id.txt_event_start_date)
+            cal = event.getStartTime();
+        else if (view.getId() == R.id.txt_event_end_date)
+            cal = event.getEndTime();
+        if (cal == null)
+            return;
+
+        DatePickerDialog dialog = new DatePickerDialog(this, listener, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+        dialog.show();
+    }
+
+    public void pickStartTimeClick(View view) {
+        Calendar cal;
+        if (view.getId() == R.id.txt_event_start_time)
+            cal = event.getStartTime();
+        else cal = event.getEndTime();
+
+        MyOnTimeSetListener listener = new MyOnTimeSetListener((TextView) view, cal) {
+            @Override
+            public void onTimeSet(TimePicker picker, int hourOfDay, int minute) {
+                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                calendar.set(Calendar.MINUTE, minute);
+
+                if (view.getId() == R.id.txt_event_start_time)
+                    event.setStartTime(calendar);
+                else event.setEndTime(calendar);
+
+                view.setText(String.format(Locale.US,
+                        "%02d:%02d",
+                        calendar.get(Calendar.HOUR_OF_DAY),
+                        calendar.get(Calendar.MINUTE))
+                );
+            }
+        };
+        TimePickerDialog dialog = new TimePickerDialog(this, listener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true);
+        dialog.show();
+    }
+
+    public void pickEndTimeClick(View view) {
+        Calendar cal;
+        if (view.getId() == R.id.txt_event_start_time)
+            cal = event.getStartTime();
+        else cal = event.getEndTime();
+
+        MyOnTimeSetListener listener = new MyOnTimeSetListener((TextView) view, cal) {
+            @Override
+            public void onTimeSet(TimePicker picker, int hourOfDay, int minute) {
+                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                calendar.set(Calendar.MINUTE, minute);
+
+                if (view.getId() == R.id.txt_event_start_time)
+                    event.setStartTime(calendar);
+                else event.setEndTime(calendar);
+
+                view.setText(String.format(Locale.US,
+                        "%02d:%02d",
+                        calendar.get(Calendar.HOUR_OF_DAY),
+                        calendar.get(Calendar.MINUTE))
+                );
+            }
+        };
         TimePickerDialog dialog = new TimePickerDialog(this, listener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true);
         dialog.show();
     }
@@ -1259,54 +1337,18 @@ public class EventActivity extends AppCompatActivity {
     }
 
     private abstract class MyOnDateSetListener implements DatePickerDialog.OnDateSetListener {
-        MyOnDateSetListener(@Nullable View view, Object... args) {
+        MyOnDateSetListener(TextView view) {
             this.view = view;
-            this.args = args;
         }
 
-        View view;
-        Object[] args;
+        TextView view;
     }
 
     private abstract class MyOnTimeSetListener implements TimePickerDialog.OnTimeSetListener {
-        MyOnTimeSetListener(View view) {
+        MyOnTimeSetListener(TextView view) {
             this.view = view;
         }
 
-        View view;
-    }
-
-    private abstract class MyTextWatcher implements TextWatcher {
-        MyTextWatcher(TextView startDateText, TextView startTimeText, TextView endDateText, TextView endTimeText) {
-            this.startDateText = startDateText;
-            this.startTimeText = startTimeText;
-            this.endDateText = endDateText;
-            this.endTimeText = endTimeText;
-
-            startTime = Calendar.getInstance(Locale.US);
-            endTime = Calendar.getInstance(Locale.US);
-        }
-
-        TextView startDateText, startTimeText, endDateText, endTimeText;
-        Calendar startTime, endTime;
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        void removeListeners() {
-            startDateText.removeTextChangedListener(this);
-            startTimeText.removeTextChangedListener(this);
-            endDateText.removeTextChangedListener(this);
-            endTimeText.removeTextChangedListener(this);
-        }
-
-        void addListeners() {
-            startDateText.addTextChangedListener(this);
-            startTimeText.addTextChangedListener(this);
-            endDateText.addTextChangedListener(this);
-            endTimeText.addTextChangedListener(this);
-        }
+        TextView view;
     }
 }
