@@ -119,32 +119,13 @@ public class Tools {
     }
 
     //    static void toggle_keyboard(@NonNull Activity activity, EditText editText, boolean show) {
-//        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-//        if (imm != null)
-//            if (show)
-//                imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
-//            else
-//                imm.hideSoftInputFromWindow(editText.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
-//    }
-//
-    static void copy_date(long fromMillis, Calendar toCal) {
-        Calendar fromCal = Calendar.getInstance(Locale.US);
-        fromCal.setTimeInMillis(fromMillis);
-
-        toCal.set(Calendar.YEAR, fromCal.get(Calendar.YEAR));
-        toCal.set(Calendar.MONTH, fromCal.get(Calendar.MONTH));
-        toCal.set(Calendar.DAY_OF_MONTH, fromCal.get(Calendar.DAY_OF_MONTH));
-    }
-
-    static void copy_time(long fromMillis, Calendar toCal) {
-        Calendar fromCal = Calendar.getInstance(Locale.US);
-        fromCal.setTimeInMillis(fromMillis);
-
-        toCal.set(Calendar.HOUR_OF_DAY, fromCal.get(Calendar.HOUR_OF_DAY));
-        toCal.set(Calendar.MINUTE, fromCal.get(Calendar.MINUTE));
-        toCal.set(Calendar.SECOND, 0);
-        toCal.set(Calendar.MILLISECOND, 0);
-    }
+    //        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+    //        if (imm != null)
+    //            if (show)
+    //                imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+    //            else
+    //                imm.hideSoftInputFromWindow(editText.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+    //    }
 
     @ColorInt
     static int stressLevelToColor(Context context, int level) {

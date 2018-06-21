@@ -896,133 +896,65 @@ public class EventActivity extends AppCompatActivity {
 
         event.setEvaluated(false);
 
-        if (Tools.isNetworkAvailable(this)) {
-            switch (event.getRepeatMode()) {
-                case Event.NO_REPEAT:
-                    createEvent(EventActivity.event.getStartTime().getTimeInMillis(), EventActivity.event.getEndTime().getTimeInMillis(), EventActivity.event.getEventId(), 0, true);
-                    break;
-                case Event.REPEAT_EVERYDAY:
-                    createEvent(EventActivity.event.getStartTime().getTimeInMillis(), EventActivity.event.getEndTime().getTimeInMillis(), EventActivity.event.getEventId(), Calendar.getInstance(Locale.US).getTimeInMillis(), true);
-                    break;
-                case Event.REPEAT_WEEKLY:
-                    createEvent(EventActivity.event.getStartTime().getTimeInMillis(), EventActivity.event.getEndTime().getTimeInMillis(), EventActivity.event.getEventId(), Calendar.getInstance(Locale.US).getTimeInMillis(), true);
-                    long repeatId = Calendar.getInstance(Locale.US).getTimeInMillis();
-
-                    // a dynamically updaing row
-                    Calendar[] startTimeCals = new Calendar[7];
-                    Calendar[] endTimeCals = new Calendar[7];
-
-                    // for building up the first row
-                    final Calendar evStartTime = event.getStartTime();
-                    final Calendar evEndTime = event.getEndTime();
-
-                    for (int n = 0; n < repeatWeeklDayChecks.length; n++) {
-                        if (!repeatWeeklDayChecks[n].isChecked())
-                            continue;
-                        if (startTimeCals[n] == null) {
-                            // building up the first row calendars
-                            startTimeCals[n] = (Calendar) evStartTime.clone();
-                            endTimeCals[n] = (Calendar) evEndTime.clone();
-
-                            // shifting the start-time to the needed day of the week
-                            startTimeCals[n].set(Calendar.DAY_OF_WEEK, n + 1);
-                            if (startTimeCals[n].before(evStartTime))
-                                startTimeCals[n].add(Calendar.DAY_OF_MONTH, 7);
-
-                            // adjusting the end-time in a synchronized way, using the start-time delta
-                            endTimeCals[n].add(Calendar.MILLISECOND, (int) (startTimeCals[n].getTimeInMillis() - evStartTime.getTimeInMillis()));
-                        }
-
-                        // rock it buddy
-                        createRepeatingEvents(startTimeCals[n].getTimeInMillis(), endTimeCals[n].getTimeInMillis(), repeatTillTime, repeatId, WEEK_MILLIS);
-                    }
-                    break;
-                default:
-                    break;
-            }
-        } else
+        if (Tools.isNetworkAvailable(this))
+            createEvent();
+        else
             Toast.makeText(this, "No network! Please connect to network first!", Toast.LENGTH_SHORT).show();
     }
 
-    private void createRepeatingEvents(long origStartTime, long origEndTime, long repeatUntil, long repeatId, int jump) {
-        if (origEndTime - origStartTime > jump) {
-            Toast.makeText(EventActivity.this, "Event length is too long for this repeat mode, please recheck!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        while (origStartTime + jump < repeatUntil) {
-            createEvent(origStartTime, origEndTime, Calendar.getInstance(Locale.US).getTimeInMillis(), repeatId, false);
-
-            origStartTime += jump;
-            origEndTime += jump;
-        }
-        createEvent(origStartTime, origEndTime, Calendar.getInstance(Locale.US).getTimeInMillis(), repeatId, true);
-    }
-
-    private void createEvent(long startTime, long endTime, long eventId, long repeatId, boolean finishActivity) {
-        event.setRepeatId(repeatId);
-        Calendar sCal = Calendar.getInstance(Locale.US);
-        sCal.setTimeInMillis(startTime);
-        event.setStartTime(sCal);
-        Calendar eCal = Calendar.getInstance(Locale.US);
-        eCal.setTimeInMillis(endTime);
-        event.setEndTime(eCal);
+    private void createEvent() {
+        event.setRepeatId(event.getRepeatMode() == Event.NO_REPEAT ? 0 : Calendar.getInstance(Locale.US).getTimeInMillis());
 
         Tools.execute(new MyRunnable(
                 this,
                 EventActivity.event.isNewEvent() ? getString(R.string.url_event_create, getString(R.string.server_ip)) : getString(R.string.url_event_edit, getString(R.string.server_ip)),
                 SignInActivity.loginPrefs.getString(SignInActivity.username, null),
-                SignInActivity.loginPrefs.getString(SignInActivity.password, null),
-                eventId,
-                finishActivity
+                SignInActivity.loginPrefs.getString(SignInActivity.password, null)
         ) {
             @Override
             public void run() {
                 String url = (String) args[0];
                 String username = (String) args[1];
                 String password = (String) args[2];
-                long eventId = (long) args[3];
-                boolean finishActivity = (boolean) args[4];
 
                 JSONObject body = new JSONObject();
                 try {
                     body.put("username", username);
                     body.put("password", password);
-                    body.put("eventId", eventId);
-                    body.put("title", EventActivity.event.getTitle());
-                    body.put("stressLevel", EventActivity.event.getStressLevel());
-                    body.put("startTime", EventActivity.event.getStartTime().getTimeInMillis());
-                    body.put("endTime", EventActivity.event.getEndTime().getTimeInMillis());
-                    if (EventActivity.event.getIntervention() == null) {
+                    body.put("eventId", event.getEventId());
+                    body.put("title", event.getTitle());
+                    body.put("stressLevel", event.getStressLevel());
+                    body.put("startTime", event.getStartTime().getTimeInMillis());
+                    body.put("endTime", event.getEndTime().getTimeInMillis());
+                    if (event.getIntervention() == null) {
                         body.put("intervention", "");
                         body.put("interventionReminder", 0);
                     } else {
-                        body.put("intervention", EventActivity.event.getIntervention());
-                        body.put("interventionReminder", EventActivity.event.getInterventionReminder());
+                        body.put("intervention", event.getIntervention());
+                        body.put("interventionReminder", event.getInterventionReminder());
                     }
-                    body.put("stressType", EventActivity.event.getStressType());
-                    body.put("stressCause", EventActivity.event.getStressCause());
-                    body.put("repeatMode", EventActivity.event.getRepeatMode());
-                    body.put("repeatId", EventActivity.event.getRepeatId());
+                    body.put("stressType", event.getStressType());
+                    body.put("stressCause", event.getStressCause());
+                    body.put("repeatMode", event.getRepeatMode());
+                    body.put("repeatId", event.getRepeatId());
                     body.put("repeatTill", repeatTillTime);
-                    body.put("eventReminder", EventActivity.event.getEventReminder());
-                    body.put("isEvaluated", EventActivity.event.isEvaluated());
+                    body.put("eventReminder", event.getEventReminder());
+                    body.put("isEvaluated", event.isEvaluated());
 
                     JSONObject res = new JSONObject(Tools.post(url, body));
                     Thread.sleep(100);
                     switch (res.getInt("result")) {
                         case Tools.RES_OK:
-                            if (finishActivity)
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(EventActivity.this, EventActivity.event.isNewEvent() ? "Event successfully created!" : "Event has been edited.", Toast.LENGTH_SHORT).show();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(EventActivity.this, EventActivity.event.isNewEvent() ? "Event successfully created!" : "Event has been edited.", Toast.LENGTH_SHORT).show();
 
-                                        setResult(Activity.RESULT_OK);
-                                        finish();
-                                        overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
-                                    }
-                                });
+                                    setResult(Activity.RESULT_OK);
+                                    finish();
+                                    overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
+                                }
+                            });
                             break;
                         case Tools.RES_FAIL:
                             runOnUiThread(new Runnable() {
@@ -1053,8 +985,7 @@ public class EventActivity extends AppCompatActivity {
                         }
                     });
                 }
-                if (finishActivity)
-                    enableTouch();
+                enableTouch();
             }
         });
     }
@@ -1168,7 +1099,6 @@ public class EventActivity extends AppCompatActivity {
 
         customNotifRadioButton.setVisibility(View.VISIBLE);
         customNotifRadioButton.setText(txt);
-        //TODO: complete the custom notification part
     }
 
     public void initFeedbackView() {
