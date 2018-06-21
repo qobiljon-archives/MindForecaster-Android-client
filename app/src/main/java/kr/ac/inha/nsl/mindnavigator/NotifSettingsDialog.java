@@ -18,8 +18,8 @@ public class NotifSettingsDialog extends DialogFragment {
     //region Variables
     ViewGroup root;
     TextView sundayTxt, everyMorningTxt, everyEveningTxt;
-    static Calendar sunday = Calendar.getInstance(), everyMorning = Calendar.getInstance(), everyEvening = Calendar.getInstance();
-    static Calendar sundayPrev = Calendar.getInstance(), everyMorningPrev = Calendar.getInstance(), everyEveningPrev = Calendar.getInstance();
+    static Calendar sunday = Calendar.getInstance(Locale.US), everyMorning = Calendar.getInstance(Locale.US), everyEvening = Calendar.getInstance(Locale.US);
+    static Calendar sundayPrev = Calendar.getInstance(Locale.US), everyMorningPrev = Calendar.getInstance(Locale.US), everyEveningPrev = Calendar.getInstance(Locale.US);
     //endregion
 
     @Override
@@ -118,7 +118,7 @@ public class NotifSettingsDialog extends DialogFragment {
         MyOnTimeSetListener listener = new MyOnTimeSetListener(view) {
             @Override
             public void onTimeSet(TimePicker picker, int hourOfDay, int minute) {
-                Calendar cal = Calendar.getInstance();
+                Calendar cal = Calendar.getInstance(Locale.US);
                 cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 cal.set(Calendar.MINUTE, minute);
 
@@ -154,7 +154,7 @@ public class NotifSettingsDialog extends DialogFragment {
                 }
             }
         };
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance(Locale.US);
         cal.setTimeInMillis((long) view.getTag());
         TimePickerDialog dialog = new TimePickerDialog(getActivity(), listener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true);
         dialog.show();

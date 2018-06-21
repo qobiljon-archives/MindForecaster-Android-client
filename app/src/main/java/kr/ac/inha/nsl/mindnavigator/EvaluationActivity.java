@@ -85,8 +85,6 @@ public class EvaluationActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
-
-        Tools.toggle_keyboard(this, journalText, false);
     }
 
     public void cancelClick(View view) {

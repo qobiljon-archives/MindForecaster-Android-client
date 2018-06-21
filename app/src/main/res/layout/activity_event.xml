@@ -234,8 +234,8 @@
                     android:padding="20dp">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/icon_notification" />
@@ -253,10 +253,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableEnd="@drawable/img_expand"
-                        android:textAlignment="viewEnd"
                         android:onClick="expandNotificationClick"
-                        android:textSize="16sp"
-                        android:textColor="@color/dark_blue"/>
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/dark_blue"
+                        android:textSize="16sp" />
                 </LinearLayout>
 
 
@@ -369,8 +369,8 @@
                     android:padding="20dp">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/icon_repeat" />
@@ -388,10 +388,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableEnd="@drawable/img_expand"
-                        android:textAlignment="viewEnd"
                         android:onClick="expandRepeatClick"
-                        android:textSize="16sp"
-                        android:textColor="@color/dark_blue"/>
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/dark_blue"
+                        android:textSize="16sp" />
 
 
                 </LinearLayout>
@@ -443,24 +443,107 @@
                             android:text="@string/every_week"
                             android:textSize="14sp" />
 
-                        <RadioButton
-                            android:id="@+id/repeat_radio_btn_custom"
+                        <LinearLayout
+                            android:id="@+id/weekdays_group"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:text="@string/dummy"
-                            android:textSize="14sp"
-                            android:visibility="gone" />
+                            android:layout_marginStart="20dp"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
 
-                        <TextView
-                            android:id="@+id/txt_custom_repeat"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="32dp"
-                            android:layout_marginTop="10dp"
-                            android:onClick="clickCustomRepeat"
-                            android:text="@string/custom"
-                            android:textSize="15sp" />
+                            <CheckBox
+                                android:id="@+id/sun"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:layout_margin="3dp"
+                                android:layout_marginEnd="3dp"
+                                android:layout_marginStart="3dp"
+                                android:background="@drawable/bg_weekday"
+                                android:button="@drawable/bg_weekday"
+                                android:gravity="center"
+                                android:tag="@string/sunday"
+                                android:text="@string/sunday"
+                                android:textSize="12sp" />
+
+                            <CheckBox
+                                android:id="@+id/mon"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:layout_margin="3dp"
+                                android:layout_marginStart="3dp"
+                                android:background="@drawable/bg_weekday"
+                                android:button="@drawable/bg_weekday"
+                                android:gravity="center"
+                                android:tag="@string/monday"
+                                android:text="@string/monday"
+                                android:textSize="12sp" />
+
+                            <CheckBox
+                                android:id="@+id/tue"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:layout_margin="3dp"
+                                android:layout_marginStart="3dp"
+                                android:background="@drawable/bg_weekday"
+                                android:button="@drawable/bg_weekday"
+                                android:gravity="center"
+                                android:tag="@string/tuesday"
+                                android:text="@string/tuesday"
+                                android:textSize="12sp" />
+
+                            <CheckBox
+                                android:id="@+id/wed"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:layout_margin="3dp"
+                                android:layout_marginStart="3dp"
+                                android:background="@drawable/bg_weekday"
+                                android:button="@drawable/bg_weekday"
+                                android:gravity="center"
+                                android:tag="@string/wednesday"
+                                android:text="@string/wednesday"
+                                android:textSize="12sp" />
+
+                            <CheckBox
+                                android:id="@+id/thu"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:layout_margin="3dp"
+                                android:layout_marginStart="3dp"
+                                android:background="@drawable/bg_weekday"
+                                android:button="@drawable/bg_weekday"
+                                android:gravity="center"
+                                android:tag="@string/thursday"
+                                android:text="@string/thursday"
+                                android:textSize="12sp" />
+
+                            <CheckBox
+                                android:id="@+id/fri"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:layout_margin="3dp"
+                                android:layout_marginStart="3dp"
+                                android:background="@drawable/bg_weekday"
+                                android:button="@drawable/bg_weekday"
+                                android:gravity="center"
+                                android:tag="@string/friday"
+                                android:text="@string/friday"
+                                android:textSize="12sp" />
+
+                            <CheckBox
+                                android:id="@+id/sat"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:layout_margin="3dp"
+                                android:layout_marginStart="3dp"
+                                android:background="@drawable/bg_weekday"
+                                android:button="@drawable/bg_weekday"
+                                android:gravity="center"
+                                android:tag="@string/saturday"
+                                android:text="@string/saturday"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
 
                     </RadioGroup>
 
@@ -481,8 +564,8 @@
                     android:padding="20dp">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/icon_stress_level" />
@@ -500,10 +583,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableEnd="@drawable/img_expand"
-                        android:textAlignment="viewEnd"
                         android:onClick="expandStressLevelClick"
-                        android:textSize="16sp"
-                        android:textColor="@color/dark_blue"/>
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/dark_blue"
+                        android:textSize="16sp" />
 
 
                 </LinearLayout>
@@ -707,8 +790,8 @@
                     android:padding="20dp">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/icon_intervention" />
@@ -1122,8 +1205,8 @@
                     android:padding="20dp">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_marginEnd="10dp"
                         android:background="@drawable/icon_evaluation" />

@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -102,7 +103,7 @@ public class SignInActivity extends AppCompatActivity {
                                         editor.apply();
 
                                         if (SignInActivity.loginPrefs.getBoolean("firstTime", true)) {
-                                            Calendar sundayNotifTime = Calendar.getInstance();
+                                            Calendar sundayNotifTime = Calendar.getInstance(Locale.US);
                                             sundayNotifTime.set(Calendar.DAY_OF_WEEK, 1);
                                             sundayNotifTime.set(Calendar.HOUR_OF_DAY, 20);
                                             sundayNotifTime.set(Calendar.MINUTE, 0);
@@ -111,7 +112,7 @@ public class SignInActivity extends AppCompatActivity {
                                             editor.putLong("SundayReminderTime", sundayNotifTime.getTimeInMillis());
                                             Tools.addSundayNotif(SignInActivity.this, sundayNotifTime);
 
-                                            Calendar dailyNotifTime = Calendar.getInstance();
+                                            Calendar dailyNotifTime = Calendar.getInstance(Locale.US);
                                             dailyNotifTime.set(Calendar.HOUR_OF_DAY, 8);
                                             dailyNotifTime.set(Calendar.MINUTE, 0);
                                             dailyNotifTime.set(Calendar.SECOND, 0);

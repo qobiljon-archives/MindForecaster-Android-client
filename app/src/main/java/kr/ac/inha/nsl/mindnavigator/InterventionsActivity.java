@@ -162,7 +162,6 @@ public class InterventionsActivity extends AppCompatActivity {
                 tabButtons[1].setBackgroundResource(R.drawable.bg_interv_method_checked_view);
                 interv_choice.setVisibility(View.VISIBLE);
                 interv_list.removeAllViews();
-                Tools.toggle_keyboard(this, interv_text, false);
                 if (Tools.isNetworkAvailable(this))
                     Tools.execute(new MyRunnable(
                             this,
@@ -240,7 +239,6 @@ public class InterventionsActivity extends AppCompatActivity {
                 tabButtons[2].setBackgroundResource(R.drawable.bg_interv_method_checked_view);
                 interv_choice.setVisibility(View.VISIBLE);
                 interv_list.removeAllViews();
-                Tools.toggle_keyboard(this, interv_text, false);
                 if (Tools.isNetworkAvailable(this))
                     Tools.execute(new MyRunnable(
                             this,

@@ -6,8 +6,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.ColorInt;
@@ -18,11 +16,8 @@ import android.util.LongSparseArray;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -123,17 +118,17 @@ public class Tools {
         executor.execute(runnable);
     }
 
-    static void toggle_keyboard(@NonNull Activity activity, EditText editText, boolean show) {
+    /*static void toggle_keyboard(@NonNull Activity activity, EditText editText, boolean show) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null)
             if (show)
                 imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
             else
                 imm.hideSoftInputFromWindow(editText.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
-    }
+    }*/
 
     static void copy_date(long fromMillis, Calendar toCal) {
-        Calendar fromCal = Calendar.getInstance();
+        Calendar fromCal = Calendar.getInstance(Locale.US);
         fromCal.setTimeInMillis(fromMillis);
 
         toCal.set(Calendar.YEAR, fromCal.get(Calendar.YEAR));
@@ -142,7 +137,7 @@ public class Tools {
     }
 
     static void copy_time(long fromMillis, Calendar toCal) {
-        Calendar fromCal = Calendar.getInstance();
+        Calendar fromCal = Calendar.getInstance(Locale.US);
         fromCal.setTimeInMillis(fromMillis);
 
         toCal.set(Calendar.HOUR_OF_DAY, fromCal.get(Calendar.HOUR_OF_DAY));
@@ -497,7 +492,7 @@ class Event {
     }
 
     Calendar getStartTime() {
-        return startTime;
+        return (Calendar) startTime.clone();
     }
 
     void setEndTime(Calendar endTime) {
@@ -507,7 +502,7 @@ class Event {
     }
 
     Calendar getEndTime() {
-        return endTime;
+        return (Calendar) endTime.clone();
     }
 
     void setStressLevel(int stressLevel) {
@@ -599,7 +594,7 @@ class Event {
 
     void fromJson(JSONObject eventJson) {
         try {
-            Calendar startTime = Calendar.getInstance(), endTime = Calendar.getInstance();
+            Calendar startTime = Calendar.getInstance(Locale.US), endTime = Calendar.getInstance(Locale.US);
             startTime.setTimeInMillis(eventJson.getLong("startTime"));
             endTime.setTimeInMillis(eventJson.getLong("endTime"));
 
@@ -622,10 +617,10 @@ class Event {
     }
 
     static void updateEventReminders(Context context, String txtTime) {
-        Calendar today = Calendar.getInstance(), cal;
+        Calendar today = Calendar.getInstance(Locale.US), cal;
         for (Event event : currentEventBank) {
             if (event.getEventReminder() != 0) {
-                cal = (Calendar) event.getStartTime().clone();
+                cal = event.getStartTime();
                 cal.add(Calendar.MINUTE, event.getEventReminder());
                 if (cal.before(today)) {
                     Tools.cancelNotif(context, (int) event.getEventId());
@@ -655,22 +650,22 @@ class Event {
     }
 
     public static void updateIntervReminder(Context context) {
-        Calendar today = Calendar.getInstance(), calIntervBeforeEvent, calIntervAfterEvent;
+        Calendar today = Calendar.getInstance(Locale.US), calIntervBeforeEvent, calIntervAfterEvent;
         for (Event event : currentEventBank) {
-            Calendar calIntervNotifId = Calendar.getInstance();
+            Calendar calIntervNotifId = Calendar.getInstance(Locale.US);
             calIntervNotifId.setTimeInMillis(event.getEventId());
             calIntervNotifId.add(Calendar.MILLISECOND, 1);
 
 
             if (event.getInterventionReminder() < 0) {
-                calIntervBeforeEvent = (Calendar) event.getStartTime().clone();
+                calIntervBeforeEvent = event.getStartTime();
                 calIntervBeforeEvent.add(Calendar.MINUTE, event.getInterventionReminder());
                 if (calIntervBeforeEvent.before(today)) {
                     Tools.cancelNotif(context, (int) calIntervNotifId.getTimeInMillis());
                 } else
                     Tools.addIntervNotif(context, calIntervBeforeEvent, (int) calIntervNotifId.getTimeInMillis(), String.format(Locale.US, "Intervention: %s", event.getIntervention()), String.format(Locale.US, "for upcoming event: %s", event.getTitle()));
             } else if (event.getInterventionReminder() != 0) {
-                calIntervAfterEvent = (Calendar) event.getEndTime().clone();
+                calIntervAfterEvent = event.getEndTime();
                 calIntervAfterEvent.add(Calendar.MINUTE, event.getInterventionReminder());
                 if (calIntervAfterEvent.before(today)) {
                     Tools.cancelNotif(context, (int) calIntervNotifId.getTimeInMillis());

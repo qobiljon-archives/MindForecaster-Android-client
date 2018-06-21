@@ -57,7 +57,7 @@ public class EventsListDialog extends DialogFragment {
             }
         });
 
-        Calendar selectedDay = Calendar.getInstance();
+        Calendar selectedDay = Calendar.getInstance(Locale.US);
         selectedDay.setTimeInMillis(getArguments().getLong("selectedDayMillis"));
 
         TextView dateTxt = root.findViewById(R.id.cell_date);
@@ -81,7 +81,7 @@ public class EventsListDialog extends DialogFragment {
             TextView isEvaluated = view.findViewById(R.id.is_evaluated);
             TextView stressLevel = view.findViewById(R.id.stress_lvl_box);
 
-            if (selectedDay.before(Calendar.getInstance())){
+            if (selectedDay.before(Calendar.getInstance(Locale.US))){
                 if(event.isEvaluated())
                     isEvaluated.setText("Evaluated");
                 else isEvaluated.setText("Not evaluated");

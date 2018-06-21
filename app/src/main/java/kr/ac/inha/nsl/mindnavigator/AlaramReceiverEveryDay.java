@@ -11,13 +11,14 @@ import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 public class AlaramReceiverEveryDay extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Intent notificationIntent = new Intent(context, SignInActivity.class);
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance(Locale.US);
         notificationIntent.putExtra("eventDate", cal.getTimeInMillis());
         notificationIntent.putExtra("event", "hi");
         notificationIntent.putExtra("isEvaluate", intent.getBooleanExtra("isEvaluate", false));

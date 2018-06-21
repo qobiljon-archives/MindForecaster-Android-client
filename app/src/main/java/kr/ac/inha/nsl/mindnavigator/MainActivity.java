@@ -30,6 +30,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -88,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
-        currentCal = Calendar.getInstance();
+        currentCal = Calendar.getInstance(Locale.US);
         event_grid = findViewById(R.id.event_grid);
         monthName = findViewById(R.id.header_month_name);
         year = findViewById(R.id.header_year);
@@ -115,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                 Tools.cellClearOut(cells, col, row, this, event_grid, cellClick);
 
         // Check if displayed month contains today
-        Calendar today = Calendar.getInstance();
+        Calendar today = Calendar.getInstance(Locale.US);
         TextView todayText;
 
         if (currentCal.get(Calendar.MONTH) == today.get(Calendar.MONTH) && currentCal.get(Calendar.YEAR) == today.get(Calendar.YEAR)) {
@@ -228,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
                                     public void run() {
                                         for (int row = 0; row < event_grid.getRowCount(); row++)
                                             for (int col = 0; col < event_grid.getColumnCount(); col++) {
-                                                Calendar day = Calendar.getInstance();
+                                                Calendar day = Calendar.getInstance(Locale.US);
                                                 day.setTimeInMillis((long) cells[col][row].getTag());
                                                 ArrayList<Event> dayEvents = Event.getOneDayEvents(day);
                                                 for (Event event : dayEvents) {
@@ -285,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
             Event.updateIntervReminder(MainActivity.this);
             for (row = 0; row < event_grid.getRowCount(); row++)
                 for (col = 0; col < event_grid.getColumnCount(); col++) {
-                    Calendar day = Calendar.getInstance();
+                    Calendar day = Calendar.getInstance(Locale.US);
                     day.setTimeInMillis((long) cells[col][row].getTag());
                     ArrayList<Event> dayEvents = Event.getOneDayEvents(day);
                     for (Event event : dayEvents) {
@@ -305,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public int getFirstWeekdayIndex(int day, int month, int year) {
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance(Locale.US);
         cal.set(Calendar.DATE, day);
         cal.set(Calendar.MONTH, month);
         cal.set(Calendar.YEAR, year);
@@ -328,7 +329,7 @@ public class MainActivity extends AppCompatActivity {
         if (nMgr != null) {
             nMgr.cancelAll();
         }
-        currentCal = Calendar.getInstance();
+        currentCal = Calendar.getInstance(Locale.US);
         updateCalendarView();
     }
 
@@ -361,7 +362,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onNewEventClick(View view) {
         Intent intent = new Intent(this, EventActivity.class);
-        intent.putExtra("selectedDayMillis", Calendar.getInstance().getTimeInMillis());
+        intent.putExtra("selectedDayMillis", Calendar.getInstance(Locale.US).getTimeInMillis());
         startActivityForResult(intent, 0);
         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
     }
