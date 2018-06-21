@@ -205,7 +205,7 @@ public class EventActivity extends AppCompatActivity {
                 tabInterv.setVisibility(View.GONE);
 
                 if (event.isEvaluated()) {
-                    initFeedbackView(event);
+                    initFeedbackView();
                     feedBackDetails.setVisibility(View.VISIBLE);
                     //findViewById(R.id.feedback_text).setVisibility(View.VISIBLE);
                 }
@@ -602,82 +602,6 @@ public class EventActivity extends AppCompatActivity {
         Intent intent = new Intent(this, EvaluationActivity.class);
         startActivityForResult(intent, EVALUATION_ACTIVITY);
         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
-    }
-
-    public void feedbackClick(View view) {
-        if (Tools.isNetworkAvailable(this))
-            Tools.execute(new MyRunnable(
-                    this,
-                    getString(R.string.url_eval_fetch, getString(R.string.server_ip)),
-                    SignInActivity.loginPrefs.getString(SignInActivity.username, null)
-            ) {
-                @Override
-                public void run() {
-                    String url = (String) args[0];
-                    String username = (String) args[1];
-
-                    JSONObject body = new JSONObject();
-                    try {
-                        body.put("username", username);
-                        body.put("eventId", event.getEventId());
-
-                        JSONObject res = new JSONObject(Tools.post(url, body));
-                        switch (res.getInt("result")) {
-                            case Tools.RES_OK:
-                                JSONObject eventEval = res.getJSONObject("evaluation");
-                                runOnUiThread(new MyRunnable(
-                                        activity,
-                                        eventEval.get("eventDone"),
-                                        eventEval.get("realStressLevel")
-                                ) {
-                                    @Override
-                                    public void run() {
-                                        boolean eventDone = (boolean) args[0];
-                                        int realStressLevel = (int) args[1];
-
-                                        /*Intent intent = new Intent(EventActivity.this, FeedbackActivity.class);
-                                        intent.putExtra("eventDone", eventDone);
-                                        intent.putExtra("realStressLevel", realStressLevel);
-                                        startActivityForResult(intent, FEEDBACK_ACTIVITY);
-                                        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);*/
-                                    }
-                                });
-                                break;
-                            case Tools.RES_FAIL:
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(EventActivity.this, "Failed to fetch evaluation for this event.", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                                break;
-                            case Tools.RES_SRV_ERR:
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(EventActivity.this, "Failure occurred while processing the request. (SERVER SIDE)", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                                break;
-                            default:
-                                break;
-                        }
-                    } catch (JSONException | IOException e) {
-                        e.printStackTrace();
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(EventActivity.this, "Failed to proceed due to an error in connection with server.", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                    enableTouch();
-                }
-            });
-        else {
-            Toast.makeText(this, "Please connect to a network first!", Toast.LENGTH_SHORT).show();
-        }
     }
 
     public void cancelClick(View view) {
@@ -1157,15 +1081,15 @@ public class EventActivity extends AppCompatActivity {
         //TODO: complete the custom notification part
     }
 
-    public void initFeedbackView(Event event) {
+    public void initFeedbackView() {
 
         ViewGroup intervView = findViewById(R.id.feedback_details_interv);
         SeekBar expectedStressLevelSeek = findViewById(R.id.expected_stresslvl_seekbar);
-        SeekBar realStressLevelSeek = findViewById(R.id.real_stresslvl_seekbar);
         TextView intervName = findViewById(R.id.intervention_name);
-        SeekBar intervEffectiveness = findViewById(R.id.intervention_effectiveness);
-        TextView realStressReason = findViewById(R.id.strs_reason_text);
-        TextView journal = findViewById(R.id.journal_text);
+        final SeekBar realStressLevelSeek = findViewById(R.id.real_stresslvl_seekbar);
+        final SeekBar intervEffectiveness = findViewById(R.id.intervention_effectiveness);
+        final TextView realStressReason = findViewById(R.id.strs_reason_text);
+        final TextView journalTxt = findViewById(R.id.journal_text);
 
         // set expected stress level from event variable
         expectedStressLevelSeek.setEnabled(false);
@@ -1174,19 +1098,97 @@ public class EventActivity extends AppCompatActivity {
         expectedStressLevelSeek.getProgressDrawable().setColorFilter(expectedStressColor, PorterDuff.Mode.SRC_IN);
         expectedStressLevelSeek.getThumb().setColorFilter(expectedStressColor, PorterDuff.Mode.SRC_IN);
 
-        // set real stress level from evaluation
-        realStressLevelSeek.setEnabled(false);
-        /*realStressLevelSeek.setProgress(realStressLevel);
-        realStressLevelSeek.getProgressDrawable().setColorFilter(Tools.stressLevelToColor(getApplicationContext(), realStressLevel), PorterDuff.Mode.SRC_IN);
-        realStressLevelSeek.getThumb().setColorFilter(Tools.stressLevelToColor(getApplicationContext(), realStressLevel), PorterDuff.Mode.SRC_IN);*/
-
-
         if (!event.getIntervention().equals("")) {
             intervView.setVisibility(View.VISIBLE);
             intervName.setText(getResources().getString(R.string.current_interv_title, event.getIntervention()));
-            //intervEffectiveness.setProgress(event.getIntervEffectiveness());
         } else {
             intervView.setVisibility(View.GONE);
+        }
+
+        if (Tools.isNetworkAvailable(this))
+            Tools.execute(new MyRunnable(
+                    this,
+                    getString(R.string.url_eval_fetch, getString(R.string.server_ip)),
+                    SignInActivity.loginPrefs.getString(SignInActivity.username, null)
+            ) {
+                @Override
+                public void run() {
+                    String url = (String) args[0];
+                    String username = (String) args[1];
+
+                    JSONObject body = new JSONObject();
+                    try {
+                        body.put("username", username);
+                        body.put("eventId", event.getEventId());
+
+                        JSONObject res = new JSONObject(Tools.post(url, body));
+                        switch (res.getInt("result")) {
+                            case Tools.RES_OK:
+                                JSONObject eventEval = res.getJSONObject("evaluation");
+                                runOnUiThread(new MyRunnable(
+                                        activity,
+                                        eventEval.get("realStressLevel"),
+                                        eventEval.get("intervEffectiveness"),
+                                        eventEval.get("realStressCause"),
+                                        eventEval.get("journal")
+
+                                ) {
+                                    @Override
+                                    public void run() {
+                                        int realStressLevel = (int) args[0];
+                                        int interventionEffectiveness = (int) args[1];
+                                        String realStressCause = (String) args[2];
+                                        String journalString = (String) args[3];
+
+                                        // set real stress level from evaluation
+                                        realStressLevelSeek.setEnabled(false);
+                                        realStressLevelSeek.setProgress(realStressLevel);
+                                        realStressLevelSeek.getProgressDrawable().setColorFilter(Tools.stressLevelToColor(getApplicationContext(), realStressLevel), PorterDuff.Mode.SRC_IN);
+                                        realStressLevelSeek.getThumb().setColorFilter(Tools.stressLevelToColor(getApplicationContext(), realStressLevel), PorterDuff.Mode.SRC_IN);
+
+                                        intervEffectiveness.setEnabled(false);
+                                        intervEffectiveness.setProgress(interventionEffectiveness);
+
+                                        realStressReason.setText(realStressCause);
+                                        journalTxt.setText(journalString);
+
+                                    }
+                                });
+                                break;
+                            case Tools.RES_FAIL:
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(EventActivity.this, "Failed to fetch evaluation for this event.", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                break;
+                            case Tools.RES_SRV_ERR:
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(EventActivity.this, "Failure occurred while processing the request. (SERVER SIDE)", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                break;
+                            default:
+                                break;
+                        }
+                    } catch (JSONException | IOException e) {
+                        e.printStackTrace();
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(EventActivity.this, "Failed to proceed due to an error in connection with server.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                    enableTouch();
+                }
+            });
+        else {
+            Toast.makeText(this, "Please connect to a network first!", Toast.LENGTH_SHORT).show();
         }
 
 

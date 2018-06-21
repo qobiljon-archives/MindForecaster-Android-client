@@ -30,6 +30,7 @@ public class EvaluationActivity extends AppCompatActivity {
     private CheckBox eventCompletionCheck, intervCompletionCheck, intervSharingCheck;
     private SeekBar realStressLevel;
     private SeekBar intervEffectiveness;
+    EditText journalText, realStressReason;
     //endregion
 
     private void init() {
@@ -39,7 +40,8 @@ public class EvaluationActivity extends AppCompatActivity {
         final SeekBar expectedStressLevel = findViewById(R.id.expected_stresslvl_seekbar);
         intervSharingCheck = findViewById(R.id.intervention_sharing_check);
         intervEffectiveness = findViewById(R.id.intervention_effectiveness);
-        EditText journalText = findViewById(R.id.journal_text);
+        journalText = findViewById(R.id.journal_text);
+        realStressReason = findViewById(R.id.stress_incr_reason_edit);
 
         ViewGroup interventionLayout = findViewById(R.id.intervention_layout);
         final ViewGroup stressIncrDetails = findViewById(R.id.stress_incr_details_view);
@@ -120,6 +122,8 @@ public class EvaluationActivity extends AppCompatActivity {
                         body.put("interventionDone", intervCompletionCheck.isChecked());
                         body.put("sharedIntervention", intervSharingCheck.isChecked());
                         body.put("intervEffectiveness", intervEffectiveness.getProgress());
+                        body.put("realStressCause", realStressReason.getText().toString());
+                        body.put("journal", journalText.getText().toString());
                         body.put("isEvaluated", true);
 
                         JSONObject res = new JSONObject(Tools.post(url, body));
