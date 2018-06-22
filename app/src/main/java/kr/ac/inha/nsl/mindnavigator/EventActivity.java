@@ -119,6 +119,9 @@ public class EventActivity extends AppCompatActivity {
     private TextView saveButton;
     private TextView cancelButton;
     private TextView deleteButton;
+    private TextView repeatValueText;
+    private TextView stressLevelValueText;
+    private TextView notificationValueText;
     private RadioGroup stressTypeGroup, repeatModeGroup, eventNotificationGroup;
     private EditText eventTitle, stressCause;
     private Switch switchAllDay;
@@ -163,6 +166,9 @@ public class EventActivity extends AppCompatActivity {
         TextView customNotifTxt = findViewById(R.id.txt_custom_notif);
         customNotifRadioButton = findViewById(R.id.radio_btn_custom);
         ViewGroup postEventLayout = findViewById(R.id.postEventLayout);
+        repeatValueText = findViewById(R.id.info_txt_repeat);
+        stressLevelValueText = findViewById(R.id.info_txt_stress_level);
+        notificationValueText = findViewById(R.id.info_txt_notification);
 
         weekdaysGroup = findViewById(R.id.weekdays_group);
         repeatWeeklDayChecks[0] = findViewById(R.id.sun);
@@ -311,6 +317,7 @@ public class EventActivity extends AppCompatActivity {
                 if (checkedId == R.id.no_repeat_radio) {
                     event.setRepeatMode(Event.NO_REPEAT);
                     repeatTillTime = 0;
+                    repeatValueText.setText(getString(R.string.only_once));
                     return;
                 }
 
@@ -332,6 +339,7 @@ public class EventActivity extends AppCompatActivity {
                         switch (checkedId) {
                             case R.id.everyday_repeat_radio:
                                 event.setRepeatMode(Event.REPEAT_EVERYDAY);
+                                repeatValueText.setText(getString(R.string.everyday));
                                 break;
                             case R.id.everyweek_repeat_radio:
                                 for (CheckBox cb : repeatWeeklDayChecks)
@@ -339,6 +347,7 @@ public class EventActivity extends AppCompatActivity {
                                 repeatWeeklDayChecks[event.getStartTime().get(Calendar.DAY_OF_WEEK) - 1].setChecked(true);
                                 weekdaysGroup.setVisibility(View.VISIBLE);
                                 event.setRepeatMode(Event.REPEAT_WEEKLY);
+                                repeatValueText.setText(getString(R.string.every_week));
                                 break;
                             default:
                                 break;
@@ -455,6 +464,44 @@ public class EventActivity extends AppCompatActivity {
                 intervReminderTxt.setVisibility(View.GONE);
                 break;
         }
+
+        switch (event.getRepeatMode()) {
+            case Event.NO_REPEAT:
+                repeatValueText.setText(getString(R.string.only_once));
+                break;
+            case Event.REPEAT_EVERYDAY:
+                repeatValueText.setText(getString(R.string.everyday));
+                break;
+            case Event.REPEAT_WEEKLY:
+                repeatValueText.setText(getString(R.string.every_week));
+                break;
+            default:
+                repeatValueText.setText("");
+                break;
+        }
+
+        switch (event.getStressLevel()) {
+            case 0:
+                stressLevelValueText.setText(getResources().getString(R.string.not_at_all));
+                break;
+            case 1:
+                stressLevelValueText.setText(getResources().getString(R.string.low));
+                break;
+            case 2:
+                stressLevelValueText.setText(getResources().getString(R.string.normal));
+                break;
+            case 3:
+                stressLevelValueText.setText(getResources().getString(R.string.high));
+                break;
+            case 4:
+                stressLevelValueText.setText(getResources().getString(R.string.extreme));
+                break;
+            default:
+                stressLevelValueText.setText("");
+                break;
+        }
+
+        notificationValueText.setText(((RadioButton) eventNotificationGroup.findViewById(eventNotificationGroup.getCheckedRadioButtonId())).getText().toString());
 
         eventTitle.setSelection(eventTitle.length());
     }
@@ -950,7 +997,6 @@ public class EventActivity extends AppCompatActivity {
                     body.put("sat", repeatWeeklDayChecks[6].isChecked());
 
                     JSONObject res = new JSONObject(Tools.post(url, body));
-                    Thread.sleep(100);
                     switch (res.getInt("result")) {
                         case Tools.RES_OK:
                             runOnUiThread(new Runnable() {
@@ -983,7 +1029,7 @@ public class EventActivity extends AppCompatActivity {
                         default:
                             break;
                     }
-                } catch (JSONException | IOException | InterruptedException e) {
+                } catch (JSONException | IOException e) {
                     e.printStackTrace();
 
                     runOnUiThread(new Runnable() {

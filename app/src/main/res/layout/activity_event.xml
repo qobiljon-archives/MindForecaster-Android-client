@@ -229,7 +229,10 @@
                     android:id="@+id/tab_notification"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center"
+                    android:onClick="expandNotificationClick"
                     android:orientation="horizontal"
                     android:padding="20dp">
 
@@ -359,7 +362,10 @@
                     android:id="@+id/tab_repeat"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center"
+                    android:onClick="expandRepeatClick"
                     android:orientation="horizontal"
                     android:padding="20dp">
 
@@ -549,7 +555,10 @@
                     android:id="@+id/tab_anticipated_strs_lvl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center"
+                    android:onClick="expandStressLevelClick"
                     android:orientation="horizontal"
                     android:padding="20dp">
 
