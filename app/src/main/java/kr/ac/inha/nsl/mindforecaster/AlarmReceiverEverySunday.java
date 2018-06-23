@@ -1,4 +1,4 @@
-package kr.ac.inha.nsl.mindnavigator;
+package kr.ac.inha.nsl.mindforecaster;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -19,10 +19,10 @@ public class AlarmReceiverEverySunday extends BroadcastReceiver {
         stackBuilder.addParentStack(SignInActivity.class);
         stackBuilder.addNextIntent(notificationIntent);
 
-        int notificaiton_id = (int)intent.getLongExtra("notification_id", 0);
+        int notificaiton_id = (int) intent.getLongExtra("notification_id", 0);
         PendingIntent pendingIntent = stackBuilder.getPendingIntent(notificaiton_id, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel_for_days_evening");
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, context.getString(R.string.notif_channel_id));
 
         Notification notification = builder.setContentTitle(context.getString(R.string.app_name))
                 .setContentText(intent.getStringExtra("Content"))

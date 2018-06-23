@@ -1,4 +1,4 @@
-package kr.ac.inha.nsl.mindnavigator;
+package kr.ac.inha.nsl.mindforecaster;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -23,10 +23,10 @@ public class AlarmReceiverIntervention extends BroadcastReceiver {
 
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
         inboxStyle.setBigContentTitle("Intervention");
-            inboxStyle.addLine(intent.getStringExtra("Content1"));
-            inboxStyle.addLine(intent.getStringExtra("Content2"));
+        inboxStyle.addLine(intent.getStringExtra("Content1"));
+        inboxStyle.addLine(intent.getStringExtra("Content2"));
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel_for_intervention")
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, context.getString(R.string.notif_channel_id))
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("Intervention")
                 .setTicker("New Message Alert!")

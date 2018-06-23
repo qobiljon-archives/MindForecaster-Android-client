@@ -1,4 +1,4 @@
-package kr.ac.inha.nsl.mindnavigator;
+package kr.ac.inha.nsl.mindforecaster;
 
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
@@ -93,8 +93,8 @@ public class NotifSettingsDialog extends DialogFragment {
             public void onClick(View v) {
                 deletePrevNotifications(sundayPrev, everyMorningPrev, everyEveningPrev);
                 Tools.addSundayNotif(getActivity(), sunday);
-                Tools.addDailyNotif(getActivity(), everyMorning, "Do you have a new schedule today?", false);
-                Tools.addDailyNotif(getActivity(), everyEvening, "Please, evaluate today's events!", true);
+                Tools.addDailyNotif(getActivity(), everyMorning, getString(R.string.daily_notif_question), false);
+                Tools.addDailyNotif(getActivity(), everyEvening, getString(R.string.daily_notif_request), true);
                 SharedPreferences.Editor editor = SignInActivity.loginPrefs.edit();
                 editor.putLong("SundayReminderTime", sunday.getTimeInMillis());
                 editor.putLong("EveryMorningReminderTime", everyMorning.getTimeInMillis());

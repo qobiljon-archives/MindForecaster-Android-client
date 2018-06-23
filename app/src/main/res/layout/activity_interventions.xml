@@ -66,9 +66,9 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="@color/bright_grey"
         android:layout_marginEnd="20dp"
-        android:layout_marginStart="20dp"/>
+        android:layout_marginStart="20dp"
+        android:background="@color/bright_grey" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -151,7 +151,7 @@
             android:text="@string/interventions_list"
             android:textColor="@color/black"
             android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -170,7 +170,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/interv_scheduling_view"
+        android:id="@+id/interv_reminder_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginEnd="20dp"
@@ -185,7 +185,7 @@
             android:text="@string/intervention_scheduling"
             android:textColor="@color/black"
             android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -193,7 +193,7 @@
             android:background="@drawable/bg_solid_wrap">
 
             <RadioGroup
-                android:id="@+id/interv_scheduling_group"
+                android:id="@+id/interv_reminder_radgroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -205,6 +205,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:onClick="closeInput"
                     android:tag="0"
                     android:text="@string/none"
                     android:textSize="14sp" />
@@ -214,6 +215,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:onClick="closeInput"
                     android:tag="-1440"
                     android:text="@string/_1_day_before"
                     android:textSize="14sp" />
@@ -223,6 +225,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:onClick="closeInput"
                     android:tag="-60"
                     android:text="@string/_1_hour_before"
                     android:textSize="14sp" />
@@ -232,6 +235,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:onClick="closeInput"
                     android:tag="-30"
                     android:text="@string/_30_minutes_before"
                     android:textSize="14sp" />
@@ -241,6 +245,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:onClick="closeInput"
                     android:tag="-10"
                     android:text="@string/_10_minutes_before"
                     android:textSize="14sp" />
@@ -250,6 +255,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:onClick="closeInput"
                     android:tag="10"
                     android:text="@string/_10_minutes_after"
                     android:textSize="14sp" />
@@ -259,6 +265,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:onClick="closeInput"
                     android:tag="30"
                     android:text="@string/_30_minutes_after"
                     android:textSize="14sp" />
@@ -268,6 +275,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:onClick="closeInput"
                     android:tag="60"
                     android:text="@string/_1_hour_after"
                     android:textSize="14sp" />
@@ -278,6 +286,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
+                    android:onClick="closeInput"
                     android:tag="1440"
                     android:text="@string/_1_day_after"
                     android:textSize="14sp" />
@@ -288,21 +297,22 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
+                    android:onClick="closeInput"
                     android:tag="1"
                     android:text="@string/dummy"
                     android:textSize="14sp"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/txt_custom_interv_notif"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    android:onClick="clickCustomIntervNotification"
                     android:layout_marginStart="32dp"
-                    android:textSize="15sp"
-                    android:text="@string/custom"/>
+                    android:layout_marginTop="10dp"
+                    android:onClick="clickCustomIntervNotification"
+                    android:text="@string/custom"
+                    android:textSize="15sp" />
 
             </RadioGroup>
 

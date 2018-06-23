@@ -1,4 +1,4 @@
-package kr.ac.inha.nsl.mindnavigator;
+package kr.ac.inha.nsl.mindforecaster;
 
 import org.junit.Test;
 

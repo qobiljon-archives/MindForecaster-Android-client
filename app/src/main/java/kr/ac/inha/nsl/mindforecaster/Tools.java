@@ -1,4 +1,4 @@
-package kr.ac.inha.nsl.mindnavigator;
+package kr.ac.inha.nsl.mindforecaster;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -91,7 +91,7 @@ public class Tools {
 
         if (json_body != null) {
             DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-            wr.writeBytes(json_body.toString());
+            wr.writeBytes(convertToUTF8(json_body.toString()));
             wr.flush();
             wr.close();
         }
@@ -113,19 +113,27 @@ public class Tools {
         }
     }
 
+    @SuppressWarnings("unused")
+    private static String convertFromUTF8(String s) {
+        try {
+            return new String(s.getBytes("ISO-8859-1"), "UTF-8");
+        } catch (java.io.UnsupportedEncodingException e) {
+            return null;
+        }
+    }
+
+    private static String convertToUTF8(String s) {
+        try {
+            return new String(s.getBytes("UTF-8"), "ISO-8859-1");
+        } catch (java.io.UnsupportedEncodingException e) {
+            return null;
+        }
+    }
+
     static void execute(MyRunnable runnable) {
         disable_touch(runnable.activity);
         executor.execute(runnable);
     }
-
-    //    static void toggle_keyboard(@NonNull Activity activity, EditText editText, boolean show) {
-    //        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-    //        if (imm != null)
-    //            if (show)
-    //                imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
-    //            else
-    //                imm.hideSoftInputFromWindow(editText.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
-    //    }
 
     @ColorInt
     static int stressLevelToColor(Context context, int level) {
@@ -298,7 +306,7 @@ public class Tools {
     static void addSundayNotif(Context context, Calendar when) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiverEverySunday.class);
-        intent.putExtra("Content", "Do you have a new schedule for the next week?");
+        intent.putExtra("Content", context.getString(R.string.sunday_notif_question));
         intent.putExtra("notification_id", when.getTimeInMillis());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int) when.getTimeInMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         if (alarmManager != null)
@@ -358,6 +366,32 @@ public class Tools {
 
     static void enable_touch(Activity activity) {
         activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    static String notifMinsToString(Context context, int minsValue) {
+        if (minsValue == 0)
+            return context.getString(R.string.none);
+
+        StringBuilder sb = new StringBuilder();
+
+        boolean before = minsValue < 0;
+        minsValue = Math.abs(minsValue);
+        short days = (short) (minsValue / 1440);
+        short hrs = (short) (minsValue % 1440 / 60);
+        short mins = (short) (minsValue % 1440 % 60);
+
+        if (days > 0)
+            sb.append(String.format(Locale.US, " %d %s", days, context.getString(R.string.days)));
+        if (hrs > 0)
+            sb.append(String.format(Locale.US, " %d %s", hrs, context.getString(R.string.hours)));
+        if (mins > 0)
+            sb.append(String.format(Locale.US, " %d %s", mins, context.getString(R.string.minutes)));
+        sb.append(String.format(Locale.US, " %s", before ? context.getString(R.string.before) : context.getString(R.string.after)));
+
+        String res = sb.toString();
+        if (res.startsWith(" "))
+            res = res.substring(1);
+        return res;
     }
 }
 
@@ -438,12 +472,12 @@ class Event {
     private Calendar startTime;
     private Calendar endTime;
     private String intervention;
-    private short interventionReminder;
+    private int interventionReminder;
     private String stressType;
     private String stressCause;
     private long repeatId;
     private int repeatMode;
-    private short eventReminder;
+    private int eventReminder;
     private boolean evaluated;
     //endregion
 
@@ -543,19 +577,19 @@ class Event {
         return repeatId;
     }
 
-    void setInterventionReminder(short interventionReminder) {
+    void setInterventionReminder(int interventionReminder) {
         this.interventionReminder = interventionReminder;
     }
 
-    short getInterventionReminder() {
+    int getInterventionReminder() {
         return interventionReminder;
     }
 
-    void setEventReminder(short eventReminder) {
+    void setEventReminder(int eventReminder) {
         this.eventReminder = eventReminder;
     }
 
-    short getEventReminder() {
+    int getEventReminder() {
         return eventReminder;
     }
 
@@ -608,34 +642,18 @@ class Event {
         }
     }
 
-    static void updateEventReminders(Context context, String txtTime) {
+    static void updateEventReminders(Context context) {
         Calendar today = Calendar.getInstance(Locale.US), cal;
         for (Event event : currentEventBank) {
             if (event.getEventReminder() != 0) {
                 cal = event.getStartTime();
                 cal.add(Calendar.MINUTE, event.getEventReminder());
-                if (cal.before(today)) {
+                if (cal.before(today))
                     Tools.cancelNotif(context, (int) event.getEventId());
-                } else {
-                    String text = " after ";
-                    switch (event.getEventReminder()) {
-                        case -1440:
-                            text = text + "1 day";
-                            break;
-                        case -60:
-                            text = text + "1 hour";
-                            break;
-                        case -30:
-                            text = text + "30 minutes";
-                            break;
-                        case -10:
-                            text = text + "10 minutes";
-                            break;
-                        default:
-                            text = text + txtTime;
-                            break;
-                    }
-                    Tools.addEventNotif(context, cal, event.getEventId(), event.getTitle() + text);
+                else {
+                    String reminderStr = Tools.notifMinsToString(context, event.getEventReminder());
+                    reminderStr = reminderStr.substring(0, reminderStr.lastIndexOf(' '));
+                    Tools.addEventNotif(context, cal, event.getEventId(), String.format(Locale.US, "\"%s\" %s %s", event.getTitle(), context.getString(R.string.after), reminderStr));
                 }
             }
         }
@@ -655,14 +673,46 @@ class Event {
                 if (calIntervBeforeEvent.before(today)) {
                     Tools.cancelNotif(context, (int) calIntervNotifId.getTimeInMillis());
                 } else
-                    Tools.addIntervNotif(context, calIntervBeforeEvent, (int) calIntervNotifId.getTimeInMillis(), String.format(Locale.US, "Intervention: %s", event.getIntervention()), String.format(Locale.US, "for upcoming event: %s", event.getTitle()));
+                    Tools.addIntervNotif(
+                            context,
+                            calIntervBeforeEvent,
+                            (int) calIntervNotifId.getTimeInMillis(),
+                            String.format(
+                                    Locale.US,
+                                    "%s: %s",
+                                    context.getString(R.string.intervention),
+                                    event.getIntervention()
+                            ),
+                            String.format(
+                                    Locale.US,
+                                    "%s: %s",
+                                    context.getString(R.string.upcoming_event),
+                                    event.getTitle()
+                            )
+                    );
             } else if (event.getInterventionReminder() != 0) {
                 calIntervAfterEvent = event.getEndTime();
                 calIntervAfterEvent.add(Calendar.MINUTE, event.getInterventionReminder());
                 if (calIntervAfterEvent.before(today)) {
                     Tools.cancelNotif(context, (int) calIntervNotifId.getTimeInMillis());
                 } else
-                    Tools.addIntervNotif(context, calIntervAfterEvent, (int) calIntervNotifId.getTimeInMillis(), String.format(Locale.US, "Intervention: %s", event.getIntervention()), String.format(Locale.US, "for passed event: %s", event.getTitle()));
+                    Tools.addIntervNotif(
+                            context,
+                            calIntervAfterEvent,
+                            (int) calIntervNotifId.getTimeInMillis(),
+                            String.format(
+                                    Locale.US,
+                                    "%s: %s",
+                                    context.getString(R.string.intervention),
+                                    event.getIntervention()
+                            ),
+                            String.format(
+                                    Locale.US,
+                                    "%s: %s",
+                                    context.getString(R.string.passed_event),
+                                    event.getTitle()
+                            )
+                    );
             }
         }
     }

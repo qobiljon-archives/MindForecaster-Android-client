@@ -1,7 +1,6 @@
-package kr.ac.inha.nsl.mindnavigator;
+package kr.ac.inha.nsl.mindforecaster;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -13,6 +12,7 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
                                     events[n].fromJson(event);
                                 }
                                 Event.setCurrentEventBank(events);
-                                Event.updateEventReminders(MainActivity.this, EventActivity.customNotifTimeTxt);
+                                Event.updateEventReminders(MainActivity.this);
                                 Event.updateIntervReminder(MainActivity.this);
                                 Tools.cacheMonthlyEvents(MainActivity.this, events, month, year);
 
@@ -282,7 +282,7 @@ public class MainActivity extends AppCompatActivity {
             });
         else {
             Event.setCurrentEventBank(Tools.readOfflineMonthlyEvents(this, currentCal.get(Calendar.MONTH), currentCal.get(Calendar.YEAR)));
-            Event.updateEventReminders(MainActivity.this, EventActivity.customNotifTimeTxt);
+            Event.updateEventReminders(MainActivity.this);
             Event.updateIntervReminder(MainActivity.this);
             for (row = 0; row < event_grid.getRowCount(); row++)
                 for (col = 0; col < event_grid.getColumnCount(); col++) {

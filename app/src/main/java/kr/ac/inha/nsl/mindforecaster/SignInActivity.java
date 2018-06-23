@@ -1,7 +1,11 @@
-package kr.ac.inha.nsl.mindnavigator;
+package kr.ac.inha.nsl.mindforecaster;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -54,6 +58,18 @@ public class SignInActivity extends AppCompatActivity {
             loadingPanel.setVisibility(View.VISIBLE);
             signIn(loginPrefs.getString(SignInActivity.username, null), loginPrefs.getString(SignInActivity.password, null));
         } else Toast.makeText(this, "No log in yet", Toast.LENGTH_SHORT).show();
+
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (mNotificationManager != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel(getString(R.string.notif_channel_id), name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            if (notificationManager != null)
+                notificationManager.createNotificationChannel(channel);
+        }
     }
 
     public void signInClick(View view) {
@@ -118,21 +134,21 @@ public class SignInActivity extends AppCompatActivity {
                                             dailyNotifTime.set(Calendar.SECOND, 0);
                                             NotifSettingsDialog.everyMorning = (Calendar) dailyNotifTime.clone();
                                             editor.putLong("EveryMorningReminderTime", dailyNotifTime.getTimeInMillis());
-                                            Tools.addDailyNotif(SignInActivity.this, dailyNotifTime, "Do you have a new schedule today?", false);
+                                            Tools.addDailyNotif(SignInActivity.this, dailyNotifTime, getString(R.string.daily_notif_question), false);
 
                                             dailyNotifTime.set(Calendar.HOUR_OF_DAY, 22);
                                             dailyNotifTime.set(Calendar.MINUTE, 0);
                                             dailyNotifTime.set(Calendar.SECOND, 0);
                                             NotifSettingsDialog.everyEvening = (Calendar) dailyNotifTime.clone();
                                             editor.putLong("EveryEveningReminderTime", dailyNotifTime.getTimeInMillis());
-                                            Tools.addDailyNotif(SignInActivity.this, dailyNotifTime, "Please, evaluate today's events!", true);
+                                            Tools.addDailyNotif(SignInActivity.this, dailyNotifTime, getString(R.string.daily_notif_request), true);
 
                                             editor.putBoolean("firstTime", false);
                                             editor.apply();
                                         }
 
                                         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                                        if (getIntent().hasExtra("eventDate")){
+                                        if (getIntent().hasExtra("eventDate")) {
                                             intent.putExtra("eventDate", getIntent().getLongExtra("eventDate", 0));
                                             intent.putExtra("isEvaluate", getIntent().getBooleanExtra("isEvaluate", false));
                                         }
@@ -181,7 +197,7 @@ public class SignInActivity extends AppCompatActivity {
             });
         else if (loginPrefs.getString(SignInActivity.username, null) != null && loginPrefs.getString(SignInActivity.password, null) != null) {
             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-            if (getIntent().hasExtra("eventDate")){
+            if (getIntent().hasExtra("eventDate")) {
                 intent.putExtra("eventDate", getIntent().getLongExtra("eventDate", 0));
                 intent.putExtra("isEvaluate", getIntent().getBooleanExtra("isEvaluate", false));
             }

@@ -1,4 +1,4 @@
-package kr.ac.inha.nsl.mindnavigator;
+package kr.ac.inha.nsl.mindforecaster;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -9,20 +9,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
-public class AlarmReceiverEvent extends BroadcastReceiver {
+import java.util.Calendar;
+import java.util.Locale;
+
+public class AlaramReceiverEveryDay extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Intent notificationIntent = new Intent(context, SignInActivity.class);
+        Calendar cal = Calendar.getInstance(Locale.US);
+        notificationIntent.putExtra("eventDate", cal.getTimeInMillis());
+        notificationIntent.putExtra("event", "hi");
+        notificationIntent.putExtra("isEvaluate", intent.getBooleanExtra("isEvaluate", false));
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(SignInActivity.class);
         stackBuilder.addNextIntent(notificationIntent);
 
-        int notificaiton_id = (int) intent.getLongExtra("EventId", 0);
+        int notificaiton_id = (int) intent.getLongExtra("notification_id", 0);
         PendingIntent pendingIntent = stackBuilder.getPendingIntent(notificaiton_id, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel_for_event");
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, context.getString(R.string.notif_channel_id));
 
         Notification notification = builder.setContentTitle(context.getString(R.string.app_name))
                 .setContentText(intent.getStringExtra("Content"))
@@ -34,8 +41,7 @@ public class AlarmReceiverEvent extends BroadcastReceiver {
                 .setContentIntent(pendingIntent).build();
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (notificationManager != null) {
+        if (notificationManager != null)
             notificationManager.notify(notificaiton_id, notification);
-        }
     }
 }

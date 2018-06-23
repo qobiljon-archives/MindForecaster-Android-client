@@ -1,4 +1,4 @@
-package kr.ac.inha.nsl.mindnavigator;
+package kr.ac.inha.nsl.mindforecaster;
 
 import android.app.DialogFragment;
 import android.content.Intent;
@@ -81,11 +81,11 @@ public class EventsListDialog extends DialogFragment {
             TextView isEvaluated = view.findViewById(R.id.is_evaluated);
             TextView stressLevel = view.findViewById(R.id.stress_lvl_box);
 
-            if (selectedDay.before(Calendar.getInstance(Locale.US))){
-                if(event.isEvaluated())
-                    isEvaluated.setText("Evaluated");
-                else isEvaluated.setText("Not evaluated");
-            }else isEvaluated.setVisibility(View.GONE);
+            if (selectedDay.before(Calendar.getInstance(Locale.US))) {
+                if (event.isEvaluated())
+                    isEvaluated.setText(getString(R.string.evaluated));
+                else isEvaluated.setText(getString(R.string.not_evaluated));
+            } else isEvaluated.setVisibility(View.GONE);
 
 
             stressLevel.setText(String.valueOf(event.getStressLevel()));

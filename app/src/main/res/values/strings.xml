@@ -139,6 +139,23 @@
     <string name="custom_recurrence">Custom recurrence</string>
     <string name="repeat">Repeat</string>
     <string name="notification">Notification</string>
+    <string name="channel_name">Event and Intervention notifications</string>
+    <string name="channel_description">The notifications which user can receive on the specified event time, intervention time, or on a customized notification time in the properties of a particular event.</string>
+    <string name="notif_channel_id">mf-notifs</string>
+    <string name="custom_reminder_hint">Set reminder up to 20 days.</string>
+    <string name="value">Value</string>
+    <string name="daily_notif_question">\"Do you have a new schedule today?\"</string>
+    <string name="daily_notif_request">\"Please, evaluate today\'s events!\"</string>
+    <string name="sunday_notif_question">\"Do you have a new schedule for the next week?\"</string>
+    <string name="days">days</string>
+    <string name="hours">hours</string>
+    <string name="minutes">minutes</string>
+    <string name="before">before</string>
+    <string name="after">after</string>
+    <string name="upcoming_event">for upcoming event</string>
+    <string name="passed_event">for passed event</string>
+    <string name="evaluated">Evaluated</string>
+    <string name="not_evaluated">Not evaluated</string>
 
     <string-array name="months_array">
         <item>Jan</item>
@@ -155,22 +172,15 @@
         <item>Dec</item>
     </string-array>
 
-    <string-array name="reminder_array_spinner_1st">
+    <string-array name="time_scale_values">
         <item>mins</item>
         <item>hrs</item>
         <item>days</item>
     </string-array>
 
-    <string-array name="reminder_array_spinner_2nd">
+    <string-array name="time_direction_values">
         <item>before</item>
         <item>after</item>
-    </string-array>
-
-    <string-array name="repeat_array_spinner">
-        <item>day</item>
-        <item>week</item>
-        <item>month</item>
-        <item>year</item>
     </string-array>
 
 </resources>

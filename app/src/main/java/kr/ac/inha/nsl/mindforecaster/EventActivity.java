@@ -1,4 +1,4 @@
-package kr.ac.inha.nsl.mindnavigator;
+package kr.ac.inha.nsl.mindforecaster;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -49,10 +49,10 @@ public class EventActivity extends AppCompatActivity {
         if (resultCode == Activity.RESULT_OK)
             switch (requestCode) {
                 case INTERVENTION_ACTIVITY:
-                    event.setIntervention(InterventionsActivity.result);
-                    event.setInterventionReminder(InterventionsActivity.resultSchedule);
+                    event.setIntervention(InterventionsActivity.resultIntervText);
+                    event.setInterventionReminder(InterventionsActivity.resultNotifMinutes);
                     selectedInterv.setText(event.getIntervention());
-                    switch (InterventionsActivity.resultSchedule) {
+                    switch (InterventionsActivity.resultNotifMinutes) {
                         case -1440:
                             intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_before)));
                             break;
@@ -78,7 +78,7 @@ public class EventActivity extends AppCompatActivity {
                             intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_after)));
                             break;
                         default:
-                            intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, InterventionsActivity.customReminderText));
+                            intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, Tools.notifMinsToString(this, InterventionsActivity.resultNotifMinutes)));
                             break;
                     }
                     intervReminderTxt.setVisibility(View.VISIBLE);
@@ -122,18 +122,14 @@ public class EventActivity extends AppCompatActivity {
     private TextView repeatValueText;
     private TextView stressLevelValueText;
     private TextView notificationValueText;
+    private TextView interventionTextView;
+    private RadioButton customNotifRadioButton;
     private RadioGroup stressTypeGroup, repeatModeGroup, eventNotificationGroup;
     private EditText eventTitle, stressCause;
     private Switch switchAllDay;
     private SeekBar stressLvl;
     private ViewGroup weekdaysGroup;
     private CheckBox[] repeatWeeklDayChecks = new CheckBox[7];
-
-    private RadioButton customNotifRadioButton;
-
-    private String customReminderText; // customized reminder text
-    private int customReminderMinutes; //customized reminder minutes
-    static String customNotifTimeTxt; //customized reminder time-text for notification text ( Ex.: 2 day(s) )
     //endregion
 
     private void init() {
@@ -150,7 +146,7 @@ public class EventActivity extends AppCompatActivity {
         ViewGroup tabNotif = findViewById(R.id.tab_notification);
         ViewGroup tabRepeat = findViewById(R.id.tab_repeat);
         ViewGroup tabStressLvl = findViewById(R.id.tab_anticipated_strs_lvl);
-        TextView tabInterv = findViewById(R.id.tab_interventions);
+        interventionTextView = findViewById(R.id.tab_interventions);
         stressLevelDetails = findViewById(R.id.stress_level_details);
         interventionDetails = findViewById(R.id.intervention_details);
         repeatDetails = findViewById(R.id.repeat_details);
@@ -179,7 +175,6 @@ public class EventActivity extends AppCompatActivity {
         repeatWeeklDayChecks[5] = findViewById(R.id.fri);
         repeatWeeklDayChecks[6] = findViewById(R.id.sat);
 
-
         if (getIntent().hasExtra("eventId")) {
             // Editing an existing event
             event = Event.getEventById(getIntent().getLongExtra("eventId", 0));
@@ -205,9 +200,6 @@ public class EventActivity extends AppCompatActivity {
                 eventNotificationGroup.getChildAt(n).setEnabled(false);
             selectedInterv.setEnabled(false);
 
-            // recover existing values
-            fillOutExistingValues();
-
             if (event.getEndTime().before(Calendar.getInstance(Locale.US))) {
                 saveButton.setVisibility(View.GONE);
                 cancelButton.setVisibility(View.GONE);
@@ -216,25 +208,27 @@ public class EventActivity extends AppCompatActivity {
                 tabNotif.setVisibility(View.GONE);
                 tabRepeat.setVisibility(View.GONE);
                 tabStressLvl.setVisibility(View.GONE);
-                tabInterv.setVisibility(View.GONE);
+                interventionTextView.setVisibility(View.GONE);
 
                 if (event.isEvaluated()) {
                     initFeedbackView();
                     feedBackDetails.setVisibility(View.VISIBLE);
                     //findViewById(R.id.feedback_text).setVisibility(View.VISIBLE);
                 }
-
-                eventTitle.setFocusable(false);
-                eventTitle.clearFocus();
             } else {
                 saveButton.setText(getString(R.string.edit));
                 cancelButton.setVisibility(View.GONE);
             }
+
+            eventTitle.setFocusable(false);
+            eventTitle.clearFocus();
         } else {
             event = new Event(0);
             repeatTillTime = 0;
             event.setStartTime(Calendar.getInstance(Locale.US));
             event.setEndTime(Calendar.getInstance(Locale.US));
+            event.setStressType("unknown");
+            event.setInterventionReminder(0);
             deleteButton.setVisibility(View.GONE);
 
             if (getIntent().hasExtra("selectedDayMillis")) {
@@ -251,6 +245,8 @@ public class EventActivity extends AppCompatActivity {
                 event.setEndTime(endTime);
             }
         }
+
+        fillOutExistingValues();
 
         Calendar startTime = event.getStartTime();
         Calendar endTime = event.getEndTime();
@@ -373,8 +369,8 @@ public class EventActivity extends AppCompatActivity {
     }
 
     private void fillOutExistingValues() {
-        InterventionsActivity.result = event.getIntervention();
-        InterventionsActivity.resultSchedule = event.getInterventionReminder();
+        InterventionsActivity.resultIntervText = event.getIntervention();
+        InterventionsActivity.resultNotifMinutes = event.getInterventionReminder();
 
         eventTitle.setText(event.getTitle());
         stressLvl.setProgress(event.getStressLevel());
@@ -407,6 +403,7 @@ public class EventActivity extends AppCompatActivity {
                 break;
         }
 
+        notificationValueText.setText(Tools.notifMinsToString(this, event.getEventReminder()));
         switch (event.getEventReminder()) {
             case 0:
                 eventNotificationGroup.check(R.id.option_none);
@@ -425,7 +422,7 @@ public class EventActivity extends AppCompatActivity {
                 break;
             default:
                 eventNotificationGroup.check(R.id.radio_btn_custom);
-                customNotifRadioButton.setText(customReminderText);
+                customNotifRadioButton.setText(Tools.notifMinsToString(this, event.getEventReminder()));
                 customNotifRadioButton.setVisibility(View.VISIBLE);
                 break;
         }
@@ -436,32 +433,35 @@ public class EventActivity extends AppCompatActivity {
         );
         selectedInterv.setText(event.getIntervention());
         switch (event.getInterventionReminder()) {
+            case 0:
+                intervReminderTxt.setVisibility(View.GONE);
+                break;
             case -1440:
-                intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_before)));
+                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_before)));
                 break;
             case -60:
-                intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_before)));
+                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_before)));
                 break;
             case -30:
-                intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._30_minutes_before)));
+                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._30_minutes_before)));
                 break;
             case -10:
-                intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_before)));
+                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_before)));
                 break;
             case 1440:
-                intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_after)));
+                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_after)));
                 break;
             case 60:
-                intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_after)));
+                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_after)));
                 break;
             case 30:
-                intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._30_minutes_after)));
+                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._30_minutes_after)));
                 break;
             case 10:
-                intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_after)));
+                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_after)));
                 break;
             default:
-                intervReminderTxt.setVisibility(View.GONE);
+                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, Tools.notifMinsToString(this, event.getInterventionReminder())));
                 break;
         }
 
@@ -501,20 +501,16 @@ public class EventActivity extends AppCompatActivity {
                 break;
         }
 
-        notificationValueText.setText(((RadioButton) eventNotificationGroup.findViewById(eventNotificationGroup.getCheckedRadioButtonId())).getText().toString());
-
         eventTitle.setSelection(eventTitle.length());
     }
 
     public void expandStressLevelClick(View view) {
-        final TextView info = findViewById(R.id.info_txt_stress_level);
-
         if (stressLevelDetails.getVisibility() == View.VISIBLE) {
             stressLevelDetails.setVisibility(View.GONE);
-            info.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_expand), null);
+            stressLevelValueText.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_expand), null);
         } else {
             stressLevelDetails.setVisibility(View.VISIBLE);
-            info.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
+            stressLevelValueText.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
             findViewById(R.id.tab_interventions).getParent().requestChildFocus(findViewById(R.id.tab_interventions), findViewById(R.id.tab_interventions));
         }
 
@@ -530,19 +526,19 @@ public class EventActivity extends AppCompatActivity {
 
                 switch (progress) {
                     case 0:
-                        info.setText(getResources().getString(R.string.not_at_all));
+                        stressLevelValueText.setText(getResources().getString(R.string.not_at_all));
                         break;
                     case 1:
-                        info.setText(getResources().getString(R.string.low));
+                        stressLevelValueText.setText(getResources().getString(R.string.low));
                         break;
                     case 2:
-                        info.setText(getResources().getString(R.string.normal));
+                        stressLevelValueText.setText(getResources().getString(R.string.normal));
                         break;
                     case 3:
-                        info.setText(getResources().getString(R.string.high));
+                        stressLevelValueText.setText(getResources().getString(R.string.high));
                         break;
                     case 4:
-                        info.setText(getResources().getString(R.string.extreme));
+                        stressLevelValueText.setText(getResources().getString(R.string.extreme));
                         break;
                     default:
                         break;
@@ -562,45 +558,41 @@ public class EventActivity extends AppCompatActivity {
     }
 
     public void expandNotificationClick(View view) {
-        final TextView info = findViewById(R.id.info_txt_notification);
         if (notificationDetails.getVisibility() == View.VISIBLE) {
             notificationDetails.setVisibility(View.GONE);
-            info.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_expand), null);
+            notificationValueText.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_expand), null);
         } else {
             notificationDetails.setVisibility(View.VISIBLE);
-            info.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
+            notificationValueText.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
             findViewById(R.id.tab_anticipated_strs_lvl).getParent().requestChildFocus(findViewById(R.id.tab_anticipated_strs_lvl), findViewById(R.id.tab_anticipated_strs_lvl));
         }
 
         eventNotificationGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                info.setText(((RadioButton) group.findViewById(checkedId)).getText().toString());
+                notificationValueText.setText(((RadioButton) group.findViewById(checkedId)).getText().toString());
             }
         });
     }
 
     public void expandRepeatClick(View view) {
-        TextView info = findViewById(R.id.info_txt_repeat);
         if (repeatDetails.getVisibility() == View.VISIBLE) {
             repeatDetails.setVisibility(View.GONE);
-            info.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_expand), null);
+            repeatValueText.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_expand), null);
         } else {
             repeatDetails.setVisibility(View.VISIBLE);
-            info.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
+            repeatValueText.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
             findViewById(R.id.tab_anticipated_strs_lvl).getParent().requestChildFocus(findViewById(R.id.tab_anticipated_strs_lvl), findViewById(R.id.tab_anticipated_strs_lvl));
         }
     }
 
     public void expandInterventionsClick(View view) {
-        TextView info = (TextView) view;
-
         if (interventionDetails.getVisibility() == View.VISIBLE) {
             interventionDetails.setVisibility(View.GONE);
-            info.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_expand), null);
+            interventionTextView.setCompoundDrawablesWithIntrinsicBounds(getDrawable(R.drawable.icon_intervention), null, getDrawable(R.drawable.img_expand), null);
         } else {
             interventionDetails.setVisibility(View.VISIBLE);
-            info.setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
+            interventionTextView.setCompoundDrawablesWithIntrinsicBounds(getDrawable(R.drawable.icon_intervention), null, getDrawable(R.drawable.img_collapse), null);
             interventionDetails.getParent().requestChildFocus(interventionDetails, interventionDetails);
 
             if (event.getIntervention() != null && event.getIntervention().length() > 0) {
@@ -639,9 +631,7 @@ public class EventActivity extends AppCompatActivity {
 
     public void editInterventionClick(View view) {
         Intent intent = new Intent(this, InterventionsActivity.class);
-        if (getIntent().hasExtra("eventId"))
-            intent.putExtra("eventId", event.getEventId());
-        else intent.putExtra("eventTitle", eventTitle.getText().toString());
+        intent.putExtra("eventTitle", eventTitle.getText().toString());
         startActivityForResult(intent, INTERVENTION_ACTIVITY);
         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
     }
@@ -860,6 +850,10 @@ public class EventActivity extends AppCompatActivity {
             for (int n = 0; n < eventNotificationGroup.getChildCount(); n++)
                 eventNotificationGroup.getChildAt(n).setEnabled(true);
             selectedInterv.setEnabled(true);
+
+            eventTitle.setFocusableInTouchMode(true);
+            eventTitle.setFocusable(true);
+            eventTitle.requestFocus();
             return;
         }
 
@@ -872,8 +866,8 @@ public class EventActivity extends AppCompatActivity {
         }
         Calendar startTime = event.getStartTime();
         Calendar endTime = event.getEndTime();
-        if (!(startTime.after(Calendar.getInstance(Locale.US)) && startTime.before(endTime))) {
-            Toast.makeText(this, "Event start time must be between it's end and present time. Please try again!", Toast.LENGTH_LONG).show();
+        if (!startTime.before(endTime)) {
+            Toast.makeText(this, "Event start-time must be after it's end-time. Please try again!", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -937,7 +931,6 @@ public class EventActivity extends AppCompatActivity {
                 event.setEventReminder((short) -10);
                 break;
             default:
-                event.setEventReminder((short) customReminderMinutes);
                 break;
         }
 
@@ -1059,10 +1052,69 @@ public class EventActivity extends AppCompatActivity {
                         startDate.get(Calendar.DAY_OF_MONTH),
                         startDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
                 ));
+
+                if (!event.getStartTime().before(event.getEndTime())) {
+                    Calendar endCal = event.getStartTime();
+                    endCal.add(Calendar.HOUR_OF_DAY, 1);
+                    event.setEndTime(endCal);
+
+                    endDateText.setText(String.format(Locale.US,
+                            "%d, %s %d, %s",
+                            endCal.get(Calendar.YEAR),
+                            endCal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
+                            endCal.get(Calendar.DAY_OF_MONTH),
+                            endCal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
+                    ));
+                    endTimeText.setText(String.format(Locale.US,
+                            "%02d:%02d",
+                            endCal.get(Calendar.HOUR_OF_DAY),
+                            endCal.get(Calendar.MINUTE))
+                    );
+                }
             }
         };
         Calendar cal = event.getStartTime();
         DatePickerDialog dialog = new DatePickerDialog(this, listener, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+        dialog.show();
+    }
+
+    public void pickStartTimeClick(View view) {
+        TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker picker, int hourOfDay, int minute) {
+                Calendar startTime = event.getStartTime();
+                startTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                startTime.set(Calendar.MINUTE, minute);
+                event.setStartTime(startTime);
+
+                startTimeText.setText(String.format(Locale.US,
+                        "%02d:%02d",
+                        startTime.get(Calendar.HOUR_OF_DAY),
+                        startTime.get(Calendar.MINUTE))
+                );
+
+                if (!event.getStartTime().before(event.getEndTime())) {
+                    Calendar endCal = event.getStartTime();
+                    endCal.add(Calendar.HOUR_OF_DAY, 1);
+                    event.setEndTime(endCal);
+
+                    endDateText.setText(String.format(Locale.US,
+                            "%d, %s %d, %s",
+                            endCal.get(Calendar.YEAR),
+                            endCal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
+                            endCal.get(Calendar.DAY_OF_MONTH),
+                            endCal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
+                    ));
+                    endTimeText.setText(String.format(Locale.US,
+                            "%02d:%02d",
+                            endCal.get(Calendar.HOUR_OF_DAY),
+                            endCal.get(Calendar.MINUTE))
+                    );
+                }
+            }
+        };
+        Calendar cal = event.getStartTime();
+        TimePickerDialog dialog = new TimePickerDialog(this, listener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true);
         dialog.show();
     }
 
@@ -1085,27 +1137,6 @@ public class EventActivity extends AppCompatActivity {
         };
         Calendar cal = event.getEndTime();
         DatePickerDialog dialog = new DatePickerDialog(this, listener, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
-        dialog.show();
-    }
-
-    public void pickStartTimeClick(View view) {
-        TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker picker, int hourOfDay, int minute) {
-                Calendar startTime = event.getStartTime();
-                startTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                startTime.set(Calendar.MINUTE, minute);
-                event.setStartTime(startTime);
-
-                startTimeText.setText(String.format(Locale.US,
-                        "%02d:%02d",
-                        startTime.get(Calendar.HOUR_OF_DAY),
-                        startTime.get(Calendar.MINUTE))
-                );
-            }
-        };
-        Calendar cal = event.getStartTime();
-        TimePickerDialog dialog = new TimePickerDialog(this, listener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true);
         dialog.show();
     }
 
@@ -1145,14 +1176,32 @@ public class EventActivity extends AppCompatActivity {
 
     }
 
-    public void setCustomNotifParams(int minutes, String txt, String timeTxt) {
-        customReminderMinutes = minutes;
-        customReminderText = txt;
-        customNotifTimeTxt = timeTxt;
-        eventNotificationGroup.check(R.id.radio_btn_custom);
+    public void setCustomNotifParams(int minutes) {
+        event.setEventReminder(minutes);
+        notificationValueText.setText(Tools.notifMinsToString(this, minutes));
 
-        customNotifRadioButton.setVisibility(View.VISIBLE);
-        customNotifRadioButton.setText(txt);
+        switch (minutes) {
+            case 0:
+                eventNotificationGroup.check(R.id.option_none);
+                break;
+            case -1440:
+                eventNotificationGroup.check(R.id.option_day_before);
+                break;
+            case -60:
+                eventNotificationGroup.check(R.id.option_hour_before);
+                break;
+            case -30:
+                eventNotificationGroup.check(R.id.option_30mins_before);
+                break;
+            case -10:
+                eventNotificationGroup.check(R.id.option_10mins_before);
+                break;
+            default:
+                eventNotificationGroup.check(R.id.radio_btn_custom);
+                customNotifRadioButton.setText(Tools.notifMinsToString(this, minutes));
+                customNotifRadioButton.setVisibility(View.VISIBLE);
+                break;
+        }
     }
 
     public void initFeedbackView() {
