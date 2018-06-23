@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MindForecaster</string>
     <string name="sunday">일</string>
     <string name="monday">월</string>
     <string name="tuesday">화</string>
@@ -8,4 +7,6 @@
     <string name="thursday">목</string>
     <string name="friday">금</string>
     <string name="saturday">토</string>
+    <string name="daily_notif_question">오늘 새로운 일정이 있으십니까?</string>
+    <string name="sunday_notif_question">일주일동안의 스케쥴을 입력해주세요.</string>
 </resources>

@@ -144,9 +144,9 @@
     <string name="notif_channel_id">mf-notifs</string>
     <string name="custom_reminder_hint">Set reminder up to 20 days.</string>
     <string name="value">Value</string>
-    <string name="daily_notif_question">\"Do you have a new schedule today?\"</string>
-    <string name="daily_notif_request">\"Please, evaluate today\'s events!\"</string>
-    <string name="sunday_notif_question">\"Do you have a new schedule for the next week?\"</string>
+    <string name="daily_notif_question">Do you have a new schedule today?</string>
+    <string name="daily_notif_request">Please, evaluate today\'s events!</string>
+    <string name="sunday_notif_question">Do you have a new schedule for the next week?</string>
     <string name="days">days</string>
     <string name="hours">hours</string>
     <string name="minutes">minutes</string>
