@@ -9,4 +9,87 @@
     <string name="saturday">토</string>
     <string name="daily_notif_question">오늘 새로운 일정이 있으십니까?</string>
     <string name="sunday_notif_question">일주일동안의 스케쥴을 입력해주세요.</string>
+    <string name="not_evaluated">아직 평가 안함</string>
+    <string name="evaluated">평가 함</string>
+    <string name="sunday_time">전체 일정 입력 시간 (일요일)</string>
+    <string name="every_morning_time">새로운 일정 입력 시간 (매일 오전)</string>
+    <string name="every_evening_time">일정 평가 시간 (매일 저녁)</string>
+    <string name="event_title_hint">제목, 시간, 예상되는 스트레스를 입력하세요</string>
+    <string name="all_day">종일</string>
+    <string name="event_start_time">시작 시간</string>
+    <string name="event_end_time">종료 시간gv</string>
+    <string name="notification">알림</string>
+    <string name="repeat">반복</string>
+    <string name="anticipated_stress_level">예상되는 스트레스 정도</string>
+    <string name="intervention">스트레스 중재 방안</string>
+    <string name="evaluation">평가</string>
+    <string name="none">없음</string>
+    <string name="_10_minutes_before">10분 전</string>
+    <string name="_30_minutes_before">30분 전</string>
+    <string name="_1_hour_before">1시간 전</string>
+    <string name="_1_day_before">1일 전</string>
+    <string name="custom">사용자 설정</string>
+    <string name="everyday">매일</string>
+    <string name="every_week">매주</string>
+    <string name="event_repeat_mode">일정이 반복되는 시간을 설정해주세요.</string>
+    <string name="event_notification">일정에 대한 알림을 설정해주세요.</string>
+    <string name="stress_lvl">스트레스 레벨</string>
+    <string name="not_at_all">"없음 "</string>
+    <string name="low">낮음</string>
+    <string name="normal">보통</string>
+    <string name="high">높음</string>
+    <string name="extreme">극심</string>
+    <string name="stress_cause">스트레스를 유발하는 원인이 무엇입니까?</string>
+    <string name="positive">긍정적</string>
+    <string name="negative">부정적</string>
+    <string name="unidentified">잘 모르겠음</string>
+    <string name="stress_type">스트레스가 나에게 어떤 존재입니까?</string>
+    <string name="self_intervention_hint">스트레스를 완화시킬 수 있는 자신만의  중재방법을 만들어보세요.</string>
+    <string name="intervention_scheduling">중재 방안 시간 설정</string>
+    <string name="_30_minutes_after">일정 30분 후</string>
+    <string name="_10_minutes_after">일정 10분 후</string>
+    <string name="_1_hour_after">일정 1시간 후</string>
+    <string name="_1_day_after">일정 하루 후</string>
+    <string name="event">일정</string>
+    <string name="event_completion">일정을 완료하셨나요?</string>
+    <string name="ask_stress_level">실제 일정이 주는 스트레스의 정도는?</string>
+    <string name="expected_stress_level">예상했던 스트레스 레벨</string>
+    <string name="interv_effectiveness">실천하셨다면, 중재방안의 효과는 어떠셨나요?</string>
+    <string name="poor">없음</string>
+    <string name="fair">나쁨</string>
+    <string name="average">보통</string>
+    <string name="good">좋음</string>
+    <string name="excellent">매우좋음</string>
+    <string name="journal">총평</string>
+    <string name="interv_done">설정한 중재방안을 실천하셨나요?</string>
+    <string name="interv_recommendation">다른 사람에게 자신의 중재방법을 공유 또는 추천하고 싶으시다면 체크해주세요</string>
+    <string name="cancel">취소</string>
+    <string name="save">저장</string>
+    <string name="create">생성</string>
+    <string name="interventions">스트레스 중재 방안</string>
+    <string name="only_oncehihine">안 함</string>
+    <string name="before">전</string>
+    <string name="after">후</string>
+
+
+    <string-array name="months_array">
+         <item> 1 월 </item>
+         <item> 2 월 </item>
+         <item> 3 월 </item>
+         <item> 4 월 </item>
+         <item> 5 월 </item>
+         <item> 6 월 </item>
+         <item> 7 월 </item>
+         <item> 8 월 </item>
+         <item> 9 월 </item>
+         <item> 10 월 </item>
+         <item> 11 월 </item>
+         <item> 12 월 </item>
+    </string-array>
+
+    <string-array name="time_direction_values">
+        <item>전</item>
+        <item>후</item>
+    </string-array>
+
 </resources>

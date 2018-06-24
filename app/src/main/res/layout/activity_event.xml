@@ -66,7 +66,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginStart="10dp"
         android:gravity="center">
 
         <ImageView
@@ -97,12 +100,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 android:gravity="center_vertical">
 
                 <ImageView
@@ -233,7 +239,8 @@
                     android:gravity="center"
                     android:onClick="expandNotificationClick"
                     android:orientation="horizontal"
-                    android:padding="20dp">
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -276,7 +283,8 @@
                     android:gravity="center"
                     android:onClick="expandRepeatClick"
                     android:orientation="horizontal"
-                    android:padding="20dp">
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -321,7 +329,8 @@
                     android:gravity="center"
                     android:onClick="expandStressLevelClick"
                     android:orientation="horizontal"
-                    android:padding="20dp">
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -366,7 +375,8 @@
                     android:drawableStart="@drawable/icon_intervention"
                     android:gravity="center_vertical"
                     android:onClick="expandInterventionsClick"
-                    android:padding="20dp"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp"
                     android:text="@string/interventions"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
@@ -405,7 +415,8 @@
                     android:drawableStart="@drawable/icon_evaluation"
                     android:gravity="center_vertical"
                     android:onClick="evaluationClick"
-                    android:padding="20dp"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp"
                     android:text="@string/evaluation"
                     android:textColor="@color/black"
                     android:textSize="18sp" />

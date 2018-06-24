@@ -313,7 +313,7 @@ public class EventActivity extends AppCompatActivity {
                 if (checkedId == R.id.no_repeat_radio) {
                     event.setRepeatMode(Event.NO_REPEAT);
                     repeatTillTime = 0;
-                    repeatValueText.setText(getString(R.string.only_once));
+                    repeatValueText.setText(getString(R.string.only_oncehihine));
                     return;
                 }
 
@@ -467,7 +467,7 @@ public class EventActivity extends AppCompatActivity {
 
         switch (event.getRepeatMode()) {
             case Event.NO_REPEAT:
-                repeatValueText.setText(getString(R.string.only_once));
+                repeatValueText.setText(getString(R.string.only_oncehihine));
                 break;
             case Event.REPEAT_EVERYDAY:
                 repeatValueText.setText(getString(R.string.everyday));

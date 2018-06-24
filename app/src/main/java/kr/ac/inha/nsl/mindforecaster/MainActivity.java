@@ -62,8 +62,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView year;
     private Calendar currentCal;
 
-    private String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
-
     // region CellClick Listener
     LinearLayout.OnClickListener cellClick = new LinearLayout.OnClickListener() {
         @Override
@@ -107,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("CutPasteId")
     public void updateCalendarView() {
         // Update the value of year and month according to the currently selected month
-        monthName.setText(months[currentCal.get(Calendar.MONTH)]);
+        monthName.setText(getResources().getStringArray(R.array.months_array)[currentCal.get(Calendar.MONTH)]);
         year.setText(String.valueOf(currentCal.get(Calendar.YEAR)));
 
         // First clear our the grid
