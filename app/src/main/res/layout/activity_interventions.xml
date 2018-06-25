@@ -157,15 +157,30 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/bg_solid_wrap">
-
             <LinearLayout
-                android:id="@+id/interventions_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
                 android:orientation="vertical">
+                <LinearLayout
+                    android:id="@+id/interventions_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="vertical">
 
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/interventions_list_more"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="vertical">
+
+                </LinearLayout>
             </LinearLayout>
+
+
         </ScrollView>
     </LinearLayout>
 

@@ -48,7 +48,6 @@
             android:id="@+id/weekdays_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
             android:orientation="horizontal"
             android:visibility="gone">
 

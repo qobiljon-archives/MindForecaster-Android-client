@@ -7,7 +7,6 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,10 +40,11 @@ public class InterventionsActivity extends AppCompatActivity {
 
     private EditText intervTitleText;
     private View intervChoice;
-    private ViewGroup intervList, intervReminderRoot;
+    private ViewGroup intervList, intervListMore, intervReminderRoot;
     private RadioGroup intervReminderRadGroup;
     private RadioButton customReminderRadioButton;
     private Button[] tabButtons;
+
 
     private InputMethodManager imm;
 
@@ -54,6 +54,7 @@ public class InterventionsActivity extends AppCompatActivity {
         intervChoice = findViewById(R.id.intervention_choice);
         intervTitleText = findViewById(R.id.intervention_text);
         intervList = findViewById(R.id.interventions_list);
+        intervListMore = findViewById(R.id.interventions_list_more);
         intervReminderRoot = findViewById(R.id.interv_reminder_root);
         intervReminderRadGroup = findViewById(R.id.interv_reminder_radgroup);
         customReminderRadioButton = findViewById(R.id.option_custom);
@@ -164,6 +165,7 @@ public class InterventionsActivity extends AppCompatActivity {
                 tabButtons[1].setBackgroundResource(R.drawable.bg_interv_method_checked_view);
                 intervChoice.setVisibility(View.VISIBLE);
                 intervList.removeAllViews();
+                intervListMore.removeAllViews();
                 if (Tools.isNetworkAvailable(this))
                     Tools.execute(new MyRunnable(
                             this,
@@ -194,15 +196,23 @@ public class InterventionsActivity extends AppCompatActivity {
                                                 JSONArray arr = (JSONArray) args[0];
                                                 while (intervList.getChildCount() > 1)
                                                     intervList.removeViewAt(1);
+
                                                 LayoutInflater inflater = getLayoutInflater();
                                                 try {
                                                     String[] interv = new String[arr.length()];
-                                                    for (int n = 0; n < arr.length(); n++) {
+                                                    for (int n = 0; n < 20; n++) {
                                                         inflater.inflate(R.layout.intervention_element, intervList);
                                                         TextView interv_text = intervList.getChildAt(n).findViewById(R.id.intervention_text);
                                                         interv_text.setText(interv[n] = arr.getString(n));
                                                     }
+                                                    inflater.inflate(R.layout.more_button_element, intervList);
+                                                    for (int n = 20, i = 0; n < arr.length(); n++, i++) {
+                                                        inflater.inflate(R.layout.intervention_element, intervListMore);
+                                                        TextView interv_text = intervListMore.getChildAt(i).findViewById(R.id.intervention_text);
+                                                        interv_text.setText(interv[n] = arr.getString(n));
+                                                    }
                                                     Tools.cacheSystemInterventions(InterventionsActivity.this, interv);
+                                                    intervListMore.setVisibility(View.GONE);
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
                                                 }
@@ -318,7 +328,6 @@ public class InterventionsActivity extends AppCompatActivity {
             default:
                 break;
         }
-
         closeInput(view);
     }
 
@@ -448,5 +457,10 @@ public class InterventionsActivity extends AppCompatActivity {
         intervReminderRadGroup.check(R.id.option_custom);
         customReminderRadioButton.setText(Tools.notifMinsToString(this, minutes));
         customReminderRadioButton.setVisibility(View.VISIBLE);
+    }
+
+    public void clickmoreInterventions(View view) {
+        view.setVisibility(View.GONE);
+        intervListMore.setVisibility(View.VISIBLE);
     }
 }
