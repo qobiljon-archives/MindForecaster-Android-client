@@ -86,12 +86,16 @@ public class EventsListDialog extends DialogFragment {
                     stressLevel.setBackgroundColor(Tools.stressLevelToColor(getActivity(), event.getRealStressLevel()));
                     stressLevel.setText(String.valueOf(event.getRealStressLevel()));
                 }
-                else{
+                else {
                     isEvaluated.setText(getString(R.string.not_evaluated));
                     stressLevel.setBackgroundColor(Tools.stressLevelToColor(getActivity(), event.getStressLevel()));
                     stressLevel.setText(String.valueOf(event.getStressLevel()));
                 }
-            } else isEvaluated.setVisibility(View.GONE);
+            } else{
+                isEvaluated.setVisibility(View.GONE);
+                stressLevel.setBackgroundColor(Tools.stressLevelToColor(getActivity(), event.getStressLevel()));
+                stressLevel.setText(String.valueOf(event.getStressLevel()));
+            }
 
 
             titleText.setText(event.getTitle());
