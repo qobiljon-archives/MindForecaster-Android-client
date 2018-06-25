@@ -25,6 +25,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -103,20 +104,20 @@ public class Tools {
         } else {
             byte[] buf = new byte[1024];
             int rd;
-            StringBuilder sb = new StringBuilder();
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
             BufferedInputStream is = new BufferedInputStream(con.getInputStream());
             while ((rd = is.read(buf)) > 0)
-                sb.append(new String(buf, 0, rd, "utf-8"));
+                bos.write(buf, 0, rd);
             is.close();
             con.disconnect();
-            return sb.toString();
+            bos.close();
+            return convertFromUTF8(bos.toByteArray());
         }
     }
 
-    @SuppressWarnings("unused")
-    private static String convertFromUTF8(String s) {
+    private static String convertFromUTF8(byte[] raw) {
         try {
-            return new String(s.getBytes("ISO-8859-1"), "UTF-8");
+            return new String(raw, "UTF-8");
         } catch (java.io.UnsupportedEncodingException e) {
             return null;
         }
