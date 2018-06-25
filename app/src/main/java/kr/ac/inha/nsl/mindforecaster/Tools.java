@@ -195,9 +195,8 @@ public class Tools {
                 String receiveString;
                 StringBuilder stringBuilder = new StringBuilder();
 
-                while ((receiveString = bufferedReader.readLine()) != null) {
+                while ((receiveString = bufferedReader.readLine()) != null)
                     stringBuilder.append(receiveString);
-                }
 
                 bufferedReader.close();
                 inputStream.close();
