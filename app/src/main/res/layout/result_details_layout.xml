@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/feedback_details_expect_strs"
+        android:id="@+id/result_details_expect_strs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -85,7 +85,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/feedback_details_real_strs"
+        android:id="@+id/result_details_real_strs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -162,7 +162,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/feedback_details_interv"
+        android:id="@+id/result_details_interv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -265,7 +265,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/feedback_details_strs_reason"
+        android:id="@+id/result_details_strs_reason"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
@@ -297,7 +297,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/feedback_details_journal"
+        android:id="@+id/result_details_journal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"

@@ -395,10 +395,10 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <!--Option: Feedback-->
+                <!--Option: Result-->
                 <include
-                    android:id="@+id/feedback_details"
-                    layout="@layout/feedback_details_layout"
+                    android:id="@+id/result_details"
+                    layout="@layout/result_details_layout"
                     android:visibility="gone" />
 
                 <!--Option: Evaluation-->

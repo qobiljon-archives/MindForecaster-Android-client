@@ -54,31 +54,31 @@ public class EventActivity extends AppCompatActivity {
                     selectedInterv.setText(event.getIntervention());
                     switch (InterventionsActivity.resultNotifMinutes) {
                         case -1440:
-                            intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_before)));
+                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._1_day_before)));
                             break;
                         case -60:
-                            intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_before)));
+                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._1_hour_before)));
                             break;
                         case -30:
-                            intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._30_minutes_before)));
+                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._30_minutes_before)));
                             break;
                         case -10:
-                            intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_before)));
+                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._10_minutes_before)));
                             break;
                         case 1440:
-                            intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_after)));
+                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._1_day_after)));
                             break;
                         case 60:
-                            intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_after)));
+                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._1_hour_after)));
                             break;
                         case 30:
-                            intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._30_minutes_after)));
+                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._30_minutes_after)));
                             break;
                         case 10:
-                            intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_after)));
+                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._10_minutes_after)));
                             break;
                         default:
-                            intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, Tools.notifMinsToString(this, InterventionsActivity.resultNotifMinutes)));
+                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, Tools.notifMinsToString(this, InterventionsActivity.resultNotifMinutes)));
                             break;
                     }
                     intervReminderTxt.setVisibility(View.VISIBLE);
@@ -123,6 +123,7 @@ public class EventActivity extends AppCompatActivity {
     private TextView stressLevelValueText;
     private TextView notificationValueText;
     private TextView interventionTextView;
+    private TextView tabEvaluation;
     private RadioButton customNotifRadioButton;
     private RadioGroup stressTypeGroup, repeatModeGroup, eventNotificationGroup;
     private EditText eventTitle, stressCause;
@@ -151,7 +152,7 @@ public class EventActivity extends AppCompatActivity {
         interventionDetails = findViewById(R.id.intervention_details);
         repeatDetails = findViewById(R.id.repeat_details);
         notificationDetails = findViewById(R.id.notification_details);
-        ViewGroup feedBackDetails = findViewById(R.id.feedback_details);
+        ViewGroup resultDetails = findViewById(R.id.result_details);
         selectedInterv = findViewById(R.id.selected_intervention);
         repeatModeGroup = findViewById(R.id.repeat_mode_group);
         eventNotificationGroup = findViewById(R.id.event_notification_group);
@@ -165,6 +166,7 @@ public class EventActivity extends AppCompatActivity {
         repeatValueText = findViewById(R.id.info_txt_repeat);
         stressLevelValueText = findViewById(R.id.info_txt_stress_level);
         notificationValueText = findViewById(R.id.info_txt_notification);
+        tabEvaluation = findViewById(R.id.tab_evaluation);
 
         weekdaysGroup = findViewById(R.id.weekdays_group);
         repeatWeeklDayChecks[0] = findViewById(R.id.sun);
@@ -210,10 +212,10 @@ public class EventActivity extends AppCompatActivity {
                 tabStressLvl.setVisibility(View.GONE);
                 interventionTextView.setVisibility(View.GONE);
 
+                tabEvaluation.setText(getString(R.string.evaluation));
                 if (event.isEvaluated()) {
-                    initFeedbackView();
-                    feedBackDetails.setVisibility(View.VISIBLE);
-                    //findViewById(R.id.feedback_text).setVisibility(View.VISIBLE);
+                    initResultView();
+                    resultDetails.setVisibility(View.VISIBLE);
                 }
             } else {
                 saveButton.setText(getString(R.string.edit));
@@ -236,7 +238,7 @@ public class EventActivity extends AppCompatActivity {
                 Calendar endTime = event.getEndTime();
 
                 startTime.setTimeInMillis(getIntent().getLongExtra("selectedDayMillis", 0));
-                startTime.set(Calendar.HOUR_OF_DAY, 9);
+                startTime.set(Calendar.HOUR_OF_DAY, Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + 1);
                 startTime.set(Calendar.MINUTE, 0);
                 endTime.setTimeInMillis(startTime.getTimeInMillis());
                 endTime.add(Calendar.HOUR_OF_DAY, 1);
@@ -1204,9 +1206,10 @@ public class EventActivity extends AppCompatActivity {
         }
     }
 
-    public void initFeedbackView() {
+    public void initResultView() {
 
-        ViewGroup intervView = findViewById(R.id.feedback_details_interv);
+        tabEvaluation.setText(getString(R.string.re_evaluation));
+        ViewGroup intervView = findViewById(R.id.result_details_interv);
         SeekBar expectedStressLevelSeek = findViewById(R.id.expected_stresslvl_seekbar);
         TextView intervName = findViewById(R.id.intervention_name);
         final SeekBar realStressLevelSeek = findViewById(R.id.real_stresslvl_seekbar);
@@ -1273,7 +1276,10 @@ public class EventActivity extends AppCompatActivity {
                                         intervEffectiveness.setProgress(interventionEffectiveness);
 
                                         realStressReason.setText(realStressCause);
+                                        realStressReason.setVisibility(realStressReason.length() == 0 ? View.GONE : View.VISIBLE);
                                         journalTxt.setText(journalString);
+                                        journalTxt.setVisibility(journalTxt.length() == 0 ? View.GONE : View.VISIBLE);
+
 
                                     }
                                 });
