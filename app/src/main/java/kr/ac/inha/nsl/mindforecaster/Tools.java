@@ -469,6 +469,7 @@ class Event {
     private long id;
     private String title;
     private int stressLevel;
+    private int realStressLevel;
     private Calendar startTime;
     private Calendar endTime;
     private String intervention;
@@ -476,6 +477,7 @@ class Event {
     private String stressType;
     private String stressCause;
     private long repeatId;
+    private long repeatTill;
     private int repeatMode;
     private int eventReminder;
     private boolean evaluated;
@@ -529,6 +531,14 @@ class Event {
         return stressLevel;
     }
 
+    private void setRealStressLevel(int realStressLevel) {
+        this.realStressLevel = realStressLevel;
+    }
+
+    int getRealStressLevel() {
+        return realStressLevel;
+    }
+
     void setTitle(String title) {
         this.title = title;
     }
@@ -573,6 +583,14 @@ class Event {
         this.repeatId = repeatId;
     }
 
+    private void setRepeatTill(long repeatTill){
+        this.repeatTill = repeatTill;
+    }
+
+    private long getRepeatTill(){
+        return repeatTill;
+    }
+
     long getRepeatId() {
         return repeatId;
     }
@@ -600,6 +618,7 @@ class Event {
             eventJson.put("eventId", getEventId());
             eventJson.put("title", getTitle());
             eventJson.put("stressLevel", getStressLevel());
+            eventJson.put("realStressLevel", getRealStressLevel());
             eventJson.put("startTime", getStartTime().getTimeInMillis());
             eventJson.put("endTime", getEndTime().getTimeInMillis());
             eventJson.put("intervention", getIntervention());
@@ -608,6 +627,7 @@ class Event {
             eventJson.put("stressCause", getStressCause());
             eventJson.put("repeatMode", getRepeatMode());
             eventJson.put("repeatId", getRepeatId());
+            eventJson.put("repeatTill", getRepeatTill());
             eventJson.put("eventReminder", getEventReminder());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -626,6 +646,7 @@ class Event {
             id = eventJson.getLong("eventId");
             setTitle(eventJson.getString("title"));
             setStressLevel(eventJson.getInt("stressLevel"));
+            setRealStressLevel(eventJson.getInt("realStressLevel"));
             setStartTime(startTime);
             setEndTime(endTime);
             setIntervention(eventJson.getString("intervention"));
@@ -634,6 +655,7 @@ class Event {
             setStressCause(eventJson.getString("stressCause"));
             setRepeatMode(eventJson.getInt("repeatMode"));
             setRepeatId(eventJson.getLong("repeatId"));
+            setRepeatTill(eventJson.getLong("repeatTill"));
             setEventReminder((short) eventJson.getInt("eventReminder"));
             setEventReminder((short) eventJson.getInt("eventReminder"));
             setEvaluated(eventJson.getBoolean("isEvaluated"));

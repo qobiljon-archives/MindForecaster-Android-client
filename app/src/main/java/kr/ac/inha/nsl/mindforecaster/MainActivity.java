@@ -12,7 +12,6 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -233,7 +232,10 @@ public class MainActivity extends AppCompatActivity {
                                                 for (Event event : dayEvents) {
                                                     getLayoutInflater().inflate(R.layout.event_small_element, cells[col][row]);
                                                     TextView tv = (TextView) cells[col][row].getChildAt(cells[col][row].getChildCount() - 1);
-                                                    tv.setBackgroundColor(Tools.stressLevelToColor(getApplicationContext(), event.getStressLevel()));
+                                                    if (!event.isEvaluated())
+                                                        tv.setBackgroundColor(Tools.stressLevelToColor(getApplicationContext(), event.getStressLevel()));
+                                                    else
+                                                        tv.setBackgroundColor(Tools.stressLevelToColor(getApplicationContext(), event.getRealStressLevel()));
                                                     tv.setText(event.getTitle());
                                                 }
                                             }

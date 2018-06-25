@@ -239,11 +239,18 @@ public class InterventionsActivity extends AppCompatActivity {
                         return;
 
                     LayoutInflater inflater = getLayoutInflater();
-                    for (int n = 0; n < interventions.length; n++) {
+                    for (int n = 0; n < 20; n++) {
                         inflater.inflate(R.layout.intervention_element, intervList);
                         TextView interv_text = intervList.getChildAt(n).findViewById(R.id.intervention_text);
                         interv_text.setText(interventions[n]);
                     }
+                    inflater.inflate(R.layout.more_button_element, intervList);
+                    for (int n = 20, i = 0; n < interventions.length; n++, i++) {
+                        inflater.inflate(R.layout.intervention_element, intervListMore);
+                        TextView interv_text = intervListMore.getChildAt(i).findViewById(R.id.intervention_text);
+                        interv_text.setText(interventions[n]);
+                    }
+                    intervListMore.setVisibility(View.GONE);
                 }
                 saveIntervention = false;
                 break;
