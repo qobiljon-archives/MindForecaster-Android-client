@@ -54,31 +54,35 @@ public class EventActivity extends AppCompatActivity {
                     selectedInterv.setText(event.getIntervention());
                     switch (InterventionsActivity.resultNotifMinutes) {
                         case -1440:
-                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._1_day_before)));
+                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._1_day_before1)));
                             break;
                         case -60:
-                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._1_hour_before)));
+                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._1_hour_before1)));
                             break;
                         case -30:
-                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._30_minutes_before)));
+                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._30_minutes_before1)));
                             break;
                         case -10:
-                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._10_minutes_before)));
+                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._10_minutes_before1)));
                             break;
                         case 1440:
-                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._1_day_after)));
+                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text1, getString(R.string._1_day_after1)));
                             break;
                         case 60:
-                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._1_hour_after)));
+                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text1, getString(R.string._1_hour_after1)));
                             break;
                         case 30:
-                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._30_minutes_after)));
+                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text1, getString(R.string._30_minutes_after1)));
                             break;
                         case 10:
-                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._10_minutes_after)));
+                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text1, getString(R.string._10_minutes_after1)));
                             break;
                         default:
-                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, Tools.notifMinsToString(this, InterventionsActivity.resultNotifMinutes)));
+                            if (InterventionsActivity.resultNotifMinutes > 0) {
+                                intervReminderTxt.setText(getString(R.string.intervention_reminder_text1, Tools.notifMinsToString(this, InterventionsActivity.resultNotifMinutes)));
+
+                            } else
+                                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, Tools.notifMinsToString(this, InterventionsActivity.resultNotifMinutes)));
                             break;
                     }
                     intervReminderTxt.setVisibility(View.VISIBLE);
@@ -445,31 +449,35 @@ public class EventActivity extends AppCompatActivity {
                 intervReminderTxt.setVisibility(View.GONE);
                 break;
             case -1440:
-                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_before)));
+                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_before1)));
                 break;
             case -60:
-                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_before)));
+                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_before1)));
                 break;
             case -30:
-                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._30_minutes_before)));
+                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._30_minutes_before1)));
                 break;
             case -10:
-                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_before)));
+                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_before1)));
                 break;
             case 1440:
-                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_after)));
+                intervReminderTxt.setText(getString(R.string.intervention_reminder_text1, getResources().getString(R.string._1_day_after1)));
                 break;
             case 60:
-                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_after)));
+                intervReminderTxt.setText(getString(R.string.intervention_reminder_text1, getResources().getString(R.string._1_hour_after1)));
                 break;
             case 30:
-                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._30_minutes_after)));
+                intervReminderTxt.setText(getString(R.string.intervention_reminder_text1, getResources().getString(R.string._30_minutes_after1)));
                 break;
             case 10:
-                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_after)));
+                intervReminderTxt.setText(getString(R.string.intervention_reminder_text1, getResources().getString(R.string._10_minutes_after1)));
                 break;
             default:
-                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, Tools.notifMinsToString(this, event.getInterventionReminder())));
+                if (event.getInterventionReminder() > 0) {
+                    intervReminderTxt.setText(getString(R.string.intervention_reminder_text1, Tools.notifMinsToString(this, event.getInterventionReminder())));
+
+                } else
+                    intervReminderTxt.setText(getString(R.string.intervention_reminder_text, Tools.notifMinsToString(this, event.getInterventionReminder())));
                 break;
         }
 
@@ -610,28 +618,35 @@ public class EventActivity extends AppCompatActivity {
             if (event.getIntervention() != null && event.getIntervention().length() > 0) {
                 switch (event.getInterventionReminder()) {
                     case -1440:
-                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_before)));
+                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_before1)));
                         break;
                     case -60:
-                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_before)));
+                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_before1)));
                         break;
                     case -30:
-                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._30_minutes_before)));
+                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._30_minutes_before1)));
                         break;
                     case -10:
-                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_before)));
+                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_before1)));
                         break;
                     case 1440:
-                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_after)));
+                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text1, getResources().getString(R.string._1_day_after1)));
                         break;
                     case 60:
-                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_after)));
+                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text1, getResources().getString(R.string._1_hour_after1)));
                         break;
                     case 30:
-                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._30_minutes_after)));
+                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text1, getResources().getString(R.string._30_minutes_after1)));
                         break;
                     case 10:
-                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_after)));
+                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text1, getResources().getString(R.string._10_minutes_after1)));
+                        break;
+                    default:
+                        if (event.getInterventionReminder() > 0) {
+                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text1, Tools.notifMinsToString(this, event.getInterventionReminder())));
+
+                        } else
+                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, Tools.notifMinsToString(this, event.getInterventionReminder())));
                         break;
                 }
                 intervReminderTxt.setVisibility(View.VISIBLE);
