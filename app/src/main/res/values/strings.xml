@@ -51,7 +51,8 @@
     <string name="all_day">All-day</string>
     <string name="selected_interv_hint">Create an intervention to mediate your stress</string>
     <string name="self_intervention_hint">Please describe here an intervention that can mediate your stress</string>
-    <string name="interventions_list">Please choose one of the options below:</string>
+    <string name="interventions_list_peer">Please choose one of the options shared by others below:</string>
+    <string name="interventions_list_system">Please choose one of the options offered by system below:</string>
     <string name="expand_button">Expand button</string>
     <string name="anticipated_stress_level">Anticipated stress level</string>
     <string name="arrow_down">Arrow down</string>
@@ -148,19 +149,23 @@
     <string name="daily_notif_question">Do you have a new schedule today?</string>
     <string name="daily_notif_request">Please, evaluate today\'s events!</string>
     <string name="sunday_notif_question">Do you have a new schedule for the next week?</string>
-    <string name="days">days</string>
-    <string name="hours">hours</string>
-    <string name="minutes">minutes</string>
+    <string name="days">day(s)</string>
+    <string name="hours">hour(s)</string>
+    <string name="minutes">minute(s)</string>
     <string name="before">before</string>
     <string name="after">after</string>
-    <string name="upcoming_event">for upcoming event</string>
-    <string name="passed_event">for passed event</string>
+    <string name="upcoming_event">For upcoming event</string>
+    <string name="passed_event">For passed event</string>
     <string name="evaluated">Evaluated</string>
     <string name="not_evaluated">Not evaluated</string>
     <string name="repeat_until">Repeat until</string>
     <string name="everyday_repeat">Everyday till %1$s %2$d</string>
     <string name="everyweek_repeat">Every week till %1$s %2$d</string>
-    <string name="notification_event">"%1$s" after %2$s</string>
+    <string name="notification_event">"%1$s" is %2$s</string>
+    <string name="notification_event_time">%1$s %2$s</string>
+    <string name="tomorrow">tomorrow</string>
+    <string name="result">Result</string>
+
 
 
     <string-array name="months_array">

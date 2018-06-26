@@ -25,10 +25,10 @@
     <string name="evaluation">평가</string>
     <string name="re_evaluation">재평가</string>
     <string name="none">없음</string>
-    <string name="_10_minutes_before">10분 전</string>
-    <string name="_30_minutes_before">30분 전</string>
-    <string name="_1_hour_before">1시간 전</string>
-    <string name="_1_day_before">1일 전</string>
+    <string name="_10_minutes_before">일정 10분 전</string>
+    <string name="_30_minutes_before">일정 30분 전</string>
+    <string name="_1_hour_before">일정 1시간 전</string>
+    <string name="_1_day_before">일정 1일 전</string>
     <string name="custom">사용자 설정</string>
     <string name="everyday">매일</string>
     <string name="every_week">매주</string>
@@ -91,22 +91,23 @@
     <string name="event_title">Event title</string>
     <string name="event_note">Event note (optional)</string>
     <string name="edit">Edit</string>
-    <string name="delete">Delete</string>
+    <string name="delete">삭제</string>
     <string name="btn_close">Close</string>
     <string name="more">More</string>
-    <string name="intervention_method">Intervention method</string>
+    <string name="intervention_method">중재방안 등록</string>
     <string name="self">self</string>
     <string name="system">system</string>
     <string name="peer">peer</string>
     <string name="selected_interv_hint">스트레스를 완화시킬 수 있는 자신만의 중재방안을 만들어보세요</string>
-    <string name="interventions_list">Please choose one of the options below:</string>
+    <string name="interventions_list_peer">다른 사람들이 추천한 방법들 중에서 하나를 선택해보세요:</string>
+    <string name="interventions_list_system">아래의 다양한 활동들 중에서 하나를 선택해보세요:</string>
     <string name="expand_button">Expand button</string>
     <string name="arrow_down">Arrow down</string>
     <string name="clock_image">Clock image</string>
     <string name="repeat_notification">Repeat / Notification</string>
     <string name="share">Share</string>
     <string name="feedback">Feedback</string>
-    <string name="event_details">Event details</string>
+    <string name="event_details">일정 등록</string>
     <string name="bad">Bad</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -148,12 +149,15 @@
     <string name="days">일</string>
     <string name="hours">시</string>
     <string name="minutes">분</string>
-    <string name="upcoming_event">for upcoming event</string>
-    <string name="passed_event">for passed event</string>
+    <string name="upcoming_event">다가오는 일정</string>
+    <string name="passed_event">지나간 일정</string>
     <string name="repeat_until">언제까지 반복</string>
-    <string name="everyday_repeat">%1$s %2$d까지 매일</string>
-    <string name="everyweek_repeat">%1$s %2$d까지 매주</string>
-    <string name="notification_event">"%1$s" %2$s 후에</string>
+    <string name="everyday_repeat">%1$s %2$d일까지 매일</string>
+    <string name="everyweek_repeat">%1$s %2$d일까지 매주</string>
+    <string name="notification_event">"%2$s" 일정: %1$s</string>
+    <string name="notification_event_time">%2$s %1$s</string>
+    <string name="tomorrow">내일</string>
+    <string name="result">결과</string>
 
 
 

@@ -22,13 +22,13 @@ public class AlarmReceiverIntervention extends BroadcastReceiver {
         int notificaiton_id = (int) intent.getLongExtra("notification_id", 0);
 
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-        inboxStyle.setBigContentTitle("Intervention");
+        inboxStyle.setBigContentTitle(context.getString(R.string.intervention));
         inboxStyle.addLine(intent.getStringExtra("Content1"));
         inboxStyle.addLine(intent.getStringExtra("Content2"));
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, context.getString(R.string.notif_channel_id))
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Intervention")
+                .setContentTitle(context.getString(R.string.intervention))
                 .setTicker("New Message Alert!")
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)

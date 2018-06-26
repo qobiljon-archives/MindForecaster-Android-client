@@ -44,6 +44,7 @@ public class InterventionsActivity extends AppCompatActivity {
     private RadioGroup intervReminderRadGroup;
     private RadioButton customReminderRadioButton;
     private Button[] tabButtons;
+    private TextView requestMessageTxt;
 
 
     private InputMethodManager imm;
@@ -53,6 +54,7 @@ public class InterventionsActivity extends AppCompatActivity {
     private void init() {
         intervChoice = findViewById(R.id.intervention_choice);
         intervTitleText = findViewById(R.id.intervention_text);
+        requestMessageTxt = findViewById(R.id.request_message_txt);
         intervList = findViewById(R.id.interventions_list);
         intervListMore = findViewById(R.id.interventions_list_more);
         intervReminderRoot = findViewById(R.id.interv_reminder_root);
@@ -162,6 +164,7 @@ public class InterventionsActivity extends AppCompatActivity {
                 saveIntervention = true;
                 break;
             case R.id.button_systems_intervention:
+                requestMessageTxt.setText(getString(R.string.interventions_list_system));
                 tabButtons[1].setBackgroundResource(R.drawable.bg_interv_method_checked_view);
                 intervChoice.setVisibility(View.VISIBLE);
                 intervList.removeAllViews();
@@ -255,6 +258,8 @@ public class InterventionsActivity extends AppCompatActivity {
                 saveIntervention = false;
                 break;
             case R.id.button_peer_interventions:
+                requestMessageTxt.setText(getString(R.string.interventions_list_peer));
+                intervListMore.setVisibility(View.GONE);
                 tabButtons[2].setBackgroundResource(R.drawable.bg_interv_method_checked_view);
                 intervChoice.setVisibility(View.VISIBLE);
                 intervList.removeAllViews();

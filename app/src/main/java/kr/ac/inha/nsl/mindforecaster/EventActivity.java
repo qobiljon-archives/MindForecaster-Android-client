@@ -124,6 +124,7 @@ public class EventActivity extends AppCompatActivity {
     private TextView notificationValueText;
     private TextView interventionTextView;
     private TextView tabEvaluation;
+    private TextView activityTitle;
     private RadioButton customNotifRadioButton;
     private RadioGroup stressTypeGroup, repeatModeGroup, eventNotificationGroup;
     private EditText eventTitle, stressCause;
@@ -144,6 +145,7 @@ public class EventActivity extends AppCompatActivity {
         inactiveLayout = findViewById(R.id.layout_to_be_inactive);
         stressTypeGroup = findViewById(R.id.stress_type_group);
         stressCause = findViewById(R.id.txt_stress_cause);
+        activityTitle = findViewById(R.id.activity_title);
         ViewGroup tabNotif = findViewById(R.id.tab_notification);
         ViewGroup tabRepeat = findViewById(R.id.tab_repeat);
         ViewGroup tabStressLvl = findViewById(R.id.tab_anticipated_strs_lvl);
@@ -340,7 +342,7 @@ public class EventActivity extends AppCompatActivity {
                             case R.id.everyday_repeat_radio:
                                 event.setRepeatMode(Event.REPEAT_EVERYDAY);
                                 calTill.setTimeInMillis(event.getRepeatTill());
-                                repeatValueText.setText(String.format(getString(R.string.everyday_repeat), calTill.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()), calTill.get(Calendar.DAY_OF_MONTH)));
+                                repeatValueText.setText(String.format(getString(R.string.everyday_repeat), calTill.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()), calTill.get(Calendar.DAY_OF_MONTH)));
                                 break;
                             case R.id.everyweek_repeat_radio:
                                 for (CheckBox cb : repeatWeeklDayChecks)
@@ -349,7 +351,7 @@ public class EventActivity extends AppCompatActivity {
                                 weekdaysGroup.setVisibility(View.VISIBLE);
                                 event.setRepeatMode(Event.REPEAT_WEEKLY);
                                 calTill.setTimeInMillis(event.getRepeatTill());
-                                repeatValueText.setText(String.format(getString(R.string.everyweek_repeat), calTill.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()), calTill.get(Calendar.DAY_OF_MONTH)));
+                                repeatValueText.setText(String.format(getString(R.string.everyweek_repeat), calTill.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()), calTill.get(Calendar.DAY_OF_MONTH)));
                                 break;
                             default:
                                 break;
@@ -1217,6 +1219,7 @@ public class EventActivity extends AppCompatActivity {
 
     public void initResultView() {
 
+        activityTitle.setText(getString(R.string.result));
         tabEvaluation.setText(getString(R.string.re_evaluation));
         ViewGroup intervView = findViewById(R.id.result_details_interv);
         SeekBar expectedStressLevelSeek = findViewById(R.id.expected_stresslvl_seekbar);

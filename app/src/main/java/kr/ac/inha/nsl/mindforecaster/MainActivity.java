@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
         currentCal = Calendar.getInstance(Locale.US);
+        currentCal.set(currentCal.get(Calendar.YEAR), currentCal.get(Calendar.MONTH), currentCal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
         event_grid = findViewById(R.id.event_grid);
         monthName = findViewById(R.id.header_month_name);
         year = findViewById(R.id.header_year);
@@ -177,14 +178,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Download events from internet and display them
+        Calendar periodFrom = Calendar.getInstance();
+        Calendar periodTill = Calendar.getInstance();
+        periodFrom.setTimeInMillis((long) cells[0][0].getTag());
+        periodTill.setTimeInMillis((long) cells[cells.length - 1][cells[0].length - 1].getTag());
+        periodTill.add(Calendar.DAY_OF_MONTH, 1);
         if (Tools.isNetworkAvailable(this))
             Tools.execute(new MyRunnable(
                     this,
                     getString(R.string.url_events_fetch, getString(R.string.server_ip)),
                     SignInActivity.loginPrefs.getString(SignInActivity.username, null),
                     SignInActivity.loginPrefs.getString(SignInActivity.password, null),
-                    cells[0][0].getTag(),
-                    cells[cells.length - 1][cells[0].length - 1].getTag(),
+                    periodFrom.getTimeInMillis(),
+                    periodTill.getTimeInMillis(),
                     currentCal.get(Calendar.MONTH),
                     currentCal.get(Calendar.YEAR)
             ) {
@@ -330,6 +336,7 @@ public class MainActivity extends AppCompatActivity {
             nMgr.cancelAll();
         }
         currentCal = Calendar.getInstance(Locale.US);
+        currentCal.set(currentCal.get(Calendar.YEAR), currentCal.get(Calendar.MONTH), currentCal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
         updateCalendarView();
     }
 

@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -423,7 +424,7 @@ class Event {
             this.id = id;
     }
 
-    static ArrayList<Event> getOneDayEvents(@NonNull Calendar day) {
+    static synchronized ArrayList<Event> getOneDayEvents(@NonNull Calendar day) {
         return getOneDayEvents(currentEventBank, day);
     }
 
@@ -675,6 +676,10 @@ class Event {
                 else {
                     String reminderStr = Tools.notifMinsToString(context, event.getEventReminder());
                     reminderStr = reminderStr.substring(0, reminderStr.lastIndexOf(' '));
+                    if(reminderStr.equals("1 " + context.getString(R.string.days)))
+                        reminderStr = context.getString(R.string.tomorrow);
+                    else
+                        reminderStr = String.format(context.getString(R.string.notification_event_time), context.getString(R.string.after), reminderStr);
                     Tools.addEventNotif(context, cal, event.getEventId(), String.format(context.getResources().getString(R.string.notification_event), event.getTitle(), reminderStr));
                 }
             }
@@ -708,7 +713,7 @@ class Event {
                             String.format(
                                     Locale.US,
                                     "%s: %s",
-                                    context.getString(R.string.event),
+                                    context.getString(R.string.upcoming_event),
                                     event.getTitle()
                             )
                     );
@@ -731,7 +736,7 @@ class Event {
                             String.format(
                                     Locale.US,
                                     "%s: %s",
-                                    context.getString(R.string.current_event_title),
+                                    context.getString(R.string.passed_event),
                                     event.getTitle()
                             )
                     );
