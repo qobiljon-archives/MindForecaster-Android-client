@@ -157,6 +157,11 @@
     <string name="passed_event">for passed event</string>
     <string name="evaluated">Evaluated</string>
     <string name="not_evaluated">Not evaluated</string>
+    <string name="repeat_until">Repeat until</string>
+    <string name="everyday_repeat">Everyday till %1$s %2$d</string>
+    <string name="everyweek_repeat">Every week till %1$s %2$d</string>
+    <string name="notification_event">"%1$s" after %2$s</string>
+
 
     <string-array name="months_array">
         <item>January</item>

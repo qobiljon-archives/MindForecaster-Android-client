@@ -461,6 +461,7 @@ public class InterventionsActivity extends AppCompatActivity {
 
     public void setCustomNotifParams(int minutes) {
         resultNotifMinutes = minutes;
+        customReminderRadioButton.setTag(String.valueOf(minutes));
         intervReminderRadGroup.check(R.id.option_custom);
         customReminderRadioButton.setText(Tools.notifMinsToString(this, minutes));
         customReminderRadioButton.setVisibility(View.VISIBLE);

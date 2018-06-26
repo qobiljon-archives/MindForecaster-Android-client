@@ -238,7 +238,7 @@ public class EventActivity extends AppCompatActivity {
                 Calendar endTime = event.getEndTime();
 
                 startTime.setTimeInMillis(getIntent().getLongExtra("selectedDayMillis", 0));
-                startTime.set(Calendar.HOUR_OF_DAY, Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + 1);
+                startTime.set(Calendar.HOUR_OF_DAY, Calendar.getInstance(Locale.US).get(Calendar.HOUR_OF_DAY) + 1);
                 startTime.set(Calendar.MINUTE, 0);
                 endTime.setTimeInMillis(startTime.getTimeInMillis());
                 endTime.add(Calendar.HOUR_OF_DAY, 1);
@@ -325,19 +325,22 @@ public class EventActivity extends AppCompatActivity {
                 DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker picker, int year, int month, int dayOfMonth) {
-                        Calendar cal = Calendar.getInstance(Locale.US);
+                        Calendar cal = Calendar.getInstance(Locale.US), calTill;
                         cal.set(year, month, dayOfMonth, 0, 0, 0);
                         cal.set(Calendar.MILLISECOND, 0);
+                        calTill = (Calendar) cal.clone();
                         cal.add(Calendar.DAY_OF_MONTH, 1);
                         if (event.getStartTime().after(cal))
                             repeatTillTime = 0;
                         else
                             repeatTillTime = cal.getTimeInMillis();
+                        event.setRepeatTill(calTill.getTimeInMillis());
 
                         switch (checkedId) {
                             case R.id.everyday_repeat_radio:
                                 event.setRepeatMode(Event.REPEAT_EVERYDAY);
-                                repeatValueText.setText(getString(R.string.everyday));
+                                calTill.setTimeInMillis(event.getRepeatTill());
+                                repeatValueText.setText(String.format(getString(R.string.everyday_repeat), calTill.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()), calTill.get(Calendar.DAY_OF_MONTH)));
                                 break;
                             case R.id.everyweek_repeat_radio:
                                 for (CheckBox cb : repeatWeeklDayChecks)
@@ -345,7 +348,8 @@ public class EventActivity extends AppCompatActivity {
                                 repeatWeeklDayChecks[event.getStartTime().get(Calendar.DAY_OF_WEEK) - 1].setChecked(true);
                                 weekdaysGroup.setVisibility(View.VISIBLE);
                                 event.setRepeatMode(Event.REPEAT_WEEKLY);
-                                repeatValueText.setText(getString(R.string.every_week));
+                                calTill.setTimeInMillis(event.getRepeatTill());
+                                repeatValueText.setText(String.format(getString(R.string.everyweek_repeat), calTill.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()), calTill.get(Calendar.DAY_OF_MONTH)));
                                 break;
                             default:
                                 break;
@@ -364,7 +368,7 @@ public class EventActivity extends AppCompatActivity {
                         }
                     }
                 });
-                dialog.setTitle("Repeat until");
+                dialog.setTitle(getString(R.string.repeat_until));
                 dialog.show();
             }
         });
@@ -467,15 +471,19 @@ public class EventActivity extends AppCompatActivity {
                 break;
         }
 
+
+        Calendar calTill = Calendar.getInstance(Locale.US);
         switch (event.getRepeatMode()) {
             case Event.NO_REPEAT:
                 repeatValueText.setText(getString(R.string.only_oncehihine));
                 break;
             case Event.REPEAT_EVERYDAY:
-                repeatValueText.setText(getString(R.string.everyday));
+                calTill.setTimeInMillis(event.getRepeatTill());
+                repeatValueText.setText(String.format(getString(R.string.everyday_repeat), calTill.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()), calTill.get(Calendar.DAY_OF_MONTH)));
                 break;
             case Event.REPEAT_WEEKLY:
-                repeatValueText.setText(getString(R.string.every_week));
+                calTill.setTimeInMillis(event.getRepeatTill());
+                repeatValueText.setText(String.format(getString(R.string.everyweek_repeat), calTill.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()), calTill.get(Calendar.DAY_OF_MONTH)));
                 break;
             default:
                 repeatValueText.setText("");
@@ -1201,6 +1209,7 @@ public class EventActivity extends AppCompatActivity {
             default:
                 eventNotificationGroup.check(R.id.radio_btn_custom);
                 customNotifRadioButton.setText(Tools.notifMinsToString(this, minutes));
+                notificationValueText.setText(customNotifRadioButton.getText().toString());
                 customNotifRadioButton.setVisibility(View.VISIBLE);
                 break;
         }

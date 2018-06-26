@@ -313,7 +313,6 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="10dp"
                     android:onClick="closeInput"
-                    android:tag="1"
                     android:text="@string/dummy"
                     android:textSize="14sp"
                     android:visibility="gone" />

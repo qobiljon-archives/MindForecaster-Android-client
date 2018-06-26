@@ -583,11 +583,11 @@ class Event {
         this.repeatId = repeatId;
     }
 
-    private void setRepeatTill(long repeatTill){
+    void setRepeatTill(long repeatTill){
         this.repeatTill = repeatTill;
     }
 
-    private long getRepeatTill(){
+    long getRepeatTill(){
         return repeatTill;
     }
 
@@ -675,7 +675,7 @@ class Event {
                 else {
                     String reminderStr = Tools.notifMinsToString(context, event.getEventReminder());
                     reminderStr = reminderStr.substring(0, reminderStr.lastIndexOf(' '));
-                    Tools.addEventNotif(context, cal, event.getEventId(), String.format(Locale.US, "\"%s\" %s %s", event.getTitle(), context.getString(R.string.after), reminderStr));
+                    Tools.addEventNotif(context, cal, event.getEventId(), String.format(context.getResources().getString(R.string.notification_event), event.getTitle(), reminderStr));
                 }
             }
         }
@@ -708,7 +708,7 @@ class Event {
                             String.format(
                                     Locale.US,
                                     "%s: %s",
-                                    context.getString(R.string.upcoming_event),
+                                    context.getString(R.string.event),
                                     event.getTitle()
                             )
                     );
@@ -731,7 +731,7 @@ class Event {
                             String.format(
                                     Locale.US,
                                     "%s: %s",
-                                    context.getString(R.string.passed_event),
+                                    context.getString(R.string.current_event_title),
                                     event.getTitle()
                             )
                     );

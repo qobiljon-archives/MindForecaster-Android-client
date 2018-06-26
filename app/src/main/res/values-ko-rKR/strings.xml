@@ -150,12 +150,10 @@
     <string name="minutes">분</string>
     <string name="upcoming_event">for upcoming event</string>
     <string name="passed_event">for passed event</string>
-
-
-
-
-
-
+    <string name="repeat_until">언제까지 반복</string>
+    <string name="everyday_repeat">%1$s %2$d까지 매일</string>
+    <string name="everyweek_repeat">%1$s %2$d까지 매주</string>
+    <string name="notification_event">"%1$s" %2$s 후에</string>
 
 
 
