@@ -265,7 +265,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/result_details_strs_reason"
+        android:id="@+id/result_details_expected_strs_reason"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
@@ -275,14 +275,46 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:labelFor="@+id/strs_reason_text"
+            android:labelFor="@+id/expected_strs_reason_text"
+            android:text="@string/stress_incr_title1"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@id/expected_strs_reason_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_solid_wrap"
+            android:gravity="top"
+            android:lines="3"
+            android:maxLength="128"
+            android:maxLines="5"
+            android:padding="10dp"
+            android:paddingTop="5dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/result_details_real_strs_reason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/real_strs_reason_text"
             android:text="@string/stress_incr_title"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@id/strs_reason_text"
+            android:id="@id/real_strs_reason_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"

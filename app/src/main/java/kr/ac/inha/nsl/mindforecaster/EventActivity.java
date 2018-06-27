@@ -54,16 +54,16 @@ public class EventActivity extends AppCompatActivity {
                     selectedInterv.setText(event.getIntervention());
                     switch (InterventionsActivity.resultNotifMinutes) {
                         case -1440:
-                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._1_day_before1)));
+                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._1_day_before)));
                             break;
                         case -60:
-                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._1_hour_before1)));
+                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._1_hour_before)));
                             break;
                         case -30:
-                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._30_minutes_before1)));
+                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._30_minutes_before)));
                             break;
                         case -10:
-                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._10_minutes_before1)));
+                            intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getString(R.string._10_minutes_before)));
                             break;
                         case 1440:
                             intervReminderTxt.setText(getString(R.string.intervention_reminder_text1, getString(R.string._1_day_after1)));
@@ -363,7 +363,7 @@ public class EventActivity extends AppCompatActivity {
                     }
                 };
 
-                DatePickerDialog dialog = new DatePickerDialog(EventActivity.this, listener, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+                DatePickerDialog dialog = new DatePickerDialog(EventActivity.this, R.style.DialogTheme, listener, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
                 dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         if (which == DialogInterface.BUTTON_NEGATIVE) {
@@ -449,16 +449,16 @@ public class EventActivity extends AppCompatActivity {
                 intervReminderTxt.setVisibility(View.GONE);
                 break;
             case -1440:
-                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_before1)));
+                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_before)));
                 break;
             case -60:
-                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_before1)));
+                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_before)));
                 break;
             case -30:
-                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._30_minutes_before1)));
+                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._30_minutes_before)));
                 break;
             case -10:
-                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_before1)));
+                intervReminderTxt.setText(getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_before)));
                 break;
             case 1440:
                 intervReminderTxt.setText(getString(R.string.intervention_reminder_text1, getResources().getString(R.string._1_day_after1)));
@@ -618,16 +618,16 @@ public class EventActivity extends AppCompatActivity {
             if (event.getIntervention() != null && event.getIntervention().length() > 0) {
                 switch (event.getInterventionReminder()) {
                     case -1440:
-                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_before1)));
+                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_day_before)));
                         break;
                     case -60:
-                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_before1)));
+                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._1_hour_before)));
                         break;
                     case -30:
-                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._30_minutes_before1)));
+                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._30_minutes_before)));
                         break;
                     case -10:
-                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_before1)));
+                        intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text, getResources().getString(R.string._10_minutes_before)));
                         break;
                     case 1440:
                         intervReminderTxt.setText(getResources().getString(R.string.intervention_reminder_text1, getResources().getString(R.string._1_day_after1)));
@@ -1141,7 +1141,7 @@ public class EventActivity extends AppCompatActivity {
             }
         };
         Calendar cal = event.getStartTime();
-        TimePickerDialog dialog = new TimePickerDialog(this, listener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true);
+        TimePickerDialog dialog = new TimePickerDialog(this, listener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), false);
         dialog.show();
     }
 
@@ -1183,8 +1183,9 @@ public class EventActivity extends AppCompatActivity {
                 );
             }
         };
+
         Calendar cal = event.getEndTime();
-        TimePickerDialog dialog = new TimePickerDialog(this, listener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true);
+        TimePickerDialog dialog = new TimePickerDialog(this, listener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), false);
         dialog.show();
     }
 
@@ -1239,9 +1240,10 @@ public class EventActivity extends AppCompatActivity {
         ViewGroup intervView = findViewById(R.id.result_details_interv);
         SeekBar expectedStressLevelSeek = findViewById(R.id.expected_stresslvl_seekbar);
         TextView intervName = findViewById(R.id.intervention_name);
+        TextView expectedStressReason = findViewById(R.id.expected_strs_reason_text);
         final SeekBar realStressLevelSeek = findViewById(R.id.real_stresslvl_seekbar);
         final SeekBar intervEffectiveness = findViewById(R.id.intervention_effectiveness);
-        final TextView realStressReason = findViewById(R.id.strs_reason_text);
+        final TextView realStressReason = findViewById(R.id.real_strs_reason_text);
         final TextView journalTxt = findViewById(R.id.journal_text);
 
         // set expected stress level from event variable
@@ -1250,6 +1252,9 @@ public class EventActivity extends AppCompatActivity {
         int expectedStressColor = Tools.stressLevelToColor(getApplicationContext(), EventActivity.event.getStressLevel());
         expectedStressLevelSeek.getProgressDrawable().setColorFilter(expectedStressColor, PorterDuff.Mode.SRC_IN);
         expectedStressLevelSeek.getThumb().setColorFilter(expectedStressColor, PorterDuff.Mode.SRC_IN);
+
+        expectedStressReason.setText(event.getStressCause());
+        ((ViewGroup)expectedStressReason.getParent()).setVisibility(expectedStressReason.length() == 0 ? View.GONE : View.VISIBLE);
 
         if (!event.getIntervention().equals("")) {
             intervView.setVisibility(View.VISIBLE);
@@ -1303,7 +1308,7 @@ public class EventActivity extends AppCompatActivity {
                                         intervEffectiveness.setProgress(interventionEffectiveness);
 
                                         realStressReason.setText(realStressCause);
-                                        realStressReason.setVisibility(realStressReason.length() == 0 ? View.GONE : View.VISIBLE);
+                                        ((ViewGroup)realStressReason.getParent()).setVisibility(realStressReason.length() == 0 ? View.GONE : View.VISIBLE);
                                         journalTxt.setText(journalString);
                                         journalTxt.setVisibility(journalTxt.length() == 0 ? View.GONE : View.VISIBLE);
 

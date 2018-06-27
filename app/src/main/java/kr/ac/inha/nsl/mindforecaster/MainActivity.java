@@ -178,8 +178,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Download events from internet and display them
-        Calendar periodFrom = Calendar.getInstance();
-        Calendar periodTill = Calendar.getInstance();
+        Calendar periodFrom = Calendar.getInstance(Locale.US);
+        Calendar periodTill = Calendar.getInstance(Locale.US);
         periodFrom.setTimeInMillis((long) cells[0][0].getTag());
         periodTill.setTimeInMillis((long) cells[cells.length - 1][cells[0].length - 1].getTag());
         periodTill.add(Calendar.DAY_OF_MONTH, 1);

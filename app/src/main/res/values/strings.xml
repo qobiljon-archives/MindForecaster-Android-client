@@ -107,10 +107,6 @@
     <string name="_1_hour_before">1 hour before</string>
     <string name="_30_minutes_before">30 minutes before</string>
     <string name="_10_minutes_before">10 minutes before</string>
-    <string name="_1_day_before1">1 day before</string>
-    <string name="_1_hour_before1">1 hour before</string>
-    <string name="_30_minutes_before1">30 minutes before</string>
-    <string name="_10_minutes_before1">10 minutes before</string>
     <string name="_10_minutes_after">10 minutes after</string>
     <string name="_30_minutes_after">30 minutes after</string>
     <string name="_1_hour_after">1 hour after</string>
@@ -131,6 +127,7 @@
     <string name="real_stress_level" translatable="false">Real (resulting) stress level</string>
     <string name="stress_incr_reason">Please, describe here what you think was the reason that made the real stress be higher than expected one.</string>
     <string name="stress_incr_title">Reason of difference between expected and real stress levels</string>
+    <string name="stress_incr_title1">Reason of expected stress levels</string>
     <string name="sunday_time">Sunday evaluation reminder</string>
     <string name="every_morning_time">Every-morning reminder</string>
     <string name="every_evening_time">Every-evening reminder</string>
@@ -174,7 +171,7 @@
     <string name="notification_event_time">%1$s %2$s</string>
     <string name="tomorrow">tomorrow</string>
     <string name="result">Result</string>
-
+    <string name="set_up_reminders">Set up reminders</string>
 
 
     <string-array name="months_array">

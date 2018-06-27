@@ -29,10 +29,6 @@
     <string name="_30_minutes_before">일정 30분 전</string>
     <string name="_1_hour_before">일정 1시간 전</string>
     <string name="_1_day_before">일정 1일 전</string>
-    <string name="_10_minutes_before1">10분 전</string>
-    <string name="_30_minutes_before1">30분 전</string>
-    <string name="_1_hour_before1">1시간 전</string>
-    <string name="_1_day_before1">1일 전</string>
     <string name="_30_minutes_after">일정 30분 후</string>
     <string name="_10_minutes_after">일정 10분 후</string>
     <string name="_1_hour_after">일정 1시간 후</string>
@@ -41,7 +37,7 @@
     <string name="_10_minutes_after1">10분 후</string>
     <string name="_1_hour_after1">1시간 후</string>
     <string name="_1_day_after1">하루 후</string>
-    <string name="custom">사용자 설정</string>
+    <string name="custom">사용자 설정…</string>
     <string name="everyday">매일</string>
     <string name="every_week">매주</string>
     <string name="event_repeat_mode">일정이 반복되는 시간을 설정해주세요.</string>
@@ -137,7 +133,7 @@
     <string name="before_event">Before event</string>
     <string name="after_ecvent">After ecvent</string>
     <string name="intervention_reminder_text">%1$s 알림</string>
-    <string name="intervention_reminder_text1">종료 후 %1$s 알림</string>
+    <string name="intervention_reminder_text1">일정 종료 %1$s 알림</string>
     <string name="log_out">Log out</string>
     <string name="notifications_settings">Notifications settings</string>
     <string name="current_event_title">일정: %1$s</string>
@@ -146,15 +142,16 @@
     <string name="real_stress_level" translatable="false">실제 일정에 대한 스트레스 레벨</string>
     <string name="stress_incr_reason">스트레스 레벨이 예상한 것 보다 오히려 높아진 이유는 무엇입니까?</string>
     <string name="stress_incr_title">스트레스 레벨 증가 원인</string>
+    <string name="stress_incr_title1">스트레스 레벨 증가 원인</string>
     <string name="ok">OK</string>
-    <string name="custom_reminder">Custom reminder</string>
+    <string name="custom_reminder">사용자 알림 설정</string>
     <string name="custom_recurrence">Custom recurrence</string>
     <string name="channel_name">Event and Intervention notifications</string>
     <string name="channel_description">The notifications which user can receive on the specified event time, intervention time, or on a customized notification time in the properties of a particular event.</string>
     <string name="notif_channel_id">mf-notifs</string>
-    <string name="custom_reminder_hint">Set reminder up to 20 days.</string>
-    <string name="value">Value</string>
-    <string name="daily_notif_request">Please, evaluate today\'s events!</string>
+    <string name="custom_reminder_hint">최대 20일 전까지 설정 할 수 있습니다.</string>
+    <string name="value">입력</string>
+    <string name="daily_notif_request">오늘 일정에 대해 평가해주세요.</string>
     <string name="days">일</string>
     <string name="hours">시</string>
     <string name="minutes">분</string>
@@ -167,6 +164,8 @@
     <string name="notification_event_time">%2$s %1$s</string>
     <string name="tomorrow">내일</string>
     <string name="result">결과</string>
+    <string name="set_up_reminders">일정 등록 관련 알림 설정</string>
+
 
 
 
@@ -187,7 +186,7 @@
 
     <string-array name="time_scale_values">
         <item>분</item>
-        <item>시</item>
+        <item>시간</item>
         <item>일</item>
     </string-array>
 

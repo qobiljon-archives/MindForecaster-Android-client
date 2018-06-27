@@ -1,5 +1,6 @@
 package kr.ac.inha.nsl.mindforecaster;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
@@ -8,6 +9,7 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -46,11 +48,11 @@ public class InterventionsActivity extends AppCompatActivity {
     private Button[] tabButtons;
     private TextView requestMessageTxt;
 
-
     private InputMethodManager imm;
 
     //endregion
 
+    @SuppressLint("ClickableViewAccessibility")
     private void init() {
         intervChoice = findViewById(R.id.intervention_choice);
         intervTitleText = findViewById(R.id.intervention_text);
@@ -85,7 +87,16 @@ public class InterventionsActivity extends AppCompatActivity {
         if (!EventActivity.event.isNewEvent())
             fillOutExistingValues();
 
+
         //region For hiding a soft keyboard
+        intervTitleText.setFocusable(false);
+        intervTitleText.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                intervTitleText.setFocusableInTouchMode(true);
+                return false;
+            }
+        });
         imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null)
             imm.hideSoftInputFromWindow(intervTitleText.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
@@ -160,6 +171,7 @@ public class InterventionsActivity extends AppCompatActivity {
                 intervTitleText.setText("");
                 intervReminderRadGroup.check(R.id.option_none);
                 intervTitleText.setVisibility(View.VISIBLE);
+                intervTitleText.setFocusableInTouchMode(true);
                 intervReminderRoot.setVisibility(View.VISIBLE);
                 saveIntervention = true;
                 break;
@@ -350,7 +362,7 @@ public class InterventionsActivity extends AppCompatActivity {
         intervChoice.setVisibility(View.GONE);
         intervTitleText.setVisibility(View.VISIBLE);
         intervReminderRoot.setVisibility(View.VISIBLE);
-        saveIntervention = true;
+        saveIntervention = false;
     }
 
     public void cancelClick(View view) {
@@ -445,6 +457,7 @@ public class InterventionsActivity extends AppCompatActivity {
                 Toast.makeText(this, "Please pick an intervention first!", Toast.LENGTH_SHORT).show();
                 return;
             }
+            Toast.makeText(this, "Intervention is successfully picked!", Toast.LENGTH_SHORT).show();
             setResult(Activity.RESULT_OK);
             finish();
             overridePendingTransition(R.anim.activity_in_reverse, R.anim.activity_out_reverse);
