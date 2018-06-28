@@ -77,13 +77,6 @@
     <string name="after">후</string>
 
 
-
-
-
-
-
-
-
     <string name="app_name">MindForecaster</string>
     <string name="month">Month</string>
     <string name="year">Year</string>
@@ -157,7 +150,7 @@
     <string name="minutes">분</string>
     <string name="upcoming_event">다가오는 일정</string>
     <string name="passed_event">지나간 일정</string>
-    <string name="repeat_until">언제까지 반복</string>
+    <string name="repeat_until">언제까지 반복할까요?</string>
     <string name="everyday_repeat">%1$s %2$d일까지 매일</string>
     <string name="everyweek_repeat">%1$s %2$d일까지 매주</string>
     <string name="notification_event">"%2$s" 일정: %1$s</string>
@@ -165,34 +158,74 @@
     <string name="tomorrow">내일</string>
     <string name="result">결과</string>
     <string name="set_up_reminders">일정 등록 관련 알림 설정</string>
+    <string name="survey_main_txt">Please, complete the each survey</string>
+    <string name="survey">설문조사</string>
+
+    <string name="survey1_title">아래 문항은 지난 한 달 동안 당신의 감정과 생각에 대한 질문입니다 . 각 질문에 대해 얼마나 자주 그러했 는지 비슷하다고 생각되는 것을 하나 골라 번호에 체크해 주십시오.</string>
+    <string name="survey2_title">다음의 각 문장을 읽고 얼마나 그 문항이 당신에게 적용되는지에 따라 가리키는 숫자  0, 1, 2, 3, 4, 5, 에 체크하세요. 정답이나 오답은 없습니다. 답을 하는데 있어서 너무 많은 시간을 들이지 마세요.</string>
+    <string name="survey3_title">다음 항목들을 신중하게 읽으면서 그것이 당신의 삶과 어떤 관련이 있는지 생각한 다음 당신에게 해당되는 따라 숫자를 체크하십시오.</string>
+    <string name="survey4_title">일이 잘 되지 않거나 문제가 있을때,  당신은 다음의 항목들에 대해 얼마나 자신 또는 확신이 있으십니까?</string>
+
+
+    <string name="survey1_scale0">전혀 없었다</string>
+    <string name="survey1_scale1">거의 없었다</string>
+    <string name="survey1_scale2">가끔 있었다</string>
+    <string name="survey1_scale3">자주  있었다</string>
+    <string name="survey1_scale4">매우 자주 있었다</string>
+
+    <string name="survey2_scale0">매우 아니다 </string>
+    <string name="survey2_scale1">거의 아니다</string>
+    <string name="survey2_scale2">약간 아니다</string>
+    <string name="survey2_scale3">약간 그렇다</string>
+    <string name="survey2_scale4">거의 그렇다</string>
+    <string name="survey2_scale5">매우 그렇다</string>
+
+
+    <string name="survey3_scale0">매우 아니다 </string>
+    <string name="survey3_scale1">보통이다</string>
+    <string name="survey3_scale2">매우 그렇다</string>
+
+    <string name="survey4_scale0">전혀 할 수 없다</string>
+    <string name="survey4_scale1">보통이다</string>
+    <string name="survey4_scale2">확실히 할 수 있다</string>
 
 
 
+<string-array name="months_array">
+<item> 1 월 </item>
+        
+<item> 2 월 </item>
+        
+<item> 3 월 </item>
+        
+<item> 4 월 </item>
+        
+<item> 5 월 </item>
+        
+<item> 6 월 </item>
+        
+<item> 7 월 </item>
+        
+<item> 8 월 </item>
+        
+<item> 9 월 </item>
+        
+<item> 10 월 </item>
+        
+<item> 11 월 </item>
+        
+<item> 12 월 </item>
+</string-array>
 
-    <string-array name="months_array">
-         <item> 1 월 </item>
-         <item> 2 월 </item>
-         <item> 3 월 </item>
-         <item> 4 월 </item>
-         <item> 5 월 </item>
-         <item> 6 월 </item>
-         <item> 7 월 </item>
-         <item> 8 월 </item>
-         <item> 9 월 </item>
-         <item> 10 월 </item>
-         <item> 11 월 </item>
-         <item> 12 월 </item>
-    </string-array>
+<string-array name="time_scale_values">
+<item>분</item>
+<item>시간</item>
+<item>일</item>
+</string-array>
 
-    <string-array name="time_scale_values">
-        <item>분</item>
-        <item>시간</item>
-        <item>일</item>
-    </string-array>
+<string-array name="time_direction_values">
+<item>전</item>
+<item>후</item>
+</string-array>
 
-    <string-array name="time_direction_values">
-        <item>전</item>
-        <item>후</item>
-    </string-array>
-
-</resources>
+    </resources>

@@ -78,7 +78,8 @@ public class InterventionsActivity extends AppCompatActivity {
         intervReminderRadGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                resultNotifMinutes = Integer.parseInt(String.valueOf(intervReminderRadGroup.findViewById(checkedId).getTag()));
+                if (intervReminderRadGroup.findViewById(checkedId) != findViewById(R.id.txt_custom_interv_notif))
+                    resultNotifMinutes = Integer.parseInt(String.valueOf(intervReminderRadGroup.findViewById(checkedId).getTag()));
             }
         });
 

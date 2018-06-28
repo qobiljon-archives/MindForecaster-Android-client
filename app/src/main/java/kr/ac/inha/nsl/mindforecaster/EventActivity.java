@@ -166,7 +166,6 @@ public class EventActivity extends AppCompatActivity {
         saveButton = findViewById(R.id.btn_create);
         cancelButton = findViewById(R.id.btn_cancel);
         deleteButton = findViewById(R.id.btn_delete);
-        TextView customNotifTxt = findViewById(R.id.txt_custom_notif);
         customNotifRadioButton = findViewById(R.id.radio_btn_custom);
         ViewGroup postEventLayout = findViewById(R.id.postEventLayout);
         repeatValueText = findViewById(R.id.info_txt_repeat);
@@ -194,7 +193,6 @@ public class EventActivity extends AppCompatActivity {
             startTimeText.setEnabled(false);
             endDateText.setEnabled(false);
             endTimeText.setEnabled(false);
-            customNotifTxt.setEnabled(false);
             stressLvl.setEnabled(false);
             stressCause.setEnabled(false);
             stressTypeGroup.setEnabled(false);

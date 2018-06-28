@@ -77,11 +77,10 @@
             android:textSize="14sp"
             android:visibility="gone" />
 
-        <TextView
+        <RadioButton
             android:id="@+id/txt_custom_notif"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
             android:layout_marginTop="10dp"
             android:onClick="clickCustomNotification"
             android:text="@string/custom"

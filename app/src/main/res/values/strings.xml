@@ -14,6 +14,8 @@
     <string name="url_feedback_subm">http://%1$s/feedb_subm</string>
     <string name="url_eval_subm">http://%1$s/eval_subm</string>
     <string name="url_eval_fetch">http://%1$s/eval_fetch</string>
+    <string name="url_survey_fetch">http://%1$s/survey_fetch</string>
+    <string name="url_survey_sub">http://%1$s/survey_sub</string>
 
     <string name="app_name">MindForecaster</string>
     <string name="month">Month</string>
@@ -172,6 +174,40 @@
     <string name="tomorrow">tomorrow</string>
     <string name="result">Result</string>
     <string name="set_up_reminders">Set up reminders</string>
+    <string name="survey_main_txt">Please, complete each survey</string>
+    <string name="survey">Survey</string>
+    <string name="survey1_tab_txt">Perceived Stress Scale (PSS)</string>
+    <string name="survey2_tab_txt">Self-control and Self-management (SCSM) </string>
+    <string name="survey3_tab_txt">Basic Need Satisfaction in General</string>
+    <string name="survey4_tab_txt">Coping Self-Efficacy Scale </string>
+
+    <string name="survey1_title">아래 문항은 지난 한 달 동안 당신의 감정과 생각에 대한 질문입니다 . 각 질문에 대해 얼마나 자주 그러했 는지 비슷하다고 생각되는 것을 하나 골라 번호에 체크해 주십시오.</string>
+    <string name="survey2_title">다음의 각 문장을 읽고 얼마나 그 문항이 당신에게 적용되는지에 따라 가리키는 숫자  0, 1, 2, 3, 4, 5, 에 체크하세요. 정답이나 오답은 없습니다. 답을 하는데 있어서 너무 많은 시간을 들이지 마세요.</string>
+    <string name="survey3_title">다음 항목들을 신중하게 읽으면서 그것이 당신의 삶과 어떤 관련이 있는지 생각한 다음 당신에게 해당되는 따라 숫자를 체크하십시오.</string>
+    <string name="survey4_title">일이 잘 되지 않거나 문제가 있을때,  당신은 다음의 항목들에 대해 얼마나 자신 또는 확신이 있으십니까?</string>
+
+
+    <string name="survey1_scale0">Strongly disagree</string>
+    <string name="survey1_scale1">Disagree</string>
+    <string name="survey1_scale2">Neutral</string>
+    <string name="survey1_scale3">Agree</string>
+    <string name="survey1_scale4">Strongly agree</string>
+
+    <string name="survey2_scale0">매우 아니다 </string>
+    <string name="survey2_scale1">거의 아니다</string>
+    <string name="survey2_scale2">약간 아니다</string>
+    <string name="survey2_scale3">약간 그렇다</string>
+    <string name="survey2_scale4">거의 그렇다</string>
+    <string name="survey2_scale5">매우 그렇다</string>
+
+
+    <string name="survey3_scale0">매우 아니다 </string>
+    <string name="survey3_scale1">보통이다</string>
+    <string name="survey3_scale2">매우 그렇다</string>
+
+    <string name="survey4_scale0">전혀 할 수 없다</string>
+    <string name="survey4_scale1">보통이다</string>
+    <string name="survey4_scale2">확실히 할 수 있다</string>
 
 
     <string-array name="months_array">

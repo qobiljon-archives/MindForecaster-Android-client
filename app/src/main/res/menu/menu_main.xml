@@ -17,6 +17,13 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/action_survey"
+        android:icon="@drawable/icon_survey"
+        android:onClick="surveyClick"
+        android:title="@string/survey"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_logout"
         android:icon="@drawable/img_logout"
         android:onClick="logoutClick"

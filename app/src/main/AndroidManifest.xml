@@ -5,7 +5,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.wearable.permission.RECEIVE_COMPLICATION_DATA" />
 
@@ -42,10 +41,15 @@
             android:name=".EvaluationActivity"
             android:theme="@style/InnerActivityTheme" />
 
+        <activity android:name=".SurveyActivity"
+            android:theme="@style/InnerActivityTheme"/>
+
         <receiver android:name=".AlaramReceiverEveryDay" />
         <receiver android:name=".AlarmReceiverEverySunday" />
         <receiver android:name=".AlarmReceiverEvent" />
         <receiver android:name=".AlarmReceiverIntervention" />
+
+
     </application>
 
 </manifest>

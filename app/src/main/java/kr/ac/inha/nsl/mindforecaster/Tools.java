@@ -259,6 +259,17 @@ public class Tools {
         cacheInterventions(context, sysInterventions, "system");
     }
 
+    static void cacheSurveys(Context context, String[] survey, String type) {
+        if (survey.length == 0)
+            return;
+
+        JSONArray array = new JSONArray();
+        for (String surveyTexts : survey)
+            array.put(surveyTexts);
+
+        Tools.writeToFile(context, String.format(Locale.US, "%s_survey.json", type), array.toString());
+    }
+
     static void cachePeerInterventions(Context context, String[] peerInterventions) {
         cacheInterventions(context, peerInterventions, "peer");
     }
@@ -267,6 +278,26 @@ public class Tools {
         JSONArray array;
         try {
             array = new JSONArray(readFromFile(context, String.format(Locale.US, "%s_interventions.json", type)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        try {
+            String[] res = new String[array.length()];
+            for (int n = 0; n < array.length(); n++)
+                res[n] = array.getString(n);
+            return res;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static String[] readOfflineSurvey(Context context, String type) {
+        JSONArray array;
+        try {
+            array = new JSONArray(readFromFile(context, String.format(Locale.US, "%s_survey.json", type)));
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
@@ -583,11 +614,11 @@ class Event {
         this.repeatId = repeatId;
     }
 
-    void setRepeatTill(long repeatTill){
+    void setRepeatTill(long repeatTill) {
         this.repeatTill = repeatTill;
     }
 
-    long getRepeatTill(){
+    long getRepeatTill() {
         return repeatTill;
     }
 
@@ -675,7 +706,7 @@ class Event {
                 else {
                     String reminderStr = Tools.notifMinsToString(context, event.getEventReminder());
                     reminderStr = reminderStr.substring(0, reminderStr.lastIndexOf(' '));
-                    if(reminderStr.equals("1 " + context.getString(R.string.days)))
+                    if (reminderStr.equals("1 " + context.getString(R.string.days)))
                         reminderStr = context.getString(R.string.tomorrow);
                     else
                         reminderStr = String.format(context.getString(R.string.notification_event_time), context.getString(R.string.after), reminderStr);

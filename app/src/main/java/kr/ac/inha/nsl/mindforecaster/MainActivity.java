@@ -373,4 +373,11 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, 0);
         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
     }
+
+    static final int SURVEY_ACTIVITY =  0;
+    public void surveyClick(MenuItem item) {
+        Intent intent = new Intent(this, SurveyActivity.class);
+        startActivityForResult(intent, SURVEY_ACTIVITY);
+        overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
+    }
 }
