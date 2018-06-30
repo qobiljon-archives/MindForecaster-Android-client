@@ -3,7 +3,6 @@ package kr.ac.inha.nsl.mindforecaster;
 import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +15,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Arrays;
-
-import javax.security.auth.login.LoginException;
 
 public class SurveyActivity extends AppCompatActivity {
 
@@ -94,48 +90,39 @@ public class SurveyActivity extends AppCompatActivity {
 
                                         LayoutInflater inflater = getLayoutInflater();
                                         try {
-                                            String[] survey1 = new String[arrSurvey1.length()];
-                                            String[] survey2 = new String[arrSurvey2.length()];
-                                            String[] survey3 = new String[arrSurvey3.length()];
-                                            String[] survey4 = new String[arrSurvey4.length()];
-
                                             for (int n = 0; n < arrSurvey1.length(); n++) {
                                                 inflater.inflate(R.layout.survey1_element, surveyChildHolder1);
                                                 TextView interv_text = surveyChildHolder1.getChildAt(n).findViewById(R.id.txt_survey_element);
                                                 SeekBar scale = surveyChildHolder1.getChildAt(n).findViewById(R.id.scale);
                                                 JSONObject object = arrSurvey1.getJSONObject(n);
-                                                interv_text.setText(survey1[n] = object.getString("key"));
+                                                interv_text.setText(object.getString("key"));
                                                 scale.setProgress(object.getInt("value"));
                                             }
-                                            Tools.cacheSurveys(SurveyActivity.this, survey1, "survey1");
                                             for (int n = 0; n < arrSurvey2.length(); n++) {
                                                 inflater.inflate(R.layout.survey2_element, surveyChildHolder2);
                                                 TextView interv_text = surveyChildHolder2.getChildAt(n).findViewById(R.id.txt_survey_element);
                                                 SeekBar scale = surveyChildHolder2.getChildAt(n).findViewById(R.id.scale);
                                                 JSONObject object = arrSurvey2.getJSONObject(n);
-                                                interv_text.setText(survey2[n] = object.getString("key"));
+                                                interv_text.setText(object.getString("key"));
                                                 scale.setProgress(object.getInt("value"));
                                             }
-                                            Tools.cacheSurveys(SurveyActivity.this, survey2, "survey2");
                                             for (int n = 0; n < arrSurvey3.length(); n++) {
                                                 inflater.inflate(R.layout.survey3_element, surveyChildHolder3);
                                                 TextView interv_text = surveyChildHolder3.getChildAt(n).findViewById(R.id.txt_survey_element);
                                                 SeekBar scale = surveyChildHolder3.getChildAt(n).findViewById(R.id.scale);
                                                 JSONObject object = arrSurvey3.getJSONObject(n);
-                                                interv_text.setText(survey3[n] = object.getString("key"));
+                                                interv_text.setText(object.getString("key"));
                                                 scale.setProgress(object.getInt("value"));
                                             }
-                                            Tools.cacheSurveys(SurveyActivity.this, survey3, "survey3");
                                             for (int n = 0; n < arrSurvey4.length(); n++) {
                                                 inflater.inflate(R.layout.survey4_element, surveyChildHolder4);
                                                 TextView interv_text = surveyChildHolder4.getChildAt(n).findViewById(R.id.txt_survey_element);
                                                 SeekBar scale = surveyChildHolder4.getChildAt(n).findViewById(R.id.scale);
                                                 JSONObject object = arrSurvey4.getJSONObject(n);
-                                                interv_text.setText(survey4[n] = object.getString("key"));
+                                                interv_text.setText(object.getString("key"));
                                                 scale.setProgress(object.getInt("value"));
                                             }
-                                            Tools.cacheSurveys(SurveyActivity.this, survey4, "survey4");
-
+                                            Tools.cacheSurveys(SurveyActivity.this, arrSurvey1, arrSurvey2, arrSurvey3, arrSurvey4);
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -157,7 +144,49 @@ public class SurveyActivity extends AppCompatActivity {
                 }
             });
         else {
-            Toast.makeText(this, "Please connect to a network first!", Toast.LENGTH_SHORT).show();
+            try {
+                JSONArray[] recvSurv = Tools.readOfflineSurvey(this);
+                if (recvSurv == null) {
+                    Toast.makeText(this, "Please connect to a network first!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                LayoutInflater inflater = getLayoutInflater();
+                for (int n = 0; n < recvSurv[0].length(); n++) {
+                    inflater.inflate(R.layout.survey1_element, surveyChildHolder1);
+                    TextView interv_text = surveyChildHolder1.getChildAt(n).findViewById(R.id.txt_survey_element);
+                    SeekBar scale = surveyChildHolder1.getChildAt(n).findViewById(R.id.scale);
+                    JSONObject object = recvSurv[0].getJSONObject(n);
+                    interv_text.setText(object.getString("key"));
+                    scale.setProgress(object.getInt("value"));
+                }
+                for (int n = 0; n < recvSurv[1].length(); n++) {
+                    inflater.inflate(R.layout.survey2_element, surveyChildHolder2);
+                    TextView interv_text = surveyChildHolder2.getChildAt(n).findViewById(R.id.txt_survey_element);
+                    SeekBar scale = surveyChildHolder2.getChildAt(n).findViewById(R.id.scale);
+                    JSONObject object = recvSurv[1].getJSONObject(n);
+                    interv_text.setText(object.getString("key"));
+                    scale.setProgress(object.getInt("value"));
+                }
+                for (int n = 0; n < recvSurv[2].length(); n++) {
+                    inflater.inflate(R.layout.survey3_element, surveyChildHolder3);
+                    TextView interv_text = surveyChildHolder3.getChildAt(n).findViewById(R.id.txt_survey_element);
+                    SeekBar scale = surveyChildHolder3.getChildAt(n).findViewById(R.id.scale);
+                    JSONObject object = recvSurv[2].getJSONObject(n);
+                    interv_text.setText(object.getString("key"));
+                    scale.setProgress(object.getInt("value"));
+                }
+                for (int n = 0; n < recvSurv[3].length(); n++) {
+                    inflater.inflate(R.layout.survey4_element, surveyChildHolder4);
+                    TextView interv_text = surveyChildHolder4.getChildAt(n).findViewById(R.id.txt_survey_element);
+                    SeekBar scale = surveyChildHolder4.getChildAt(n).findViewById(R.id.scale);
+                    JSONObject object = recvSurv[3].getJSONObject(n);
+                    interv_text.setText(object.getString("key"));
+                    scale.setProgress(object.getInt("value"));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -200,7 +229,6 @@ public class SurveyActivity extends AppCompatActivity {
             ((TextView) view).setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
         }
     }
-
 
     public void saveClick(View view) {
         if (Tools.isNetworkAvailable(this))
@@ -296,7 +324,7 @@ public class SurveyActivity extends AppCompatActivity {
                 }
             });
         else
-            Toast.makeText(this, "No network! Please connect to network first!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please connect to a network first!", Toast.LENGTH_SHORT).show();
     }
 
     public void cancelClick(View view) {

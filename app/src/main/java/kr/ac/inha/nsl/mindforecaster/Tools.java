@@ -259,15 +259,13 @@ public class Tools {
         cacheInterventions(context, sysInterventions, "system");
     }
 
-    static void cacheSurveys(Context context, String[] survey, String type) {
-        if (survey.length == 0)
-            return;
-
-        JSONArray array = new JSONArray();
-        for (String surveyTexts : survey)
-            array.put(surveyTexts);
-
-        Tools.writeToFile(context, String.format(Locale.US, "%s_survey.json", type), array.toString());
+    static void cacheSurveys(Context context, JSONArray survey1, JSONArray survey2, JSONArray survey3, JSONArray survey4) throws JSONException {
+        JSONObject obj = new JSONObject();
+        obj.put("survey1", survey1);
+        obj.put("survey2", survey2);
+        obj.put("survey3", survey3);
+        obj.put("survey4", survey4);
+        Tools.writeToFile(context, "survey.json", obj.toString());
     }
 
     static void cachePeerInterventions(Context context, String[] peerInterventions) {
@@ -294,20 +292,15 @@ public class Tools {
         }
     }
 
-    public static String[] readOfflineSurvey(Context context, String type) {
-        JSONArray array;
+    static JSONArray[] readOfflineSurvey(Context context) {
         try {
-            array = new JSONArray(readFromFile(context, String.format(Locale.US, "%s_survey.json", type)));
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        try {
-            String[] res = new String[array.length()];
-            for (int n = 0; n < array.length(); n++)
-                res[n] = array.getString(n);
-            return res;
+            JSONObject obj = new JSONObject(readFromFile(context, "survey.json"));
+            return new JSONArray[]{
+                    obj.getJSONArray("survey1"),
+                    obj.getJSONArray("survey2"),
+                    obj.getJSONArray("survey3"),
+                    obj.getJSONArray("survey4")
+            };
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
@@ -318,7 +311,7 @@ public class Tools {
         return readOfflineInterventions(context, "system");
     }
 
-    public static String[] readOfflinePeerInterventions(Context context) {
+    static String[] readOfflinePeerInterventions(Context context) {
         return readOfflineInterventions(context, "peer");
     }
 

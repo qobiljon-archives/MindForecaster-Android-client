@@ -1118,24 +1118,22 @@ public class EventActivity extends AppCompatActivity {
                         startTime.get(Calendar.MINUTE))
                 );
 
-                if (!event.getStartTime().before(event.getEndTime())) {
-                    Calendar endCal = event.getStartTime();
-                    endCal.add(Calendar.HOUR_OF_DAY, 1);
-                    event.setEndTime(endCal);
+                Calendar endCal = event.getStartTime();
+                endCal.add(Calendar.HOUR_OF_DAY, 1);
+                event.setEndTime(endCal);
 
-                    endDateText.setText(String.format(Locale.US,
-                            "%d, %s %d, %s",
-                            endCal.get(Calendar.YEAR),
-                            endCal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
-                            endCal.get(Calendar.DAY_OF_MONTH),
-                            endCal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
-                    ));
-                    endTimeText.setText(String.format(Locale.US,
-                            "%02d:%02d",
-                            endCal.get(Calendar.HOUR_OF_DAY),
-                            endCal.get(Calendar.MINUTE))
-                    );
-                }
+                endDateText.setText(String.format(Locale.US,
+                        "%d, %s %d, %s",
+                        endCal.get(Calendar.YEAR),
+                        endCal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()),
+                        endCal.get(Calendar.DAY_OF_MONTH),
+                        endCal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
+                ));
+                endTimeText.setText(String.format(Locale.US,
+                        "%02d:%02d",
+                        endCal.get(Calendar.HOUR_OF_DAY),
+                        endCal.get(Calendar.MINUTE))
+                );
             }
         };
         Calendar cal = event.getStartTime();
@@ -1252,7 +1250,7 @@ public class EventActivity extends AppCompatActivity {
         expectedStressLevelSeek.getThumb().setColorFilter(expectedStressColor, PorterDuff.Mode.SRC_IN);
 
         expectedStressReason.setText(event.getStressCause());
-        ((ViewGroup)expectedStressReason.getParent()).setVisibility(expectedStressReason.length() == 0 ? View.GONE : View.VISIBLE);
+        ((ViewGroup) expectedStressReason.getParent()).setVisibility(expectedStressReason.length() == 0 ? View.GONE : View.VISIBLE);
 
         if (!event.getIntervention().equals("")) {
             intervView.setVisibility(View.VISIBLE);
@@ -1306,7 +1304,7 @@ public class EventActivity extends AppCompatActivity {
                                         intervEffectiveness.setProgress(interventionEffectiveness);
 
                                         realStressReason.setText(realStressCause);
-                                        ((ViewGroup)realStressReason.getParent()).setVisibility(realStressReason.length() == 0 ? View.GONE : View.VISIBLE);
+                                        ((ViewGroup) realStressReason.getParent()).setVisibility(realStressReason.length() == 0 ? View.GONE : View.VISIBLE);
                                         journalTxt.setText(journalString);
                                         journalTxt.setVisibility(journalTxt.length() == 0 ? View.GONE : View.VISIBLE);
 

@@ -208,6 +208,7 @@
     <string name="survey4_scale0">전혀 할 수 없다</string>
     <string name="survey4_scale1">보통이다</string>
     <string name="survey4_scale2">확실히 할 수 있다</string>
+    <string name="intervention_effectiveness_txt">Intervention effectiveness</string>
 
 
     <string-array name="months_array">
