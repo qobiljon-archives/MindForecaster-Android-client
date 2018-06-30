@@ -14,8 +14,8 @@
     <string name="url_feedback_subm">http://%1$s/feedb_subm</string>
     <string name="url_eval_subm">http://%1$s/eval_subm</string>
     <string name="url_eval_fetch">http://%1$s/eval_fetch</string>
-    <string name="url_survey_fetch">http://%1$s/survey_fetch</string>
-    <string name="url_survey_sub">http://%1$s/survey_sub</string>
+    <string name="url_survey_fetch">http://%1$s/surv_fetch</string>
+    <string name="url_survey_subm">http://%1$s/surv_subm</string>
 
     <string name="app_name">MindForecaster</string>
     <string name="month">Month</string>

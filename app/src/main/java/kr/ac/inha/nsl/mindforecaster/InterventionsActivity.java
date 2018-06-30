@@ -218,14 +218,26 @@ public class InterventionsActivity extends AppCompatActivity {
                                                     String[] interv = new String[arr.length()];
                                                     for (int n = 0; n < 20; n++) {
                                                         inflater.inflate(R.layout.intervention_element, intervList);
-                                                        TextView interv_text = intervList.getChildAt(n).findViewById(R.id.intervention_text);
+                                                        final TextView interv_text = intervList.getChildAt(n).findViewById(R.id.intervention_text);
                                                         interv_text.setText(interv[n] = arr.getString(n));
+                                                        interv_text.setOnClickListener(new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View view) {
+                                                                onIntervClick(interv_text, true);
+                                                            }
+                                                        });
                                                     }
                                                     inflater.inflate(R.layout.more_button_element, intervList);
                                                     for (int n = 20, i = 0; n < arr.length(); n++, i++) {
                                                         inflater.inflate(R.layout.intervention_element, intervListMore);
-                                                        TextView interv_text = intervListMore.getChildAt(i).findViewById(R.id.intervention_text);
+                                                        final TextView interv_text = intervListMore.getChildAt(i).findViewById(R.id.intervention_text);
                                                         interv_text.setText(interv[n] = arr.getString(n));
+                                                        interv_text.setOnClickListener(new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View view) {
+                                                                onIntervClick(interv_text, true);
+                                                            }
+                                                        });
                                                     }
                                                     Tools.cacheSystemInterventions(InterventionsActivity.this, interv);
                                                     intervListMore.setVisibility(View.GONE);
@@ -257,14 +269,26 @@ public class InterventionsActivity extends AppCompatActivity {
                     LayoutInflater inflater = getLayoutInflater();
                     for (int n = 0; n < 20; n++) {
                         inflater.inflate(R.layout.intervention_element, intervList);
-                        TextView interv_text = intervList.getChildAt(n).findViewById(R.id.intervention_text);
+                        final TextView interv_text = intervList.getChildAt(n).findViewById(R.id.intervention_text);
                         interv_text.setText(interventions[n]);
+                        interv_text.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                onIntervClick(interv_text, true);
+                            }
+                        });
                     }
                     inflater.inflate(R.layout.more_button_element, intervList);
                     for (int n = 20, i = 0; n < interventions.length; n++, i++) {
                         inflater.inflate(R.layout.intervention_element, intervListMore);
-                        TextView interv_text = intervListMore.getChildAt(i).findViewById(R.id.intervention_text);
+                        final TextView interv_text = intervListMore.getChildAt(i).findViewById(R.id.intervention_text);
                         interv_text.setText(interventions[n]);
+                        interv_text.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                onIntervClick(interv_text, true);
+                            }
+                        });
                     }
                     intervListMore.setVisibility(View.GONE);
                 }
@@ -312,8 +336,14 @@ public class InterventionsActivity extends AppCompatActivity {
                                                     String[] interv = new String[arr.length()];
                                                     for (int n = 0; n < arr.length(); n++) {
                                                         inflater.inflate(R.layout.intervention_element, intervList);
-                                                        TextView interv_text = intervList.getChildAt(n).findViewById(R.id.intervention_text);
+                                                        final TextView interv_text = intervList.getChildAt(n).findViewById(R.id.intervention_text);
                                                         interv_text.setText(interv[n] = arr.getString(n));
+                                                        interv_text.setOnClickListener(new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View view) {
+                                                                onIntervClick(interv_text, false);
+                                                            }
+                                                        });
                                                     }
                                                     Tools.cachePeerInterventions(InterventionsActivity.this, interv);
                                                 } catch (JSONException e) {
@@ -344,8 +374,14 @@ public class InterventionsActivity extends AppCompatActivity {
                     LayoutInflater inflater = getLayoutInflater();
                     for (int n = 0; n < interventions.length; n++) {
                         inflater.inflate(R.layout.intervention_element, intervList);
-                        TextView interv_text = intervList.getChildAt(n).findViewById(R.id.intervention_text);
+                        final TextView interv_text = intervList.getChildAt(n).findViewById(R.id.intervention_text);
                         interv_text.setText(interventions[n]);
+                        interv_text.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                onIntervClick(interv_text, false);
+                            }
+                        });
                     }
                 }
                 saveIntervention = false;
@@ -356,14 +392,20 @@ public class InterventionsActivity extends AppCompatActivity {
         closeInput(view);
     }
 
-    public void onIntervClick(View view) {
-        resultIntervText = ((TextView) view.findViewById(R.id.intervention_text)).getText().toString();
-        intervTitleText.setText(resultIntervText);
+    public void onIntervClick(View view, boolean isSystem) {
+        if (isSystem) {
+            resultIntervText = ((TextView) view.findViewById(R.id.intervention_text)).getText().toString();
+            intervTitleText.setText(resultIntervText);
 
-        intervChoice.setVisibility(View.GONE);
-        intervTitleText.setVisibility(View.VISIBLE);
-        intervReminderRoot.setVisibility(View.VISIBLE);
-        saveIntervention = false;
+            intervChoice.setVisibility(View.GONE);
+            intervTitleText.setVisibility(View.VISIBLE);
+            intervReminderRoot.setVisibility(View.VISIBLE);
+            saveIntervention = false;
+        } else {
+            //TODO: do smth here when interv from peer tab is clicled
+        }
+
+
     }
 
     public void cancelClick(View view) {

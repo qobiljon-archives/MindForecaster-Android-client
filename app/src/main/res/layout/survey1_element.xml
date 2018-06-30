@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:text="@string/dummy"
-        android:textColor="@color/black" />
+        android:textColor="@color/black"/>
 
     <SeekBar
         android:id="@+id/scale"
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:theme="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_marginTop="10dp"
-        android:max="4" />
+        android:max="4"/>
 
     <LinearLayout
         android:layout_width="match_parent"
