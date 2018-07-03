@@ -301,6 +301,40 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/stress_decr_details_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/stress_decr_reason_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:maxLength="128"
+                        android:text="@string/stress_decr_title"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/stress_decr_reason_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_solid_wrap"
+                        android:gravity="top"
+                        android:hint="@string/stress_decr_reason"
+                        android:inputType="textMultiLine"
+                        android:lines="3"
+                        android:maxLength="128"
+                        android:maxLines="5"
+                        android:padding="10dp" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout

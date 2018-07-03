@@ -215,7 +215,6 @@ public class InterventionsActivity extends AppCompatActivity {
                                                 JSONArray arr = (JSONArray) args[0];
                                                 while (intervList.getChildCount() > 1)
                                                     intervList.removeViewAt(1);
-
                                                 LayoutInflater inflater = getLayoutInflater();
                                                 try {
                                                     String[] interv = new String[arr.length()];
@@ -223,14 +222,12 @@ public class InterventionsActivity extends AppCompatActivity {
                                                         inflater.inflate(R.layout.intervention_element, intervList);
                                                         final TextView interv_text = intervList.getChildAt(n).findViewById(R.id.intervention_text);
                                                         interv_text.setText(interv[n] = arr.getString(n));
-
                                                     }
                                                     inflater.inflate(R.layout.more_button_element, intervList);
                                                     for (int n = 20, i = 0; n < arr.length(); n++, i++) {
                                                         inflater.inflate(R.layout.intervention_element, intervListMore);
                                                         final TextView interv_text = intervListMore.getChildAt(i).findViewById(R.id.intervention_text);
                                                         interv_text.setText(interv[n] = arr.getString(n));
-
                                                     }
                                                     Tools.cacheSystemInterventions(InterventionsActivity.this, interv);
                                                     intervListMore.setVisibility(View.GONE);
@@ -502,8 +499,9 @@ public class InterventionsActivity extends AppCompatActivity {
     }
 
     public void onPeerIntervMoreClick(View view) {
-
-        ViewGroup moreView = findViewById(R.id.more_view);
+        ViewGroup intervElement = findViewById(R.id.intervention_element_view);
+        getLayoutInflater().inflate(R.layout.peer_interv_details_element, intervElement);
+        ViewGroup moreView = findViewById(R.id.peer_interv_more);
         if (moreView.getVisibility() == View.VISIBLE) {
             moreView.setVisibility(View.GONE);
         } else {

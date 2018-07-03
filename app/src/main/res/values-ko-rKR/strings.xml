@@ -136,6 +136,8 @@
     <string name="stress_incr_reason">스트레스 레벨이 예상한 것 보다 오히려 높아진 이유는 무엇입니까?</string>
     <string name="stress_incr_title">스트레스 레벨 증가 원인</string>
     <string name="stress_incr_title1">스트레스 레벨 증가 원인</string>
+    <string name="stress_decr_title">"Why the stress level is lower than expected?"</string>
+    <string name="stress_decr_reason">Please, describe here what you think was the reason that made the real stress be lower than expected one.</string>
     <string name="ok">OK</string>
     <string name="custom_reminder">사용자 알림 설정</string>
     <string name="custom_recurrence">Custom recurrence</string>
@@ -190,42 +192,41 @@
     <string name="survey4_scale2">확실히 할 수 있다</string>
 
 
+    <string-array name="months_array">
+        <item> 1 월 </item>
+                
+        <item> 2 월 </item>
+                
+        <item> 3 월 </item>
+                
+        <item> 4 월 </item>
+                
+        <item> 5 월 </item>
+                
+        <item> 6 월 </item>
+                
+        <item> 7 월 </item>
+                
+        <item> 8 월 </item>
+                
+        <item> 9 월 </item>
+                
+        <item> 10 월 </item>
+                
+        <item> 11 월 </item>
+                
+        <item> 12 월 </item>
+    </string-array>
 
-<string-array name="months_array">
-<item> 1 월 </item>
-        
-<item> 2 월 </item>
-        
-<item> 3 월 </item>
-        
-<item> 4 월 </item>
-        
-<item> 5 월 </item>
-        
-<item> 6 월 </item>
-        
-<item> 7 월 </item>
-        
-<item> 8 월 </item>
-        
-<item> 9 월 </item>
-        
-<item> 10 월 </item>
-        
-<item> 11 월 </item>
-        
-<item> 12 월 </item>
-</string-array>
+    <string-array name="time_scale_values">
+        <item>분</item>
+        <item>시간</item>
+        <item>일</item>
+    </string-array>
 
-<string-array name="time_scale_values">
-<item>분</item>
-<item>시간</item>
-<item>일</item>
-</string-array>
+    <string-array name="time_direction_values">
+        <item>전</item>
+        <item>후</item>
+    </string-array>
 
-<string-array name="time_direction_values">
-<item>전</item>
-<item>후</item>
-</string-array>
-
-    </resources>
+</resources>

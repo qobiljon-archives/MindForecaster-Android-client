@@ -45,6 +45,7 @@ public class EvaluationActivity extends AppCompatActivity {
 
         ViewGroup interventionLayout = findViewById(R.id.intervention_layout);
         final ViewGroup stressIncrDetails = findViewById(R.id.stress_incr_details_view);
+        final ViewGroup stressDecrDetails = findViewById(R.id.stress_decr_details_view);
         TextView eventTitle = findViewById(R.id.event_title_text_view);
         eventTitle.setText(getString(R.string.current_event_title, EventActivity.event.getTitle()));
         TextView intervTitle = findViewById(R.id.intervention_title_text);
@@ -69,10 +70,17 @@ public class EvaluationActivity extends AppCompatActivity {
                 realStressLevel.getThumb().setColorFilter(Tools.stressLevelToColor(getApplicationContext(), progress), PorterDuff.Mode.SRC_IN);
 
                 // compare and get expectation and reality discrepancy details if needed
-                if (expectedStressLevel.getProgress() < realStressLevel.getProgress())
+                if (expectedStressLevel.getProgress() < realStressLevel.getProgress()){
                     stressIncrDetails.setVisibility(View.VISIBLE);
-                else {
+                    stressDecrDetails.setVisibility(View.GONE);
+                }
+                else if(expectedStressLevel.getProgress() > realStressLevel.getProgress()) {
                     stressIncrDetails.setVisibility(View.GONE);
+                    stressDecrDetails.setVisibility(View.VISIBLE);
+                }
+                else if(expectedStressLevel.getProgress() == realStressLevel.getProgress()){
+                    stressIncrDetails.setVisibility(View.GONE);
+                    stressDecrDetails.setVisibility(View.GONE);
                 }
             }
 

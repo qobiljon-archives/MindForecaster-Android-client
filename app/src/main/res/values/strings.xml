@@ -128,7 +128,9 @@
     <string name="expected_stress_level">Expected stress level</string>
     <string name="real_stress_level" translatable="false">Real (resulting) stress level</string>
     <string name="stress_incr_reason">Please, describe here what you think was the reason that made the real stress be higher than expected one.</string>
+    <string name="stress_decr_reason">Please, describe here what you think was the reason that made the real stress be lower than expected one.</string>
     <string name="stress_incr_title">Reason of difference between expected and real stress levels</string>
+    <string name="stress_decr_title">"Why the stress level is lower than expected?"</string>
     <string name="stress_incr_title1">Reason of expected stress levels</string>
     <string name="sunday_time">Sunday evaluation reminder</string>
     <string name="every_morning_time">Every-morning reminder</string>

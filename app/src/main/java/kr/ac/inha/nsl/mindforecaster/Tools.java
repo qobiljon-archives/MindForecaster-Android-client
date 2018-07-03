@@ -407,7 +407,7 @@ public class Tools {
         if (days > 0)
             sb.append(String.format(Locale.US, " %d %s", days, context.getString(R.string.days)));
         if (hrs > 0)
-            sb.append(String.format(Locale.US, " %d %s", hrs, context.getString(R.string.hours)));
+            sb.append(String.format(Locale.US, " %d %s", hrs, context.getResources().getStringArray(R.array.time_scale_values)[1]));
         if (mins > 0)
             sb.append(String.format(Locale.US, " %d %s", mins, context.getString(R.string.minutes)));
         sb.append(String.format(Locale.US, " %s", before ? context.getString(R.string.before) : context.getString(R.string.after)));
