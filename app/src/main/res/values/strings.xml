@@ -1,7 +1,7 @@
 <resources>
     <!-- REST API Server URLs -->
     <!--<string name="server_ip">165.246.43.162</string>&lt;!&ndash; MY PC IP: 165.246.43.162 &ndash;&gt;-->
-    <string name="server_ip">qobiljon.pythonanywhere.com:80</string><!-- SR PC IP: 165.246.43.97 -->
+    <string name="server_ip">kwangyoung.pythonanywhere.com:80</string><!-- SR PC IP: 165.246.43.97 -->
     <string name="url_user_register">http://%1$s/user_reg</string>
     <string name="url_user_login">http://%1$s/user_lgn</string>
     <string name="url_event_create">http://%1$s/event_crt</string>
@@ -179,9 +179,8 @@
     <string name="survey_main_txt">Please, complete each survey</string>
     <string name="survey">Survey</string>
     <string name="survey1_tab_txt">Perceived Stress Scale (PSS)</string>
-    <string name="survey2_tab_txt">Self-control and Self-management (SCSM) </string>
-    <string name="survey3_tab_txt">Basic Need Satisfaction in General</string>
-    <string name="survey4_tab_txt">Coping Self-Efficacy Scale </string>
+    <string name="survey2_tab_txt">Ryffs Psychological Well-Being Scale (PWB)</string>
+    <string name="survey3_tab_txt">Resilience Qutient Test (회복력 지수 테스트)</string>
 
     <string name="survey1_title">아래 문항은 지난 한 달 동안 당신의 감정과 생각에 대한 질문입니다 . 각 질문에 대해 얼마나 자주 그러했 는지 비슷하다고 생각되는 것을 하나 골라 번호에 체크해 주십시오.</string>
     <string name="survey2_title">다음의 각 문장을 읽고 얼마나 그 문항이 당신에게 적용되는지에 따라 가리키는 숫자  0, 1, 2, 3, 4, 5, 에 체크하세요. 정답이나 오답은 없습니다. 답을 하는데 있어서 너무 많은 시간을 들이지 마세요.</string>
@@ -211,6 +210,13 @@
     <string name="survey4_scale1">보통이다</string>
     <string name="survey4_scale2">확실히 할 수 있다</string>
     <string name="intervention_effectiveness_txt">Intervention effectiveness</string>
+    <string name="_0">0</string>
+    <string name="_1">1</string>
+    <string name="_2">2</string>
+    <string name="_3">3</string>
+    <string name="_4">4</string>
+    <string name="_6">6</string>
+    <string name="_5">5</string>
 
 
     <string-array name="months_array">

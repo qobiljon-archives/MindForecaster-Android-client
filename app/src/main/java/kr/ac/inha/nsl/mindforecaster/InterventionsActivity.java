@@ -41,6 +41,7 @@ public class InterventionsActivity extends AppCompatActivity {
     static String resultIntervText = null;
     static int resultNotifMinutes = 0;
 
+    private String createMethod;
     private EditText intervTitleText;
     private View intervChoice;
     private ViewGroup intervList, intervListMore, intervReminderRoot;
@@ -170,6 +171,7 @@ public class InterventionsActivity extends AppCompatActivity {
         resultIntervText = null;
         switch (view.getId()) {
             case R.id.button_self_intervention:
+                createMethod = (String) ((Button)view).getText();
                 selfIntervention = true;
                 tabButtons[0].setBackgroundResource(R.drawable.bg_interv_method_checked_view);
                 intervTitleText.setText("");
@@ -179,6 +181,7 @@ public class InterventionsActivity extends AppCompatActivity {
                 intervReminderRoot.setVisibility(View.VISIBLE);
                 break;
             case R.id.button_systems_intervention:
+                createMethod = (String) ((Button)view).getText();
                 selfIntervention = false;
                 requestMessageTxt.setText(getString(R.string.interventions_list_system));
                 tabButtons[1].setBackgroundResource(R.drawable.bg_interv_method_checked_view);
@@ -274,6 +277,7 @@ public class InterventionsActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.button_peer_interventions:
+                createMethod = (String) ((Button)view).getText();
                 selfIntervention = false;
                 requestMessageTxt.setText(getString(R.string.interventions_list_peer));
                 intervListMore.setVisibility(View.GONE);
@@ -402,6 +406,7 @@ public class InterventionsActivity extends AppCompatActivity {
                             body.put("username", username);
                             body.put("password", password);
                             body.put("interventionName", resultIntervText);
+                            body.put("intervCreateMethod", createMethod);
 
                             JSONObject res = new JSONObject(Tools.post(url, body));
                             switch (res.getInt("result")) {

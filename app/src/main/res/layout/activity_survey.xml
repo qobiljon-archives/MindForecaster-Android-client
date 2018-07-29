@@ -190,45 +190,6 @@
                 android:layout_height="0.5dp"
                 android:background="@color/bright_grey" />
 
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="expandSurveyHolder4"
-                android:paddingBottom="20dp"
-                android:paddingTop="20dp"
-                android:drawableEnd="@drawable/img_expand"
-                android:text="@string/survey4_tab_txt" />
-
-            <LinearLayout
-                android:id="@+id/survey4_main_holder"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    android:text="@string/survey4_title"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:id="@+id/survey4_child_holder"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@drawable/bg_datetime_view"
-                    android:padding="10dp"/>
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/bright_grey" />
-
         </LinearLayout>
     </ScrollView>
 

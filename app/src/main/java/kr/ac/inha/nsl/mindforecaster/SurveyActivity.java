@@ -29,19 +29,16 @@ public class SurveyActivity extends AppCompatActivity {
     private ViewGroup surveyMainHolder1, surveyChildHolder1;
     private ViewGroup surveyMainHolder2, surveyChildHolder2;
     private ViewGroup surveyMainHolder3, surveyChildHolder3;
-    private ViewGroup surveyMainHolder4, surveyChildHolder4;
     //endregion
 
     private void init() {
         surveyMainHolder1 = findViewById(R.id.survey1_main_holder);
         surveyMainHolder2 = findViewById(R.id.survey2_main_holder);
         surveyMainHolder3 = findViewById(R.id.survey3_main_holder);
-        surveyMainHolder4 = findViewById(R.id.survey4_main_holder);
 
         surveyChildHolder1 = findViewById(R.id.survey1_child_holder);
         surveyChildHolder2 = findViewById(R.id.survey2_child_holder);
         surveyChildHolder3 = findViewById(R.id.survey3_child_holder);
-        surveyChildHolder4 = findViewById(R.id.survey4_child_holder);
 
         loadTheSurvey();
     }
@@ -50,7 +47,6 @@ public class SurveyActivity extends AppCompatActivity {
         surveyChildHolder1.removeAllViews();
         surveyChildHolder2.removeAllViews();
         surveyChildHolder3.removeAllViews();
-        surveyChildHolder4.removeAllViews();
 
         if (Tools.isNetworkAvailable(this))
             Tools.execute(new MyRunnable(
@@ -78,51 +74,36 @@ public class SurveyActivity extends AppCompatActivity {
                                         activity,
                                         survJson.getJSONArray("survey1"),
                                         survJson.getJSONArray("survey2"),
-                                        survJson.getJSONArray("survey3"),
-                                        survJson.getJSONArray("survey4")
+                                        survJson.getJSONArray("survey3")
                                 ) {
                                     @Override
                                     public void run() {
                                         JSONArray arrSurvey1 = (JSONArray) args[0];
                                         JSONArray arrSurvey2 = (JSONArray) args[1];
                                         JSONArray arrSurvey3 = (JSONArray) args[2];
-                                        JSONArray arrSurvey4 = (JSONArray) args[3];
 
                                         LayoutInflater inflater = getLayoutInflater();
                                         try {
                                             for (int n = 0; n < arrSurvey1.length(); n++) {
                                                 inflater.inflate(R.layout.survey1_element, surveyChildHolder1);
                                                 TextView interv_text = surveyChildHolder1.getChildAt(n).findViewById(R.id.txt_survey_element);
-                                                SeekBar scale = surveyChildHolder1.getChildAt(n).findViewById(R.id.scale);
                                                 JSONObject object = arrSurvey1.getJSONObject(n);
                                                 interv_text.setText(object.getString("key"));
-                                                scale.setProgress(object.getInt("value"));
                                             }
                                             for (int n = 0; n < arrSurvey2.length(); n++) {
                                                 inflater.inflate(R.layout.survey2_element, surveyChildHolder2);
                                                 TextView interv_text = surveyChildHolder2.getChildAt(n).findViewById(R.id.txt_survey_element);
-                                                SeekBar scale = surveyChildHolder2.getChildAt(n).findViewById(R.id.scale);
                                                 JSONObject object = arrSurvey2.getJSONObject(n);
                                                 interv_text.setText(object.getString("key"));
-                                                scale.setProgress(object.getInt("value"));
                                             }
                                             for (int n = 0; n < arrSurvey3.length(); n++) {
                                                 inflater.inflate(R.layout.survey3_element, surveyChildHolder3);
                                                 TextView interv_text = surveyChildHolder3.getChildAt(n).findViewById(R.id.txt_survey_element);
-                                                SeekBar scale = surveyChildHolder3.getChildAt(n).findViewById(R.id.scale);
                                                 JSONObject object = arrSurvey3.getJSONObject(n);
                                                 interv_text.setText(object.getString("key"));
-                                                scale.setProgress(object.getInt("value"));
                                             }
-                                            for (int n = 0; n < arrSurvey4.length(); n++) {
-                                                inflater.inflate(R.layout.survey4_element, surveyChildHolder4);
-                                                TextView interv_text = surveyChildHolder4.getChildAt(n).findViewById(R.id.txt_survey_element);
-                                                SeekBar scale = surveyChildHolder4.getChildAt(n).findViewById(R.id.scale);
-                                                JSONObject object = arrSurvey4.getJSONObject(n);
-                                                interv_text.setText(object.getString("key"));
-                                                scale.setProgress(object.getInt("value"));
-                                            }
-                                            Tools.cacheSurveys(SurveyActivity.this, arrSurvey1, arrSurvey2, arrSurvey3, arrSurvey4);
+
+                                            Tools.cacheSurveys(SurveyActivity.this, arrSurvey1, arrSurvey2, arrSurvey3);
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -155,35 +136,22 @@ public class SurveyActivity extends AppCompatActivity {
                 for (int n = 0; n < recvSurv[0].length(); n++) {
                     inflater.inflate(R.layout.survey1_element, surveyChildHolder1);
                     TextView interv_text = surveyChildHolder1.getChildAt(n).findViewById(R.id.txt_survey_element);
-                    SeekBar scale = surveyChildHolder1.getChildAt(n).findViewById(R.id.scale);
                     JSONObject object = recvSurv[0].getJSONObject(n);
                     interv_text.setText(object.getString("key"));
-                    scale.setProgress(object.getInt("value"));
                 }
                 for (int n = 0; n < recvSurv[1].length(); n++) {
                     inflater.inflate(R.layout.survey2_element, surveyChildHolder2);
                     TextView interv_text = surveyChildHolder2.getChildAt(n).findViewById(R.id.txt_survey_element);
-                    SeekBar scale = surveyChildHolder2.getChildAt(n).findViewById(R.id.scale);
                     JSONObject object = recvSurv[1].getJSONObject(n);
                     interv_text.setText(object.getString("key"));
-                    scale.setProgress(object.getInt("value"));
                 }
                 for (int n = 0; n < recvSurv[2].length(); n++) {
                     inflater.inflate(R.layout.survey3_element, surveyChildHolder3);
                     TextView interv_text = surveyChildHolder3.getChildAt(n).findViewById(R.id.txt_survey_element);
-                    SeekBar scale = surveyChildHolder3.getChildAt(n).findViewById(R.id.scale);
                     JSONObject object = recvSurv[2].getJSONObject(n);
                     interv_text.setText(object.getString("key"));
-                    scale.setProgress(object.getInt("value"));
                 }
-                for (int n = 0; n < recvSurv[3].length(); n++) {
-                    inflater.inflate(R.layout.survey4_element, surveyChildHolder4);
-                    TextView interv_text = surveyChildHolder4.getChildAt(n).findViewById(R.id.txt_survey_element);
-                    SeekBar scale = surveyChildHolder4.getChildAt(n).findViewById(R.id.scale);
-                    JSONObject object = recvSurv[3].getJSONObject(n);
-                    interv_text.setText(object.getString("key"));
-                    scale.setProgress(object.getInt("value"));
-                }
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -220,16 +188,6 @@ public class SurveyActivity extends AppCompatActivity {
         }
     }
 
-    public void expandSurveyHolder4(View view) {
-        if (surveyMainHolder4.getVisibility() == View.VISIBLE) {
-            surveyMainHolder4.setVisibility(View.GONE);
-            ((TextView) view).setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_expand), null);
-        } else {
-            surveyMainHolder4.setVisibility(View.VISIBLE);
-            ((TextView) view).setCompoundDrawablesWithIntrinsicBounds(null, null, getDrawable(R.drawable.img_collapse), null);
-        }
-    }
-
     public void saveClick(View view) {
         if (Tools.isNetworkAvailable(this))
             Tools.execute(new MyRunnable(
@@ -249,7 +207,6 @@ public class SurveyActivity extends AppCompatActivity {
                         JSONArray survey1 = new JSONArray();
                         JSONArray survey2 = new JSONArray();
                         JSONArray survey3 = new JSONArray();
-                        JSONArray survey4 = new JSONArray();
 
                         for (int n = 0; n < surveyChildHolder1.getChildCount(); n++)
                             survey1.put(((SeekBar) surveyChildHolder1.getChildAt(n).findViewById(R.id.scale)).getProgress());
@@ -260,15 +217,11 @@ public class SurveyActivity extends AppCompatActivity {
                         for (int n = 0; n < surveyChildHolder3.getChildCount(); n++)
                             survey3.put(((SeekBar) surveyChildHolder3.getChildAt(n).findViewById(R.id.scale)).getProgress());
 
-                        for (int n = 0; n < surveyChildHolder4.getChildCount(); n++)
-                            survey4.put(((SeekBar) surveyChildHolder4.getChildAt(n).findViewById(R.id.scale)).getProgress());
-
                         body.put("username", username);
                         body.put("password", password);
                         body.put("survey1", survey1);
                         body.put("survey2", survey2);
                         body.put("survey3", survey3);
-                        body.put("survey4", survey4);
 
                         JSONObject res = new JSONObject(Tools.post(url, body));
                         switch (res.getInt("result")) {

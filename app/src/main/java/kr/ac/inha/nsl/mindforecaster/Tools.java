@@ -259,12 +259,11 @@ public class Tools {
         cacheInterventions(context, sysInterventions, "system");
     }
 
-    static void cacheSurveys(Context context, JSONArray survey1, JSONArray survey2, JSONArray survey3, JSONArray survey4) throws JSONException {
+    static void cacheSurveys(Context context, JSONArray survey1, JSONArray survey2, JSONArray survey3) throws JSONException {
         JSONObject obj = new JSONObject();
         obj.put("survey1", survey1);
         obj.put("survey2", survey2);
         obj.put("survey3", survey3);
-        obj.put("survey4", survey4);
         Tools.writeToFile(context, "survey.json", obj.toString());
     }
 
@@ -298,8 +297,7 @@ public class Tools {
             return new JSONArray[]{
                     obj.getJSONArray("survey1"),
                     obj.getJSONArray("survey2"),
-                    obj.getJSONArray("survey3"),
-                    obj.getJSONArray("survey4")
+                    obj.getJSONArray("survey3")
             };
         } catch (JSONException e) {
             e.printStackTrace();
