@@ -136,8 +136,8 @@
     <string name="stress_incr_reason">스트레스 레벨이 예상한 것 보다 오히려 높아진 이유는 무엇입니까?</string>
     <string name="stress_incr_title">스트레스 레벨 증가 원인</string>
     <string name="stress_incr_title1">스트레스 레벨 증가 원인</string>
-    <string name="stress_decr_title">"Why the stress level is lower than expected?"</string>
-    <string name="stress_decr_reason">Please, describe here what you think was the reason that made the real stress be lower than expected one.</string>
+    <string name="stress_decr_title">"스트레스 레벨 감소 원인"</string>
+    <string name="stress_decr_reason">스트레스 레벨이 예상한것보다 낮아진 이유는 무엇입니까? </string>
     <string name="ok">OK</string>
     <string name="custom_reminder">사용자 알림 설정</string>
     <string name="custom_recurrence">Custom recurrence</string>
