@@ -88,19 +88,22 @@ public class SurveyActivity extends AppCompatActivity {
                                                 inflater.inflate(R.layout.survey1_element, surveyChildHolder1);
                                                 TextView interv_text = surveyChildHolder1.getChildAt(n).findViewById(R.id.txt_survey_element);
                                                 JSONObject object = arrSurvey1.getJSONObject(n);
-                                                interv_text.setText(object.getString("key"));
+                                                String survTxt = String.valueOf(n + 1) + ". " + object.getString("key");
+                                                interv_text.setText(survTxt);
                                             }
                                             for (int n = 0; n < arrSurvey2.length(); n++) {
                                                 inflater.inflate(R.layout.survey2_element, surveyChildHolder2);
                                                 TextView interv_text = surveyChildHolder2.getChildAt(n).findViewById(R.id.txt_survey_element);
                                                 JSONObject object = arrSurvey2.getJSONObject(n);
-                                                interv_text.setText(object.getString("key"));
+                                                String survTxt = String.valueOf(n + 1) + ". " + object.getString("key");
+                                                interv_text.setText(survTxt);
                                             }
                                             for (int n = 0; n < arrSurvey3.length(); n++) {
                                                 inflater.inflate(R.layout.survey3_element, surveyChildHolder3);
                                                 TextView interv_text = surveyChildHolder3.getChildAt(n).findViewById(R.id.txt_survey_element);
                                                 JSONObject object = arrSurvey3.getJSONObject(n);
-                                                interv_text.setText(object.getString("key"));
+                                                String survTxt = String.valueOf(n + 1) + ". " + object.getString("key");
+                                                interv_text.setText(survTxt);
                                             }
 
                                             Tools.cacheSurveys(SurveyActivity.this, arrSurvey1, arrSurvey2, arrSurvey3);
@@ -137,19 +140,22 @@ public class SurveyActivity extends AppCompatActivity {
                     inflater.inflate(R.layout.survey1_element, surveyChildHolder1);
                     TextView interv_text = surveyChildHolder1.getChildAt(n).findViewById(R.id.txt_survey_element);
                     JSONObject object = recvSurv[0].getJSONObject(n);
-                    interv_text.setText(object.getString("key"));
+                    String survTxt = String.valueOf(n + 1) + ". " + object.getString("key");
+                    interv_text.setText(survTxt);
                 }
                 for (int n = 0; n < recvSurv[1].length(); n++) {
                     inflater.inflate(R.layout.survey2_element, surveyChildHolder2);
                     TextView interv_text = surveyChildHolder2.getChildAt(n).findViewById(R.id.txt_survey_element);
                     JSONObject object = recvSurv[1].getJSONObject(n);
-                    interv_text.setText(object.getString("key"));
+                    String survTxt = String.valueOf(n + 1) + ". " + object.getString("key");
+                    interv_text.setText(survTxt);
                 }
                 for (int n = 0; n < recvSurv[2].length(); n++) {
                     inflater.inflate(R.layout.survey3_element, surveyChildHolder3);
                     TextView interv_text = surveyChildHolder3.getChildAt(n).findViewById(R.id.txt_survey_element);
                     JSONObject object = recvSurv[2].getJSONObject(n);
-                    interv_text.setText(object.getString("key"));
+                    String survTxt = String.valueOf(n + 1) + ". " + object.getString("key");
+                    interv_text.setText(survTxt);
                 }
 
             } catch (JSONException e) {

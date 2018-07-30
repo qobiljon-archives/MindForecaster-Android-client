@@ -182,14 +182,14 @@
     <string name="survey2_scale4">거의 그렇다</string>
     <string name="survey2_scale5">매우 그렇다</string>
 
+    <string name="survey3_scale0">전혀 아니다</string>
+    <string name="survey3_scale1">대체로 아니다</string>
+    <string name="survey3_scale2">보통이다</string>
+    <string name="survey3_scale3">대체로 그렇다</string>
+    <string name="survey3_scale4">매우 그렇다</string>
 
-    <string name="survey3_scale0">매우 아니다 </string>
-    <string name="survey3_scale1">보통이다</string>
-    <string name="survey3_scale2">매우 그렇다</string>
 
-    <string name="survey4_scale0">전혀 할 수 없다</string>
-    <string name="survey4_scale1">보통이다</string>
-    <string name="survey4_scale2">확실히 할 수 있다</string>
+
 
 
     <string-array name="months_array">

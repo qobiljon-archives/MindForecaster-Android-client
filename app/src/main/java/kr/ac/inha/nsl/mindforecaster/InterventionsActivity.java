@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -322,8 +321,6 @@ public class InterventionsActivity extends AppCompatActivity {
                                                         inflater.inflate(R.layout.intervention_element, intervList);
                                                         TextView interv_text = intervList.getChildAt(n).findViewById(R.id.intervention_text);
                                                         interv_text.setText(interv[n] = arr.getString(n));
-                                                        ImageView imgMore = intervList.getChildAt(n).findViewById(R.id.img_btn_more);
-                                                        imgMore.setVisibility(View.VISIBLE);
                                                     }
                                                     Tools.cachePeerInterventions(InterventionsActivity.this, interv);
                                                 } catch (JSONException e) {
@@ -356,8 +353,6 @@ public class InterventionsActivity extends AppCompatActivity {
                         inflater.inflate(R.layout.intervention_element, intervList);
                         TextView interv_text = intervList.getChildAt(n).findViewById(R.id.intervention_text);
                         interv_text.setText(interventions[n]);
-                        ImageView imgMore = intervList.getChildAt(n).findViewById(R.id.img_btn_more);
-                        imgMore.setVisibility(View.VISIBLE);
                     }
                 }
                 break;
@@ -503,14 +498,4 @@ public class InterventionsActivity extends AppCompatActivity {
         intervListMore.setVisibility(View.VISIBLE);
     }
 
-    public void onPeerIntervMoreClick(View view) {
-        ViewGroup intervElement = findViewById(R.id.intervention_element_view);
-        getLayoutInflater().inflate(R.layout.peer_interv_details_element, intervElement);
-        ViewGroup moreView = findViewById(R.id.peer_interv_more);
-        if (moreView.getVisibility() == View.VISIBLE) {
-            moreView.setVisibility(View.GONE);
-        } else {
-            moreView.setVisibility(View.VISIBLE);
-        }
-    }
 }
