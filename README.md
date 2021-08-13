@@ -1,4 +1,4 @@
 # MindForecaster-Android-client
 
 
-[![Watch the video](https://i.imgur.com/vKb2F1B.png)](http://nsl.inha.ac.kr/wikipages/files/paper348vf.mp4)
+[Explanation on a video (link). ](http://nsl.inha.ac.kr/wikipages/files/paper348vf.mp4)
